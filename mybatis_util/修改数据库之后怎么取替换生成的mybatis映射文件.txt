@@ -1,0 +1,4 @@
+1.进入到mybatis目录：
+删除文件夹 target
+2.在目录底下执行命令 mvn mybatis-generator:generate
+
