@@ -3,23 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>com.fenqile</groupId>
+    <groupId>com.chair</groupId>
     <artifactId>mybatis_util</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <distributionManagement>
-        <repository>
-            <id>Releases</id>
-            <name>Releases</name>
-            <url>http://product.fenqile.com:8081/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>Snapshots</id>
-            <name>Snapshots</name>
-            <url>http://product.fenqile.com:8081/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <build>
         <finalName>MybatisGen</finalName>
         <plugins>
