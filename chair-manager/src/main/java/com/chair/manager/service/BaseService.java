@@ -24,7 +24,7 @@ public abstract class BaseService<T> {
      * @param id
      * @return
      */
-    public T findById(Long id) {
+    public T findById(Integer id) {
         return mapper.selectByPrimaryKey(id);
     }
 

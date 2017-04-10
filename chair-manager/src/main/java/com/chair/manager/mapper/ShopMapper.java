@@ -1,8 +1,8 @@
 package com.chair.manager.mapper;
 
 import com.chair.manager.mapper.plugin.ChairMapper;
-import com.chair.manager.pojo.RechargeRecord;
+import com.chair.manager.pojo.Shop;
 
-public interface ShopMapper extends ChairMapper<RechargeRecord> {
+public interface ShopMapper extends ChairMapper<Shop> {
 
 }

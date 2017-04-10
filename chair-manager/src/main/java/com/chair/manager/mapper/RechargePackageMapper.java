@@ -1,8 +1,8 @@
 package com.chair.manager.mapper;
 
 import com.chair.manager.mapper.plugin.ChairMapper;
-import com.chair.manager.pojo.FactoryProxy;
+import com.chair.manager.pojo.RechargePackage;
 
-public interface RechargePackageMapper extends ChairMapper<FactoryProxy> {
+public interface RechargePackageMapper extends ChairMapper<RechargePackage> {
 
 }

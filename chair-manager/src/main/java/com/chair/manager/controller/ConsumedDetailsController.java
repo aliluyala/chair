@@ -27,7 +27,7 @@ public class ConsumedDetailsController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/query/{cId}" ,method = RequestMethod.GET)
-	public ConsumedDetails queryOrderById(@PathVariable("cId") Long cId) {
+	public ConsumedDetails queryOrderById(@PathVariable("cId") Integer cId) {
 		return consumedDetailsService.findById(cId);
 	}
 
