@@ -6,7 +6,7 @@
 <generatorConfiguration>
 	<!--数据库驱动jar -->
 	<classPathEntry
-		location="D:\workspaces\java\mybatis_util\src\main\lib\mysql-connector-java-5.1.35.jar" />
+		location="D:\Repository\mysql\mysql-connector-java\5.1.30\mysql-connector-java-5.1.30.jar" />
 
 	<context id="DB2Tables" targetRuntime="MyBatis3">
 		<!--去除注释 -->
@@ -16,7 +16,7 @@
 
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
 			connectionURL="jdbc:mysql://127.0.0.1:3306/chair" userId="root"
-			password="root@123">
+			password="root">
 		</jdbcConnection>
 		<!--默认false Java type resolver will always use java.math.BigDecimal if 
 			the database column is of type DECIMAL or NUMERIC. -->
@@ -46,7 +46,7 @@
 		<table tableName="recharge_package" domainObjectName="RechargePackage"></table>
 		<table tableName="recharge_record" domainObjectName="RechargeRecord"></table>
 		<table tableName="shop" domainObjectName="Shop"></table>
-		<table tableName="user_account" domainObjectName="" UserAccount "></table>
+		<table tableName="user_account" domainObjectName="UserAccount"></table>
 		<table tableName="users" domainObjectName="Users"></table>
 	</context>
 </generatorConfiguration>

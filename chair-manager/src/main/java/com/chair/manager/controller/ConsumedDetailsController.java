@@ -9,25 +9,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.chair.manager.pojo.Pattern;
-import com.chair.manager.service.PatternService;
+import com.chair.manager.pojo.ConsumedDetails;
+import com.chair.manager.service.ConsumedDetailsService;
 
 
-@RequestMapping("/pattern")
+@RequestMapping("/consumed/details")
 @Controller
-public class PatternController {
-
+public class ConsumedDetailsController {
 	
-	private PatternService  testService;
+	private ConsumedDetailsService  consumedDetailsService;
 	/**
 	 * 根据ID查询
 	 * @param pId
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/query/{pId}" ,method = RequestMethod.GET)
-	public Pattern queryOrderById(@PathVariable("pId") Long pId) {
-		return testService.findById(pId);
+	@RequestMapping(value = "/query/{cId}" ,method = RequestMethod.GET)
+	public ConsumedDetails queryOrderById(@PathVariable("cId") Long cId) {
+		return consumedDetailsService.findById(cId);
 	}
 
 	/**
@@ -36,8 +35,8 @@ public class PatternController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/query" ,method = RequestMethod.GET)
-	public List<Pattern> queryOrderByUserNameAndPage() {
-		return testService.queryAll();
+	public List<ConsumedDetails> queryOrderByUserNameAndPage() {
+		return consumedDetailsService.queryList(new ConsumedDetails());
 	}
 	
 	
