@@ -3,10 +3,10 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
-<mapper namespace="com.chair.manager.mapper.PatternMapper">
+<mapper namespace="com.chair.manager.mapper.DeviceMapper">
 
-	<select id="queryAll" resultType="Pattern">
-		SELECT * FROM tb_item ORDER BY updated DESC
+	<select id="queryAll" resultType="Device">
+		SELECT * FROM device ORDER BY updated DESC
 	</select>
 	
 </mapper>
