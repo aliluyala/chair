@@ -114,8 +114,10 @@ CREATE TABLE `recharge_record` (
   `rechargePackageID` int(11) DEFAULT NULL COMMENT '充值套餐ID',
   `rechargeAmount` decimal(16,2) DEFAULT NULL COMMENT '充值金额',
   `rechargeDuration` int(11) DEFAULT NULL COMMENT '充值时长',
-  `rechargeTime` date DEFAULT NULL COMMENT '充值时间',
-  `payStatus` int(2) DEFAULT 2 COMMENT '支付状态 1已支付 2未支付',
+  `rechargeTime` datetime DEFAULT NULL COMMENT '充值时间',
+  `payAccount` varchar(64) NOT NULL COMMENT '支付账号',
+  `payMethod` int(2) NOT NULL COMMENT '支付方式 1：微信',
+  `payStatus` int(2) DEFAULT 1 COMMENT '支付状态 1待支付 2已支付',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdate` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`)
