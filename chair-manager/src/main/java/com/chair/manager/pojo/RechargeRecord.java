@@ -18,6 +18,10 @@ public class RechargeRecord {
 
     private Date rechargetime;
 
+    private String payaccount;
+
+    private Integer paymethod;
+
     private Integer paystatus;
 
     private Date createtime;
@@ -78,6 +82,22 @@ public class RechargeRecord {
 
     public void setRechargetime(Date rechargetime) {
         this.rechargetime = rechargetime;
+    }
+
+    public String getPayaccount() {
+        return payaccount;
+    }
+
+    public void setPayaccount(String payaccount) {
+        this.payaccount = payaccount == null ? null : payaccount.trim();
+    }
+
+    public Integer getPaymethod() {
+        return paymethod;
+    }
+
+    public void setPaymethod(Integer paymethod) {
+        this.paymethod = paymethod;
     }
 
     public Integer getPaystatus() {
