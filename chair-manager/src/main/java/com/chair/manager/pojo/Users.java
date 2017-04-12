@@ -42,4 +42,11 @@ public class Users {
     public void setLastupdate(Date lastupdate) {
         this.lastupdate = lastupdate;
     }
+
+	@Override
+	public String toString() {
+		return "Users [id=" + id + ", phonenumber=" + phonenumber + ", createtime=" + createtime + ", lastupdate="
+				+ lastupdate + "]";
+	}
+    
 }

@@ -5,4 +5,6 @@ import com.chair.manager.pojo.Users;
 
 public interface UsersMapper extends ChairMapper<Users> {
 
+	Users saveOrUpdate(Users u);
+
 }
