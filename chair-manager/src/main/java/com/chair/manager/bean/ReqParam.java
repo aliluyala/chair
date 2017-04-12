@@ -28,6 +28,19 @@ public class ReqParam implements  Serializable {
 	 * 套餐ID
 	 */
 	private Integer packageID;
+	
+	/**
+	 * 验证码
+	 */
+	private Integer identCode;
+	
+	
+	public Integer getIdentCode() {
+		return identCode;
+	}
+	public void setIdentCode(Integer identCode) {
+		this.identCode = identCode;
+	}
 	public Integer getUserID() {
 		return userID;
 	}
