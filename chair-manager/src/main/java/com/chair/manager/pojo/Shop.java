@@ -5,13 +5,13 @@ import java.util.Date;
 public class Shop {
     private Integer id;
 
-    private String shopname;
+    private String shopName;
 
-    private String shoplocation;
+    private String shopLocation;
 
-    private Date createtime;
+    private Date createTime;
 
-    private Date lastupdate;
+    private Date lastUpdate;
 
     public Integer getId() {
         return id;
@@ -21,35 +21,35 @@ public class Shop {
         this.id = id;
     }
 
-    public String getShopname() {
-        return shopname;
+    public String getShopName() {
+        return shopName;
     }
 
-    public void setShopname(String shopname) {
-        this.shopname = shopname == null ? null : shopname.trim();
+    public void setShopName(String shopName) {
+        this.shopName = shopName == null ? null : shopName.trim();
     }
 
-    public String getShoplocation() {
-        return shoplocation;
+    public String getShopLocation() {
+        return shopLocation;
     }
 
-    public void setShoplocation(String shoplocation) {
-        this.shoplocation = shoplocation == null ? null : shoplocation.trim();
+    public void setShopLocation(String shopLocation) {
+        this.shopLocation = shopLocation == null ? null : shopLocation.trim();
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getLastupdate() {
-        return lastupdate;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setLastupdate(Date lastupdate) {
-        this.lastupdate = lastupdate;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

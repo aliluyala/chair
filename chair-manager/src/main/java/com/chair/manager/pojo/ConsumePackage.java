@@ -5,15 +5,15 @@ import java.util.Date;
 public class ConsumePackage {
     private Integer id;
 
-    private String packagename;
+    private String packageName;
 
-    private Integer consumedduration;
+    private Integer consumedDuration;
 
     private Integer status;
 
-    private Date createtime;
+    private Date createTime;
 
-    private Date lastupdate;
+    private Date lastUpdate;
 
     public Integer getId() {
         return id;
@@ -23,20 +23,20 @@ public class ConsumePackage {
         this.id = id;
     }
 
-    public String getPackagename() {
-        return packagename;
+    public String getPackageName() {
+        return packageName;
     }
 
-    public void setPackagename(String packagename) {
-        this.packagename = packagename == null ? null : packagename.trim();
+    public void setPackageName(String packageName) {
+        this.packageName = packageName == null ? null : packageName.trim();
     }
 
-    public Integer getConsumedduration() {
-        return consumedduration;
+    public Integer getConsumedDuration() {
+        return consumedDuration;
     }
 
-    public void setConsumedduration(Integer consumedduration) {
-        this.consumedduration = consumedduration;
+    public void setConsumedDuration(Integer consumedDuration) {
+        this.consumedDuration = consumedDuration;
     }
 
     public Integer getStatus() {
@@ -47,19 +47,19 @@ public class ConsumePackage {
         this.status = status;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getLastupdate() {
-        return lastupdate;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setLastupdate(Date lastupdate) {
-        this.lastupdate = lastupdate;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

@@ -5,29 +5,29 @@ import java.util.Date;
 public class Device {
     private Integer id;
 
-    private String deviceno;
+    private String deviceNo;
 
-    private String devicemodel;
+    private String deviceModel;
 
-    private Integer shopid;
+    private Integer shopId;
 
-    private String shoplocation;
+    private String shopLocation;
 
-    private String shopname;
+    private String shopName;
 
-    private Integer proxyid;
+    private Integer proxyId;
 
-    private String proxyname;
+    private String proxyName;
 
-    private Integer facrotyid;
+    private Integer facrotyId;
 
-    private String factoryname;
+    private String factoryName;
 
     private Integer status;
 
-    private Date createtime;
+    private Date createTime;
 
-    private Date lastupdate;
+    private Date lastUpdate;
 
     public Integer getId() {
         return id;
@@ -37,76 +37,76 @@ public class Device {
         this.id = id;
     }
 
-    public String getDeviceno() {
-        return deviceno;
+    public String getDeviceNo() {
+        return deviceNo;
     }
 
-    public void setDeviceno(String deviceno) {
-        this.deviceno = deviceno == null ? null : deviceno.trim();
+    public void setDeviceNo(String deviceNo) {
+        this.deviceNo = deviceNo == null ? null : deviceNo.trim();
     }
 
-    public String getDevicemodel() {
-        return devicemodel;
+    public String getDeviceModel() {
+        return deviceModel;
     }
 
-    public void setDevicemodel(String devicemodel) {
-        this.devicemodel = devicemodel == null ? null : devicemodel.trim();
+    public void setDeviceModel(String deviceModel) {
+        this.deviceModel = deviceModel == null ? null : deviceModel.trim();
     }
 
-    public Integer getShopid() {
-        return shopid;
+    public Integer getShopId() {
+        return shopId;
     }
 
-    public void setShopid(Integer shopid) {
-        this.shopid = shopid;
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
     }
 
-    public String getShoplocation() {
-        return shoplocation;
+    public String getShopLocation() {
+        return shopLocation;
     }
 
-    public void setShoplocation(String shoplocation) {
-        this.shoplocation = shoplocation == null ? null : shoplocation.trim();
+    public void setShopLocation(String shopLocation) {
+        this.shopLocation = shopLocation == null ? null : shopLocation.trim();
     }
 
-    public String getShopname() {
-        return shopname;
+    public String getShopName() {
+        return shopName;
     }
 
-    public void setShopname(String shopname) {
-        this.shopname = shopname == null ? null : shopname.trim();
+    public void setShopName(String shopName) {
+        this.shopName = shopName == null ? null : shopName.trim();
     }
 
-    public Integer getProxyid() {
-        return proxyid;
+    public Integer getProxyId() {
+        return proxyId;
     }
 
-    public void setProxyid(Integer proxyid) {
-        this.proxyid = proxyid;
+    public void setProxyId(Integer proxyId) {
+        this.proxyId = proxyId;
     }
 
-    public String getProxyname() {
-        return proxyname;
+    public String getProxyName() {
+        return proxyName;
     }
 
-    public void setProxyname(String proxyname) {
-        this.proxyname = proxyname == null ? null : proxyname.trim();
+    public void setProxyName(String proxyName) {
+        this.proxyName = proxyName == null ? null : proxyName.trim();
     }
 
-    public Integer getFacrotyid() {
-        return facrotyid;
+    public Integer getFacrotyId() {
+        return facrotyId;
     }
 
-    public void setFacrotyid(Integer facrotyid) {
-        this.facrotyid = facrotyid;
+    public void setFacrotyId(Integer facrotyId) {
+        this.facrotyId = facrotyId;
     }
 
-    public String getFactoryname() {
-        return factoryname;
+    public String getFactoryName() {
+        return factoryName;
     }
 
-    public void setFactoryname(String factoryname) {
-        this.factoryname = factoryname == null ? null : factoryname.trim();
+    public void setFactoryName(String factoryName) {
+        this.factoryName = factoryName == null ? null : factoryName.trim();
     }
 
     public Integer getStatus() {
@@ -117,19 +117,19 @@ public class Device {
         this.status = status;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getLastupdate() {
-        return lastupdate;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setLastupdate(Date lastupdate) {
-        this.lastupdate = lastupdate;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

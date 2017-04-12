@@ -6,27 +6,23 @@ import java.util.Date;
 public class RechargeRecord {
     private Integer id;
 
-    private String batchno;
+    private String batchNo;
 
-    private String phonenumber;
+    private String phoneNumbe;
 
-    private Integer rechargepackageid;
+    private Integer rechargePackageId;
 
-    private BigDecimal rechargeamount;
+    private BigDecimal rechargeAmount;
 
-    private Integer rechargeduration;
+    private Integer rechargeDuration;
 
-    private Date rechargetime;
+    private Date rechargeTime;
 
-    private String payaccount;
+    private Integer payStatu;
 
-    private Integer paymethod;
+    private Date createTime;
 
-    private Integer paystatus;
-
-    private Date createtime;
-
-    private Date lastupdate;
+    private Date lastUpdate;
 
     public Integer getId() {
         return id;
@@ -36,91 +32,75 @@ public class RechargeRecord {
         this.id = id;
     }
 
-    public String getBatchno() {
-        return batchno;
+    public String getBatchNo() {
+        return batchNo;
     }
 
-    public void setBatchno(String batchno) {
-        this.batchno = batchno == null ? null : batchno.trim();
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo == null ? null : batchNo.trim();
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumbe() {
+        return phoneNumbe;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber == null ? null : phonenumber.trim();
+    public void setPhoneNumbe(String phoneNumbe) {
+        this.phoneNumbe = phoneNumbe == null ? null : phoneNumbe.trim();
     }
 
-    public Integer getRechargepackageid() {
-        return rechargepackageid;
+    public Integer getRechargePackageId() {
+        return rechargePackageId;
     }
 
-    public void setRechargepackageid(Integer rechargepackageid) {
-        this.rechargepackageid = rechargepackageid;
+    public void setRechargePackageId(Integer rechargePackageId) {
+        this.rechargePackageId = rechargePackageId;
     }
 
-    public BigDecimal getRechargeamount() {
-        return rechargeamount;
+    public BigDecimal getRechargeAmount() {
+        return rechargeAmount;
     }
 
-    public void setRechargeamount(BigDecimal rechargeamount) {
-        this.rechargeamount = rechargeamount;
+    public void setRechargeAmount(BigDecimal rechargeAmount) {
+        this.rechargeAmount = rechargeAmount;
     }
 
-    public Integer getRechargeduration() {
-        return rechargeduration;
+    public Integer getRechargeDuration() {
+        return rechargeDuration;
     }
 
-    public void setRechargeduration(Integer rechargeduration) {
-        this.rechargeduration = rechargeduration;
+    public void setRechargeDuration(Integer rechargeDuration) {
+        this.rechargeDuration = rechargeDuration;
     }
 
-    public Date getRechargetime() {
-        return rechargetime;
+    public Date getRechargeTime() {
+        return rechargeTime;
     }
 
-    public void setRechargetime(Date rechargetime) {
-        this.rechargetime = rechargetime;
+    public void setRechargeTime(Date rechargeTime) {
+        this.rechargeTime = rechargeTime;
     }
 
-    public String getPayaccount() {
-        return payaccount;
+    public Integer getPayStatu() {
+        return payStatu;
     }
 
-    public void setPayaccount(String payaccount) {
-        this.payaccount = payaccount == null ? null : payaccount.trim();
+    public void setPayStatu(Integer payStatu) {
+        this.payStatu = payStatu;
     }
 
-    public Integer getPaymethod() {
-        return paymethod;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setPaymethod(Integer paymethod) {
-        this.paymethod = paymethod;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Integer getPaystatus() {
-        return paystatus;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setPaystatus(Integer paystatus) {
-        this.paystatus = paystatus;
-    }
-
-    public Date getCreatetime() {
-        return createtime;
-    }
-
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
-    }
-
-    public Date getLastupdate() {
-        return lastupdate;
-    }
-
-    public void setLastupdate(Date lastupdate) {
-        this.lastupdate = lastupdate;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

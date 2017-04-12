@@ -5,31 +5,31 @@ import java.util.Date;
 public class ConsumedDetails {
     private Integer id;
 
-    private String phonenumber;
+    private String phoneNumber;
 
-    private Integer consumedpackageid;
+    private Integer consumedPackageId;
 
-    private Integer consumedduration;
+    private Integer consumedDuration;
 
-    private Integer factoryid;
+    private Integer factoryId;
 
-    private String factoryname;
+    private String factoryName;
 
-    private Integer proxyid;
+    private Integer proxyId;
 
-    private String proxyname;
+    private String proxyName;
 
-    private Integer shopid;
+    private Integer shopId;
 
-    private String shopname;
+    private String shopName;
 
-    private String shoplocation;
+    private String shopLocation;
 
-    private Integer deviceid;
+    private Integer deviceId;
 
-    private Date createtime;
+    private Date createTime;
 
-    private Date lastupdate;
+    private Date lastUpdate;
 
     public Integer getId() {
         return id;
@@ -39,107 +39,107 @@ public class ConsumedDetails {
         this.id = id;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber == null ? null : phonenumber.trim();
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
     }
 
-    public Integer getConsumedpackageid() {
-        return consumedpackageid;
+    public Integer getConsumedPackageId() {
+        return consumedPackageId;
     }
 
-    public void setConsumedpackageid(Integer consumedpackageid) {
-        this.consumedpackageid = consumedpackageid;
+    public void setConsumedPackageId(Integer consumedPackageId) {
+        this.consumedPackageId = consumedPackageId;
     }
 
-    public Integer getConsumedduration() {
-        return consumedduration;
+    public Integer getConsumedDuration() {
+        return consumedDuration;
     }
 
-    public void setConsumedduration(Integer consumedduration) {
-        this.consumedduration = consumedduration;
+    public void setConsumedDuration(Integer consumedDuration) {
+        this.consumedDuration = consumedDuration;
     }
 
-    public Integer getFactoryid() {
-        return factoryid;
+    public Integer getFactoryId() {
+        return factoryId;
     }
 
-    public void setFactoryid(Integer factoryid) {
-        this.factoryid = factoryid;
+    public void setFactoryId(Integer factoryId) {
+        this.factoryId = factoryId;
     }
 
-    public String getFactoryname() {
-        return factoryname;
+    public String getFactoryName() {
+        return factoryName;
     }
 
-    public void setFactoryname(String factoryname) {
-        this.factoryname = factoryname == null ? null : factoryname.trim();
+    public void setFactoryName(String factoryName) {
+        this.factoryName = factoryName == null ? null : factoryName.trim();
     }
 
-    public Integer getProxyid() {
-        return proxyid;
+    public Integer getProxyId() {
+        return proxyId;
     }
 
-    public void setProxyid(Integer proxyid) {
-        this.proxyid = proxyid;
+    public void setProxyId(Integer proxyId) {
+        this.proxyId = proxyId;
     }
 
-    public String getProxyname() {
-        return proxyname;
+    public String getProxyName() {
+        return proxyName;
     }
 
-    public void setProxyname(String proxyname) {
-        this.proxyname = proxyname == null ? null : proxyname.trim();
+    public void setProxyName(String proxyName) {
+        this.proxyName = proxyName == null ? null : proxyName.trim();
     }
 
-    public Integer getShopid() {
-        return shopid;
+    public Integer getShopId() {
+        return shopId;
     }
 
-    public void setShopid(Integer shopid) {
-        this.shopid = shopid;
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
     }
 
-    public String getShopname() {
-        return shopname;
+    public String getShopName() {
+        return shopName;
     }
 
-    public void setShopname(String shopname) {
-        this.shopname = shopname == null ? null : shopname.trim();
+    public void setShopName(String shopName) {
+        this.shopName = shopName == null ? null : shopName.trim();
     }
 
-    public String getShoplocation() {
-        return shoplocation;
+    public String getShopLocation() {
+        return shopLocation;
     }
 
-    public void setShoplocation(String shoplocation) {
-        this.shoplocation = shoplocation == null ? null : shoplocation.trim();
+    public void setShopLocation(String shopLocation) {
+        this.shopLocation = shopLocation == null ? null : shopLocation.trim();
     }
 
-    public Integer getDeviceid() {
-        return deviceid;
+    public Integer getDeviceId() {
+        return deviceId;
     }
 
-    public void setDeviceid(Integer deviceid) {
-        this.deviceid = deviceid;
+    public void setDeviceId(Integer deviceId) {
+        this.deviceId = deviceId;
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getLastupdate() {
-        return lastupdate;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setLastupdate(Date lastupdate) {
-        this.lastupdate = lastupdate;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

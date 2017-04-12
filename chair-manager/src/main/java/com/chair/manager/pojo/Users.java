@@ -5,11 +5,11 @@ import java.util.Date;
 public class Users {
     private Integer id;
 
-    private String phonenumber;
+    private String phoneNumber;
 
-    private Date createtime;
+    private Date createTime;
 
-    private Date lastupdate;
+    private Date lastUpdate;
 
     public Integer getId() {
         return id;
@@ -19,34 +19,27 @@ public class Users {
         this.id = id;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber == null ? null : phonenumber.trim();
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber == null ? null : phoneNumber.trim();
     }
 
-    public Date getCreatetime() {
-        return createtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public Date getLastupdate() {
-        return lastupdate;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setLastupdate(Date lastupdate) {
-        this.lastupdate = lastupdate;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
-
-	@Override
-	public String toString() {
-		return "Users [id=" + id + ", phonenumber=" + phonenumber + ", createtime=" + createtime + ", lastupdate="
-				+ lastupdate + "]";
-	}
-    
 }

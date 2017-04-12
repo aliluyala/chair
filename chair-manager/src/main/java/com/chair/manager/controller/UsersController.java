@@ -40,7 +40,7 @@ public class UsersController {
 	@RequestMapping(value="queryRechargeDetails",method=RequestMethod.POST)
 	private ResponseResult queryRechargeDetails(@RequestBody ReqParam param){
 		RechargeRecord rr=new RechargeRecord();
-		rr.setPhonenumber(param.getPhoneNumber());
+		rr.setPhoneNumbe(param.getPhoneNumber());
 		return new ResponseResult(rechargeRecordService.queryList(rr));
 	}
 	/**
@@ -53,7 +53,7 @@ public class UsersController {
 	@RequestMapping(value="queryConsumedDetails",method=RequestMethod.POST)
 	private ResponseResult queryConsumedDetails(@RequestBody ReqParam param){
 		ConsumedDetails cd=new ConsumedDetails();
-		cd.setPhonenumber(param.getPhoneNumber());
+		cd.setPhoneNumber(param.getPhoneNumber());
 		return new ResponseResult(consumedDetailsService.queryList(cd));
 	}
 	
@@ -74,9 +74,9 @@ public class UsersController {
 		//2.查询存在则更新，不存在则新增
 		//insert into users(phoneNumber, createTime, lastUpdate) values('13530380829',now(), now()) ON DUPLICATE KEY UPDATE lastUpdate=now();
 		Users u=new Users();
-		u.setPhonenumber(param.getPhoneNumber());
-		u.setCreatetime(new Date());
-		u.setLastupdate(new Date());
+		u.setPhoneNumber(param.getPhoneNumber());
+		u.setCreateTime(new Date());
+		u.setLastUpdate(new Date());
 		Users user = usersService.saveOrUpdate(u);
 		System.out.println("---user-------"+user);
 		return new ResponseResult(null);
