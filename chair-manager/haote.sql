@@ -110,11 +110,12 @@ DROP TABLE IF EXISTS `recharge_record`;
 CREATE TABLE `recharge_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '账期自增ID',
   `batchNO` varchar(32) DEFAULT NULL COMMENT '充值批次号，唯一',
+  `payOrderNO` varchar(64) DEFAULT NULL COMMENT '支付凭证编号',
   `phoneNumber` varchar(11) NOT NULL COMMENT '用户手机号',
   `rechargePackageID` int(11) DEFAULT NULL COMMENT '充值套餐ID',
   `rechargeAmount` decimal(16,2) DEFAULT NULL COMMENT '充值金额',
   `rechargeDuration` int(11) DEFAULT NULL COMMENT '充值时长',
-  `rechargeTime` datetime DEFAULT NULL COMMENT '充值时间',
+  `rechargeTime` date DEFAULT NULL COMMENT '充值时间',
   `payAccount` varchar(64) NOT NULL COMMENT '支付账号',
   `payMethod` int(2) NOT NULL COMMENT '支付方式 1：微信',
   `payStatus` int(2) DEFAULT 1 COMMENT '支付状态 1待支付 2已支付',
