@@ -2,11 +2,12 @@ package com.chair.manager.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.RechargeRecord;
@@ -31,9 +32,9 @@ public class UsersController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="queryRechargeDetails",method=RequestMethod.POST)
-	private ResponseResult queryRechargeDetails(@RequestParam("userID") Integer userID, @RequestParam("phoneNumber") String phoneNumber){
+	private ResponseResult queryRechargeDetails(@RequestBody ReqParam param){
 		RechargeRecord rr=new RechargeRecord();
-		rr.setPhonenumber(phoneNumber);
+		rr.setPhonenumber(param.getPhoneNumber());
 		return new ResponseResult(rechargeRecordService.queryList(rr));
 	}
 	/**
@@ -44,9 +45,9 @@ public class UsersController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="queryRechargeDetails",method=RequestMethod.POST)
-	private ResponseResult queryConsumedDetails(@RequestParam("userID") Integer userID, @RequestParam("phoneNumber") String phoneNumber){
+	private ResponseResult queryConsumedDetails(@RequestBody ReqParam param){
 		ConsumedDetails cd=new ConsumedDetails();
-		cd.setPhonenumber(phoneNumber);
+		cd.setPhonenumber(param.getPhoneNumber());
 		return new ResponseResult(consumedDetailsService.queryList(cd));
 	}
 }
