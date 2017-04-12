@@ -80,7 +80,6 @@ public class UsersController {
 		System.err.println("---添加或者更新前主键为："+u);
 		usersService.saveOrUpdate(u);
 		System.err.println("---添加或者更新后主键为："+u);
-//		System.out.println("---添加或者更新用户表，id为-------"+newID);
-		return new ResponseResult(null);
+		return new ResponseResult(u);
 	}
 }

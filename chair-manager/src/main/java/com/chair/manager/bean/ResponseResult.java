@@ -43,6 +43,12 @@ public class ResponseResult {
 		this.obj = data;
 	}
 	
+	public ResponseResult(Object data) {
+		super();
+		this.obj = data;
+	}
+	
+	
 	public ResponseResult(List<?> data) {
 		super();
 		this.data = data;
