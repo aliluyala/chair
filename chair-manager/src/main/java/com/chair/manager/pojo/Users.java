@@ -2,6 +2,9 @@ package com.chair.manager.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Table;
+
+@Table(name="users")
 public class Users {
     private Integer id;
 
@@ -42,4 +45,12 @@ public class Users {
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
+	@Override
+	public String toString() {
+		return "Users [id=" + id + ", phoneNumber=" + phoneNumber + ", createTime=" + createTime + ", lastUpdate="
+				+ lastUpdate + "]";
+	}
+    
+    
 }

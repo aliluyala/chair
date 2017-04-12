@@ -60,7 +60,7 @@ public class UsersController {
 	
 
 	/**
-	 * 查看用户消费明细
+	 * 用户登录
 	 * @param userID 用户ID
 	 * @param phoneNumber 用户手机号
 	 * @return
@@ -77,8 +77,10 @@ public class UsersController {
 		u.setPhoneNumber(param.getPhoneNumber());
 		u.setCreateTime(new Date());
 		u.setLastUpdate(new Date());
-		Users user = usersService.saveOrUpdate(u);
-		System.out.println("---user-------"+user);
+		System.err.println("---添加或者更新前主键为："+u);
+		usersService.saveOrUpdate(u);
+		System.err.println("---添加或者更新后主键为："+u);
+//		System.out.println("---添加或者更新用户表，id为-------"+newID);
 		return new ResponseResult(null);
 	}
 }

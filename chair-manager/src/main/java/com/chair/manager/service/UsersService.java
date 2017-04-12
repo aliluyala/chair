@@ -16,7 +16,7 @@ public class UsersService extends BaseService<Users> {
 	 * 新增或更新
 	 * @param user
 	 */
-	public Users saveOrUpdate(Users user){
-		return usersMapper.saveOrUpdate(user);
+	public void saveOrUpdate(Users user){
+		usersMapper.saveOrUpdate(user);
 	}
 }

@@ -5,7 +5,7 @@
  
 <mapper namespace="com.chair.manager.mapper.UsersMapper">
 
-	<insert id="saveOrUpdate" useGeneratedKeys="true">
-		insert into users(phoneNumber, createTime, lastUpdate) values(#{phoneNumber},#{createtime}, #{lastupdate}) ON DUPLICATE KEY UPDATE lastUpdate=#{lastupdate};
+	<insert id="saveOrUpdate" useGeneratedKeys="true" keyProperty="id">
+		insert into users(phone_number, create_time, last_update) values(#{phoneNumber},#{createTime}, #{lastUpdate}) ON DUPLICATE KEY UPDATE last_update=#{lastUpdate};
 	</insert>
 </mapper>

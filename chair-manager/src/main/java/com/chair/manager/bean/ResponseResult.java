@@ -22,6 +22,8 @@ public class ResponseResult {
 	 * 返回的数据
 	 */
 	private List<?> data;
+	
+	private Object obj;
 
 	public ResponseResult(String errorCode, String errorMsg, List<?> data) {
 		super();
@@ -34,6 +36,13 @@ public class ResponseResult {
 		this.errorCode = errorCode;
 		this.data = data;
 	}
+	
+	public ResponseResult(String errorCode, Object data) {
+		super();
+		this.errorCode = errorCode;
+		this.obj = data;
+	}
+	
 	public ResponseResult(List<?> data) {
 		super();
 		this.data = data;
@@ -56,4 +65,12 @@ public class ResponseResult {
 	public void setData(List<?> data) {
 		this.data = data;
 	}
+	public Object getObj() {
+		return obj;
+	}
+	public void setObj(Object obj) {
+		this.obj = obj;
+	}
+	
+	
 }
