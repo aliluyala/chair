@@ -78,7 +78,7 @@ public class UsersController {
 		u.setCreatetime(new Date());
 		u.setLastupdate(new Date());
 		Users user = usersService.saveOrUpdate(u);
-		System.out.println("---user----"+user);
+		System.out.println("---user-------"+user);
 		return new ResponseResult(null);
 	}
 }
