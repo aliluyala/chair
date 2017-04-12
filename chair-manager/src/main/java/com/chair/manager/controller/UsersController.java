@@ -50,4 +50,23 @@ public class UsersController {
 		cd.setPhonenumber(param.getPhoneNumber());
 		return new ResponseResult(consumedDetailsService.queryList(cd));
 	}
+	
+	
+
+	/**
+	 * 查看用户消费明细
+	 * @param userID 用户ID
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="login",method=RequestMethod.POST)
+	private ResponseResult userLogin(@RequestBody ReqParam param){
+		param.getPhoneNumber();
+		param.geti;
+		
+		ConsumedDetails cd=new ConsumedDetails();
+		cd.setPhonenumber(param.getPhoneNumber());
+		return new ResponseResult(consumedDetailsService.queryList(cd));
+	}
 }
