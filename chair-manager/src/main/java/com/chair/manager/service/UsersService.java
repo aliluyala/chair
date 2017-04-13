@@ -1,5 +1,7 @@
 package com.chair.manager.service;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +21,30 @@ public class UsersService extends BaseService<Users> {
 	public void saveOrUpdate(Users user){
 		usersMapper.saveOrUpdate(user);
 	}
+
+	/**
+	 * 发送短信验证码
+	 * @param phoneNumber
+	 */
+	public void sendCode(String phoneNumber) {
+		//生成四位数验证码
+		String code = createCode();
+		//TODO 调用短信接口发送验证码
+		
+	}
+	
+	/**
+	 * 生成验证码
+	 * @return
+	 */
+	private String createCode() {
+		String code = "";
+		Random random = new Random();
+		for (int i = 0; i < 4; i++) {
+			code += random.nextInt(9)+"";
+		}
+		return code;
+	}
+	
+	
 }

@@ -2,7 +2,7 @@ package com.chair.manager.bean;
 
 import java.io.Serializable;
 
-public class ReqParam implements  Serializable {
+public class ReqParam implements Serializable {
 
 	/**
 	 * 
@@ -13,7 +13,7 @@ public class ReqParam implements  Serializable {
 	 */
 	private Integer userID;
 	/**
-	 * 1订单支付  2账单支付 3充值
+	 * 1订单支付 2账单支付 3充值
 	 */
 	private Integer type;
 	/**
@@ -28,48 +28,106 @@ public class ReqParam implements  Serializable {
 	 * 套餐ID
 	 */
 	private Integer packageID;
-	
+
 	/**
 	 * 验证码
 	 */
 	private Integer identCode;
-	
-	
+
+	/**
+	 * 设备ID
+	 * 
+	 * @return
+	 */
+	private Integer deviceID;
+
+	/**
+	 * 设备编号
+	 */
+	private String deviceNO;
+
+	/**
+	 * 消费套餐ID
+	 */
+	private Integer consumePackageID;
+
+	public Integer getConsumePackageID() {
+		return consumePackageID;
+	}
+
+	public void setConsumePackageID(Integer consumePackageID) {
+		this.consumePackageID = consumePackageID;
+	}
+
+	public Integer getDeviceID() {
+		return deviceID;
+	}
+
+	public void setDeviceID(Integer deviceID) {
+		this.deviceID = deviceID;
+	}
+
+	public String getDeviceNO() {
+		return deviceNO;
+	}
+
+	public void setDeviceNO(String deviceNO) {
+		this.deviceNO = deviceNO;
+	}
+
 	public Integer getIdentCode() {
 		return identCode;
 	}
+
 	public void setIdentCode(Integer identCode) {
 		this.identCode = identCode;
 	}
+
 	public Integer getUserID() {
 		return userID;
 	}
+
 	public void setUserID(Integer userID) {
 		this.userID = userID;
 	}
+
 	public Integer getType() {
 		return type;
 	}
+
 	public void setType(Integer type) {
 		this.type = type;
 	}
+
 	public String getBusinessNO() {
 		return businessNO;
 	}
+
 	public void setBusinessNO(String businessNO) {
 		this.businessNO = businessNO;
 	}
+
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
+
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+
 	public Integer getPackageID() {
 		return packageID;
 	}
+
 	public void setPackageID(Integer packageID) {
 		this.packageID = packageID;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "ReqParam [userID=" + userID + ", type=" + type + ", businessNO=" + businessNO + ", phoneNumber="
+				+ phoneNumber + ", packageID=" + packageID + ", identCode=" + identCode + ", deviceID=" + deviceID
+				+ ", deviceNO=" + deviceNO + ", consumePackageID=" + consumePackageID + "]";
+	}
+
 }

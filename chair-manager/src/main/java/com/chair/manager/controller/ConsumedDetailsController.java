@@ -40,5 +40,15 @@ public class ConsumedDetailsController {
 		return new ResponseResult(consumedDetailsService.queryList(new ConsumedDetails()));
 	}
 
+	
 
+	/**
+	 * 查询消费套餐列表（客户端展示）
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/queryConsumerList" ,method = RequestMethod.GET)
+	public ResponseResult queryConsumerList() {
+		return new ResponseResult(consumedDetailsService.queryList(new ConsumedDetails()));
+	}
 }

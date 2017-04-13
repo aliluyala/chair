@@ -26,6 +26,8 @@ public class ConsumedDetails {
     private String shopLocation;
 
     private Integer deviceId;
+    
+    private Date consumedTime;
 
     private Date createTime;
 
@@ -127,7 +129,17 @@ public class ConsumedDetails {
         this.deviceId = deviceId;
     }
 
-    public Date getCreateTime() {
+    
+    
+    public Date getConsumedTime() {
+		return consumedTime;
+	}
+
+	public void setConsumedTime(Date consumedTime) {
+		this.consumedTime = consumedTime;
+	}
+
+	public Date getCreateTime() {
         return createTime;
     }
 

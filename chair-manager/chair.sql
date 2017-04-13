@@ -13,6 +13,8 @@ File Encoding         : 65001
 Date: 2017-04-12 16:54:23
 */
 
+USE chair;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -46,6 +48,7 @@ CREATE TABLE `consumed_details` (
   `shop_name` varchar(64) NOT NULL COMMENT '店铺名称',
   `shop_location` varchar(255) NOT NULL COMMENT '店铺位置',
   `device_id` int(11) NOT NULL COMMENT '设备ID',
+  `consumed_time` datetime DEFAULT NULL COMMENT '消费时间',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`)

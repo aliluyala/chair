@@ -84,4 +84,24 @@ public class UsersController {
 		logger.debug("---添加或者更新用户表【后】--："+user);
 		return new ResponseResult(user); 
 	}
+	
+
+	/**
+	 * 发送用户验证码
+	 * @param userID 用户ID
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="sendCode",method=RequestMethod.POST)
+	private ResponseResult sendCode(@RequestBody ReqParam param){
+		
+		
+		
+		usersService.sendCode(param.getPhoneNumber());
+		return new ResponseResult(null); 
+	}
+	
+	
+	
 }
