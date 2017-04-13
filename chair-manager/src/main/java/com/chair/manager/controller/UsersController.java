@@ -79,10 +79,9 @@ public class UsersController {
 		user.setPhoneNumber(param.getPhoneNumber());
 		user.setCreateTime(new Date());
 		user.setLastUpdate(new Date());
-		logger.debug("---添加或者更新用户表前--："+user);
+		logger.debug("---添加或者更新用户表【前】--："+user);
 		usersService.saveOrUpdate(user);
-		logger.debug("---添加或者更新用户表后--："+user);
+		logger.debug("---添加或者更新用户表【后】--："+user);
 		return new ResponseResult(user); 
-		
 	}
 }
