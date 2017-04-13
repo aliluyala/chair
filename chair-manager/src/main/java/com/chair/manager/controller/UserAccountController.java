@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chair.manager.bean.ReqParam;
+import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.service.UserAccountService;
 
 @RequestMapping("/account")
@@ -19,7 +20,7 @@ public class UserAccountController {
 	
 	@ResponseBody
 	@RequestMapping(value="recharge",method=RequestMethod.POST)
-	private Integer recharge(@RequestBody ReqParam param){
-		return userAccountService.recharge(param.getPhoneNumber(),param.getPackageID());
+	private ResponseResult recharge(@RequestBody ReqParam param){
+		return new ResponseResult(userAccountService.recharge(param.getPhoneNumber(),param.getPackageID()));
 	}
 }

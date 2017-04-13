@@ -1,7 +1,5 @@
 package com.chair.manager.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.chair.manager.bean.EasyUIResult;

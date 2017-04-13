@@ -21,62 +21,49 @@ public class ResponseResult {
 	/**
 	 * 返回的数据
 	 */
-	private List<?> data;
-	
-	private Object obj;
+	private Object data;
 
-	public ResponseResult(String errorCode, String errorMsg, List<?> data) {
+	public ResponseResult(String errorCode, String errorMsg, Object data) {
 		super();
 		this.errorCode = errorCode;
 		this.errorMsg = errorMsg;
 		this.data = data;
 	}
-	public ResponseResult(String errorCode, List<?> data) {
-		super();
-		this.errorCode = errorCode;
-		this.data = data;
-	}
-	
+
 	public ResponseResult(String errorCode, Object data) {
 		super();
 		this.errorCode = errorCode;
-		this.obj = data;
+		this.data = data;
 	}
-	
 	public ResponseResult(Object data) {
-		super();
-		this.obj = data;
-	}
-	
-	
-	public ResponseResult(List<?> data) {
 		super();
 		this.data = data;
 	}
+	public ResponseResult() {
+		super();
+	}
+
 	public String getErrorCode() {
 		return errorCode;
 	}
+
 	public void setErrorCode(String errorCode) {
 		this.errorCode = errorCode;
 	}
+
 	public String getErrorMsg() {
 		return errorMsg;
 	}
+
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
 	}
-	public List<?> getData() {
+
+	public Object getData() {
 		return data;
 	}
-	public void setData(List<?> data) {
+
+	public void setData(Object data) {
 		this.data = data;
 	}
-	public Object getObj() {
-		return obj;
-	}
-	public void setObj(Object obj) {
-		this.obj = obj;
-	}
-	
-	
 }
