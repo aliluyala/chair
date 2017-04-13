@@ -2,6 +2,7 @@ package com.chair.manager.controller;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ import com.chair.manager.service.UsersService;
 @RequestMapping("/users")
 @Controller
 public class UsersController {
+	private Logger logger = Logger.getLogger(UsersController.class);
 
 	@Autowired
 	private RechargeRecordService rechargeRecordService;
@@ -73,13 +75,13 @@ public class UsersController {
 		//1.验证登陆信息
 		//2.查询存在则更新，不存在则新增
 		//insert into users(phoneNumber, createTime, lastUpdate) values('13530380829',now(), now()) ON DUPLICATE KEY UPDATE lastUpdate=now();
-		Users u=new Users();
-		u.setPhoneNumber(param.getPhoneNumber());
-		u.setCreateTime(new Date());
-		u.setLastUpdate(new Date());
-		System.err.println("---添加或者更新前主键为："+u);
-		usersService.saveOrUpdate(u);
-		System.err.println("---添加或者更新后主键为："+u);
-		return new ResponseResult(u);
+		Users user=new Users();
+		user.setPhoneNumber(param.getPhoneNumber());
+		user.setCreateTime(new Date());
+		user.setLastUpdate(new Date());
+		logger.debug("---添加或者更新用户表前--："+user);
+		usersService.saveOrUpdate(user);
+		logger.debug("---添加或者更新用户表后--："+user);
+		return new ResponseResult(user);
 	}
 }
