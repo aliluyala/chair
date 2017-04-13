@@ -82,6 +82,7 @@ public class UsersController {
 		logger.debug("---添加或者更新用户表前--："+user);
 		usersService.saveOrUpdate(user);
 		logger.debug("---添加或者更新用户表后--："+user);
-		return new ResponseResult(user);
+		return new ResponseResult(user); 
+		
 	}
 }
