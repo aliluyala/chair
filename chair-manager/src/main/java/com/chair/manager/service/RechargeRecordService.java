@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.chair.manager.bean.EasyUIResult;
 import com.chair.manager.pojo.RechargeRecord;
-import com.github.pagehelper.PageHelper;
 
 @Service
 public class RechargeRecordService extends BaseService<RechargeRecord> {

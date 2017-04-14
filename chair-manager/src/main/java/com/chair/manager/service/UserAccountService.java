@@ -1,10 +1,12 @@
 package com.chair.manager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.UserAccount;
 
+@Service
 public class UserAccountService extends BaseService<UserAccount> {
 	@Autowired
 	private ConsumePackageService consumePackageService;
