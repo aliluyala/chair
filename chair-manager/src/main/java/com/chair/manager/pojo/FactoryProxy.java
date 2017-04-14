@@ -2,6 +2,9 @@ package com.chair.manager.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Table;
+
+@Table(name="factory_proxy")
 public class FactoryProxy {
     private Integer id;
 

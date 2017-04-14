@@ -2,6 +2,10 @@ package com.chair.manager.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Table;
+
+
+@Table(name="device")
 public class Device {
     private Integer id;
 

@@ -2,6 +2,9 @@ package com.chair.manager.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Table;
+
+@Table(name="consumed_details")
 public class ConsumedDetails {
     private Integer id;
 

@@ -13,6 +13,10 @@ public class UserAccountService extends BaseService<UserAccount> {
 	
 	public Integer recharge(String phoneNumber, Integer packageID) {
 		ConsumePackage consumePackage=consumePackageService.findById(packageID);
+		consumePackage.getId();
+		UserAccount ua=new UserAccount();
+		super.save(ua);
+		ua.setPhoneNumber(phoneNumber);
 		return null;
 	}
 

@@ -2,6 +2,10 @@ package com.chair.manager.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Table;
+
+
+@Table(name="factory")
 public class Factory {
     private Integer id;
 

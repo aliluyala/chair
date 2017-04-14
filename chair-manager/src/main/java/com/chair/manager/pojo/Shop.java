@@ -1,7 +1,9 @@
 package com.chair.manager.pojo;
 
 import java.util.Date;
+import javax.persistence.Table;
 
+@Table(name="shop")
 public class Shop {
     private Integer id;
 

@@ -3,6 +3,9 @@ package com.chair.manager.pojo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Table;
+
+@Table(name="recharge_package")
 public class RechargePackage {
     private Integer id;
 
