@@ -1,6 +1,5 @@
 package com.chair.manager.bean;
 
-import java.util.List;
 /**
  * 接口请求响应结果定义
  * @author good-zhiwei
