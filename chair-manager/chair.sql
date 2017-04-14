@@ -18,10 +18,10 @@ USE chair;
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for consume_package
+-- Table structure for consumed_package
 -- ----------------------------
-DROP TABLE IF EXISTS `consume_package`;
-CREATE TABLE `consume_package` (
+DROP TABLE IF EXISTS `consumed_package`;
+CREATE TABLE `consumed_package` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
   `package_name` varchar(32) DEFAULT NULL COMMENT '套餐名称',
   `consumed_duration` int(11) DEFAULT NULL COMMENT '消费时长',
