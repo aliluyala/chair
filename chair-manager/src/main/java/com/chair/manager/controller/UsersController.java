@@ -1,6 +1,7 @@
 package com.chair.manager.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
+import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.pojo.Users;
+import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.RechargeRecordService;
 import com.chair.manager.service.UsersService;
@@ -31,6 +34,8 @@ public class UsersController {
 	private ConsumedDetailsService consumedDetailsService;
 	@Autowired
 	private UsersService  usersService;
+	@Autowired
+	private ConsumePackageService  consumePackageService;
 
 	/**
 	 * 查看用户消费明细
@@ -82,6 +87,10 @@ public class UsersController {
 		logger.debug("---添加或者更新用户表【前】--："+user);
 		usersService.saveOrUpdate(user);
 		logger.debug("---添加或者更新用户表【后】--："+user);
+		//3.查询消费套餐列表
+		List<ConsumePackage> consumePackages = consumePackageService.queryList(new ConsumePackage());
+		System.err.println("-----消费套餐列表----"+consumePackages.size());
+		
 		return new ResponseResult(user); 
 	}
 	
