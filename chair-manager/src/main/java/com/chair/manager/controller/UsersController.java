@@ -75,23 +75,7 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="login",method=RequestMethod.POST)
 	private ResponseResult userLogin(@RequestBody ReqParam param){
-		param.getPhoneNumber();
-		param.getIdentCode();
-		//1.验证登陆信息
-		//2.查询存在则更新，不存在则新增
-		//insert into users(phoneNumber, createTime, lastUpdate) values('13530380829',now(), now()) ON DUPLICATE KEY UPDATE lastUpdate=now();
-		Users user=new Users();
-		user.setPhoneNumber(param.getPhoneNumber());
-		user.setCreateTime(new Date());
-		user.setLastUpdate(new Date());
-		logger.debug("---添加或者更新用户表【前】--："+user);
-		usersService.saveOrUpdate(user);
-		logger.debug("---添加或者更新用户表【后】--："+user);
-		//3.查询消费套餐列表
-		List<ConsumePackage> consumePackages = consumePackageService.queryList(new ConsumePackage());
-		System.err.println("-----消费套餐列表----"+consumePackages.size());
-		
-		return new ResponseResult(user); 
+		return new ResponseResult(usersService.login(param.getPhoneNumber(), param.getIdentCode())); 
 	}
 	
 
@@ -104,8 +88,6 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="sendCode",method=RequestMethod.POST)
 	private ResponseResult sendCode(@RequestBody ReqParam param){
-		
-		
 		
 		usersService.sendCode(param.getPhoneNumber());
 		return new ResponseResult(null); 
