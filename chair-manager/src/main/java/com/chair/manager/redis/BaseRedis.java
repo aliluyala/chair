@@ -31,6 +31,11 @@ public abstract class BaseRedis {
 	 */
 	protected  <T> T execute(IRedisFunction<ShardedJedis, T> fun) {
 		ShardedJedis shardedJedis = null;
+		System.err.println("---shardedJedisPool---"+shardedJedisPool);
+		System.err.println("---shardedJedisPool.getMaxBorrowWaitTimeMillis()---"+shardedJedisPool.getMaxBorrowWaitTimeMillis());
+		System.err.println("---shardedJedisPool.getMeanBorrowWaitTimeMillis()---"+shardedJedisPool.getMeanBorrowWaitTimeMillis());
+		System.err.println("---shardedJedisPool.getNumActive()---"+shardedJedisPool.getNumActive());
+		System.err.println("---shardedJedisPool.getNumIdle()---"+shardedJedisPool.getNumIdle());
 		try {
 			// 从连接池中获取到jedis分片对象
 			shardedJedis = shardedJedisPool.getResource();

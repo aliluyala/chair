@@ -17,6 +17,7 @@ import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.pojo.Users;
+import com.chair.manager.redis.RedisService;
 import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.RechargeRecordService;
@@ -36,6 +37,10 @@ public class UsersController {
 	private UsersService  usersService;
 	@Autowired
 	private ConsumePackageService  consumePackageService;
+	
+	@Autowired
+	private RedisService redisService;
+	
 
 	/**
 	 * 查看用户消费明细
@@ -111,6 +116,25 @@ public class UsersController {
 		return new ResponseResult(null); 
 	}
 	
+	
+
+	/**
+	 * 测试Redis
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="testRedis",method=RequestMethod.POST)
+	private ResponseResult TestRedis(@RequestBody ReqParam param){
+		System.out.println("---redisService---"+redisService);
+		System.out.println("----"+param);
+		String rs1 = redisService.set("aaa", "4321");
+		String rs2 = redisService.get("aaa");
+//		String rs2 = redisService.set("13", "4321", 10);
+		System.err.println("---rs1---"+rs1);
+		System.err.println("---rs2---"+rs2);
+		return new ResponseResult(null); 
+	}
 	
 	
 }
