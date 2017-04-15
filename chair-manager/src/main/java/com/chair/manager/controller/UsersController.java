@@ -12,7 +12,6 @@ import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.RechargeRecord;
-import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.RechargeRecordService;
 import com.chair.manager.service.UsersService;
@@ -31,8 +30,6 @@ public class UsersController {
 	private ConsumedDetailsService consumedDetailsService;
 	@Autowired
 	private UsersService  usersService;
-	@Autowired
-	private ConsumePackageService  consumePackageService;
 
 	@Autowired
 	private JedisCluster jedisCluster;
@@ -90,7 +87,6 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="sendCode",method=RequestMethod.POST)
 	private ResponseResult sendCode(@RequestBody ReqParam param){
-		
 		usersService.sendCode(param.getPhoneNumber());
 		return new ResponseResult(null); 
 	}
@@ -98,7 +94,7 @@ public class UsersController {
 	
 
 	/**
-	 * 测试Redis
+	 * 测试Redis集群
 	 * @param phoneNumber 用户手机号
 	 * @return
 	 */
