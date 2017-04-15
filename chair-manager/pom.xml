@@ -23,7 +23,8 @@
 		<joda-time.version>2.5</joda-time.version>
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<commons-io.version>1.3.2</commons-io.version>
-		<jedis.version>2.7.2</jedis.version>
+		<spring-data-redis.version>1.6.1.RELEASE</spring-data-redis.version>
+		<jedis.version>2.7.3</jedis.version>
 	</properties>
 	<dependencies>
 		<!-- 单元测试 -->
@@ -121,11 +122,17 @@
 			<version>${jsp-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-redis</artifactId>
-			<version>1.0.2.RELEASE</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-redis</artifactId>
+            <version>${spring-data-redis.version}</version>
+        </dependency>
+        
+        <dependency>  
+            <groupId>org.apache.commons</groupId>  
+            <artifactId>commons-pool2</artifactId>  
+            <version>2.4.2</version>  
+        </dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>

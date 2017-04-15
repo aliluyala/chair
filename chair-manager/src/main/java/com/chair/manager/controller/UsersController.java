@@ -1,8 +1,5 @@
 package com.chair.manager.controller;
 
-import java.util.Date;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,15 +10,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
-import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.RechargeRecord;
-import com.chair.manager.pojo.Users;
-import com.chair.manager.redis.RedisService;
+import com.chair.manager.redis.RedisClientTemplate;
 import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.RechargeRecordService;
 import com.chair.manager.service.UsersService;
+
+import redis.clients.jedis.JedisCluster;
 
 
 @RequestMapping("/users")
@@ -39,7 +36,11 @@ public class UsersController {
 	private ConsumePackageService  consumePackageService;
 	
 	@Autowired
-	private RedisService redisService;
+	private RedisClientTemplate redisClientTemplate;
+
+	@Autowired
+	private JedisCluster jedisCluster;
+	
 	
 
 	/**
@@ -108,10 +109,10 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="testRedis",method=RequestMethod.POST)
 	private ResponseResult TestRedis(@RequestBody ReqParam param){
-		System.out.println("---redisService---"+redisService);
+		System.out.println("---redisClientTemplate---"+redisClientTemplate);
 		System.out.println("----"+param);
-		String rs1 = redisService.set("aaa", "4321");
-		String rs2 = redisService.get("aaa");
+		String rs1 = jedisCluster.set("aaa", "4321");
+		String rs2 = jedisCluster.get("aaa");
 //		String rs2 = redisService.set("13", "4321", 10);
 		System.err.println("---rs1---"+rs1);
 		System.err.println("---rs2---"+rs2);

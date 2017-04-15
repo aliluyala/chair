@@ -28,12 +28,13 @@
 		</property>
 		<property name="testOnBorrow" value="true" />
 		<property name="testOnReturn" value="true" />
+        <property name="testWhileIdle" value="true"/>
 	</bean>
 
 	<bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool"
 		scope="singleton">
-		<constructor-arg index="0" ref="jedisPoolConfig" />
-		<constructor-arg index="1">
+		<constructor-arg ref="jedisPoolConfig" />
+		<constructor-arg >
 			<list>
 				<bean class="redis.clients.jedis.JedisShardInfo">
 					<constructor-arg name="host" value="${redis.host}" />
