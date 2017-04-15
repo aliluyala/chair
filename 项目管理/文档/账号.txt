@@ -10,6 +10,12 @@ SERVER：120.77.203.95(公) 172.18.168.131(私有) PW：Hys2017888
 云服务器：120.77.203.95 / Hys2017888
 数据库：120.77.203.95:3306 hys/hys123
 jdk:1.8
+服务器部署：
+	1.	redis	/home/hys01/redis/	端口:26031-26036
+	2.	mysql 	/home/mysql			端口:3306	hys/hys123
+	3.	zookeeper	/home/hadoop/zookeeper	2181 2182
+
+
 
 git地址：https://github.com/liuzw220/chair.git
 
@@ -25,3 +31,6 @@ yym903140
 域名：120.77.203.95
 www.grandart.org
 grandart.org
+
+短信服务配置：https://1123289024100286.mns.cn-hangzhou.aliyuncs.com
+
