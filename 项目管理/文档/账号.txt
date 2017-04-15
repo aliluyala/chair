@@ -1,0 +1,36 @@
+SERVER：120.77.203.95(公) 172.18.168.131(私有) PW：Hys2017888
+
+阿里云账号密码：豪艺盛智能科技     PW：hys2017    联系人：陈小姐  13600286905
+
+微信公众号：2504025681@qq.com   PW:2504QQ681   联系人：陈小姐  13600286905
+
+森煌科技
+
+
+云服务器：120.77.203.95 / Hys2017888
+数据库：120.77.203.95:3306 hys/hys123
+jdk:1.8
+服务器部署：
+	1.	redis	/home/hys01/redis/	端口:26031-26036
+	2.	mysql 	/home/mysql			端口:3306	hys/hys123
+	3.	zookeeper	/home/hadoop/zookeeper	2181 2182
+
+
+
+git地址：https://github.com/liuzw220/chair.git
+
+
+
+572361524@qq.com
+5201314@qq.com 
+
+
+75610650@qq.com
+yym903140
+
+域名：120.77.203.95
+www.grandart.org
+grandart.org
+
+短信服务配置：https://1123289024100286.mns.cn-hangzhou.aliyuncs.com
+
