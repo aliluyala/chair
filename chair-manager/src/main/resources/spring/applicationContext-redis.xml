@@ -34,4 +34,6 @@
 			</list>
 		</constructor-arg>
 	</bean>
+	<!--生成redis操作对象,用户注入用,根据具体需求配置和生成,这里默认就只生成基础服务RedisService 操作string -->
+	<bean class="com.chair.manager.redis.RedisService"/>
 </beans>
