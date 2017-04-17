@@ -2,10 +2,12 @@ package com.chair.manager.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name="users")
 public class Users {
+	@Id
     private Integer id;
 
     private String phoneNumber;

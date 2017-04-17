@@ -3,10 +3,12 @@ package com.chair.manager.pojo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name="user_account")
 public class UserAccount {
+	@Id
     private Integer id;
 
     private String phoneNumber;

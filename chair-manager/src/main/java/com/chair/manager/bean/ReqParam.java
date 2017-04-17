@@ -49,14 +49,14 @@ public class ReqParam implements Serializable {
 	/**
 	 * 消费套餐ID
 	 */
-	private Integer consumePackageID;
+	private Integer consumedPackageID;
 
-	public Integer getConsumePackageID() {
-		return consumePackageID;
+	public Integer getConsumedPackageID() {
+		return consumedPackageID;
 	}
 
-	public void setConsumePackageID(Integer consumePackageID) {
-		this.consumePackageID = consumePackageID;
+	public void setConsumedPackageID(Integer consumedPackageID) {
+		this.consumedPackageID = consumedPackageID;
 	}
 
 	public Integer getDeviceID() {
@@ -127,7 +127,7 @@ public class ReqParam implements Serializable {
 	public String toString() {
 		return "ReqParam [userID=" + userID + ", type=" + type + ", businessNO=" + businessNO + ", phoneNumber="
 				+ phoneNumber + ", packageID=" + packageID + ", identCode=" + identCode + ", deviceID=" + deviceID
-				+ ", deviceNO=" + deviceNO + ", consumePackageID=" + consumePackageID + "]";
+				+ ", deviceNO=" + deviceNO + ", consumedPackageID=" + consumedPackageID + "]";
 	}
 
 }

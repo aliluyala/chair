@@ -2,12 +2,16 @@ package com.chair.manager.pojo;
 
 import java.util.Date;
 
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 
 @Table(name="device")
 public class Device {
-    private Integer id;
+	
+//	@Column(name="id")
+	@Id
+	private Integer id;
 
     private String deviceNo;
 
@@ -136,4 +140,12 @@ public class Device {
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
+	@Override
+	public String toString() {
+		return "Device [id=" + id + ", deviceNo=" + deviceNo + ", deviceModel=" + deviceModel + ", shopId=" + shopId
+				+ ", shopLocation=" + shopLocation + ", shopName=" + shopName + ", proxyId=" + proxyId + ", proxyName="
+				+ proxyName + ", facrotyId=" + facrotyId + ", factoryName=" + factoryName + ", status=" + status
+				+ ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + "]";
+	}
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
+import com.chair.manager.exception.ChairException;
 import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.Device;
@@ -45,23 +46,24 @@ public class UserAccountController {
 	
 	
 	/**
-	 * 用户选择套餐使用
+	 * 用户启用设备，选择消费套餐
 	 * @param param
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value="choosePackage",method=RequestMethod.POST)
 	private ResponseResult choosePackage(@RequestBody ReqParam param){
-		logger.info("---用户选择套餐---参数为：："+param);
-		//查询设备信息
-		Device d = new Device();
-		d.setDeviceNo(param.getDeviceNO());
-		Device device = deviceService.findByUnique(d);
+		logger.info("---用户启用设备，选择对应的消费套餐，入参为--->>>"+param);
+		//根据设备ID查询设备信息
+		Device device = deviceService.findById(param.getDeviceID());
+		logger.info("---根据设备ID：【"+param.getDeviceID()+"】查询设备信息--->>>"+device);
 		//查询套餐信息
-		ConsumePackage consumePackage = consumePackageService.findById(param.getConsumePackageID());
-		
+		ConsumePackage consumePackage = consumePackageService.findById(param.getConsumedPackageID());
+		logger.info("---根据用户选择的消费套餐ID：【"+param.getConsumedPackageID()+"】查询消费套餐信息--->>>"+consumePackage);
+		if(device == null || consumePackage == null){
+			throw new ChairException("1000", "找不到设备或者消费套餐");
+		}
 		//TODO 发送消息给硬件启动设备， 同步任务
-		
 		//设置消费明细对象
 		ConsumedDetails consumedDetails = new ConsumedDetails();
 		consumedDetails.setPhoneNumber(param.getPhoneNumber());
@@ -72,15 +74,15 @@ public class UserAccountController {
 		consumedDetails.setProxyId(device.getProxyId());
 		consumedDetails.setProxyName(device.getProxyName());
 		consumedDetails.setShopId(device.getShopId());
+		consumedDetails.setShopLocation(device.getShopLocation());
 		consumedDetails.setShopName(device.getShopName());
 		consumedDetails.setDeviceId(device.getId());
 		consumedDetails.setConsumedTime(new Date());
 		consumedDetails.setCreateTime(new Date());
 		consumedDetails.setLastUpdate(new Date());
 		//保存消费明细信息
-		consumedDetailsService.save(consumedDetails);
-		
-		
-		return new ResponseResult(userAccountService.recharge(param.getPhoneNumber(),param.getPackageID()));
+		int rs = consumedDetailsService.save(consumedDetails);
+		logger.info("---保存消费明细结果--->>>"+rs);
+		return new ResponseResult(null);
 	}
 }

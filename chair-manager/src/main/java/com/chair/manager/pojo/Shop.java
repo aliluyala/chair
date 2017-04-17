@@ -1,10 +1,13 @@
 package com.chair.manager.pojo;
 
 import java.util.Date;
+
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name="shop")
 public class Shop {
+	@Id
     private Integer id;
 
     private String shopName;
