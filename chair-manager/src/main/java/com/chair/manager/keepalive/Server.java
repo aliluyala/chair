@@ -1,20 +1,27 @@
 package com.chair.manager.keepalive;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class Server {
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.web.context.support.XmlWebApplicationContext;
+
+public class Server implements ApplicationListener<ApplicationEvent> {
 
 	private int port;
 	private volatile boolean running = false;
-	private long receiveTimeDelay = 30000;
+	private long receiveTimeDelay = Constant.RECEIVE_TIME_DELAY;
 	private ConcurrentHashMap<Class, ServerObjectAction> actionMapping = new ConcurrentHashMap<Class, ServerObjectAction>();
+	private ConcurrentHashMap<String, Socket> ipMapping = new ConcurrentHashMap<String, Socket>();
 	private Thread connWatchDog;
+
+	public Server() {
+	}
 
 	/**
 	 * 构造函数
@@ -41,11 +48,22 @@ public class Server {
 			connWatchDog.stop();
 	}
 
+	//测试
 	public static void main(String[] args) {
-		System.out.println("----服务器启动----");
-		int port = 11111;
+		int port = Constant.PORT;
+		System.out.println("----服务器启动--端口---" + port);
 		Server server = new Server(port);
 		server.start();
+		try {
+			Thread.sleep(10*1000);
+			server.new SocketAction().send("192.168.1.176","---服务端呼叫客户端，收到请回答---");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/*------------------------------------------------------------------------------------------*/
@@ -81,7 +99,10 @@ public class Server {
 		Socket s;
 		boolean run = true;
 		long lastReceiveTime = System.currentTimeMillis();
-
+		
+		
+		public SocketAction() {
+		}
 		public SocketAction(Socket s) {
 			this.s = s;
 		}
@@ -92,37 +113,10 @@ public class Server {
 					overThis();
 				} else {
 					try {
-						String clientIP = s.getInetAddress().toString().replace("/", "");
-						System.out.println("====客户端socket.getInetAddress()=====" + clientIP);
-						s.setKeepAlive(true);// 设置长连接
-						DataInputStream dis = new DataInputStream(s.getInputStream());
-						System.out.println("服务器端接受请求");
-						String reciverMsg = dis.readUTF();
-						System.out.println("------------来自客户端消息----:" + reciverMsg);
-						/*
-						 * InputStream in = s.getInputStream();
-						 * 
-						 * if (in.available() > 0) { ObjectInputStream ois = new
-						 * ObjectInputStream(in); Object obj = ois.readObject();
-						 * lastReceiveTime = System.currentTimeMillis();
-						 * //接收客户端消息 ServerObjectAction oa =
-						 * actionMapping.get(obj.getClass()); //
-						 * System.out.println("oa---"+oa+"接收：\t" + obj);
-						 * s.setKeepAlive(true);
-						 * System.out.println(s.getKeepAlive()+"接收：\t" + obj);
-						 * oa = oa == null ? new ServerDefaultObjectAction() :
-						 * oa; addActionMap(obj.getClass(),oa); //打印客户端详情 //
-						 * showClientInfo();
-						 * 
-						 * 
-						 * Object out = oa.doAction(obj); //响应客户端消息 if (out !=
-						 * null) { ObjectOutputStream oos = new
-						 * ObjectOutputStream(s.getOutputStream());
-						 * oos.writeObject(out+"-aaa-"); oos.flush(); }
-						 */
-						/*
-						 * } else { Thread.sleep(1000); }
-						 */
+						lastReceiveTime = System.currentTimeMillis();
+						ipMapping.put(s.getInetAddress().toString().replace("/", ""), s);// 以k-v保存ip对应的socket对象
+						receive(); // 接收消息
+						response(); // 响应消息
 					} catch (Exception e) {
 						e.printStackTrace();
 						overThis();
@@ -130,7 +124,46 @@ public class Server {
 				}
 			}
 		}
+		
+		/**
+		 * 发送消息
+		 * @param toClientIP 客户端IP
+		 * @param toMessage	消息内容
+		 * @throws IOException
+		 */
+		public void send(String toClientIP, String toMessage) throws IOException {
+			Socket clientSocket = ipMapping.get(toClientIP);
+			DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+			dos.writeUTF(toMessage);
+			dos.flush();
+		}
 
+		/**
+		 * 响应消息
+		 */
+		private void response() throws IOException {
+			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+			String sendMsg = "响应成功";
+			dos.writeUTF(sendMsg);
+			dos.flush();
+		}
+
+		/**
+		 * 接收消息
+		 * 
+		 * @throws IOException
+		 */
+		private void receive() throws IOException {
+			String clientIP = s.getInetAddress().toString().replace("/", "");
+			s.setKeepAlive(true);// 设置长连接
+			DataInputStream dis = new DataInputStream(s.getInputStream());
+			String reciverMsg = dis.readUTF();
+			System.out.println("---接收客户端消息-" + clientIP + "---" + reciverMsg);
+		}
+
+		/**
+		 * 客户端断开链接
+		 */
 		private void overThis() {
 			if (run)
 				run = false;
@@ -146,18 +179,17 @@ public class Server {
 
 	}
 
-	private void showClientInfo() {
-		System.out.println("---打印客户端信息---");
-		// Enumeration<Class> enums = actionMapping.keys();
-		// Class cls = enums.nextElement();
-		// while(cls != null){
-		// System.err.println("---enum ---"+cls);
-		// cls = enums.nextElement();
-		// }
-		Set<Class> keys = actionMapping.keySet();
-		for (Class key : keys) {
-			System.err.println(key + "---" + actionMapping.get(key));
+	@Override
+	public void onApplicationEvent(ApplicationEvent event) {
+		if (event.getSource() instanceof XmlWebApplicationContext) {
+			if (((XmlWebApplicationContext) event.getSource()).getDisplayName().equals("Root WebApplicationContext")) {
+				int port = Constant.PORT;
+				System.err.println("----spring初始化Socket服务器启动，建立长连接--端口---" + port);
+				Server server = new Server(port);
+				server.start();
+			}
 		}
+
 	}
 
 }
