@@ -56,7 +56,7 @@ public class UsersService extends BaseService<Users> {
 		// TODO 调用短信接口发送验证码
 		Map<String, String> templateMap = new HashMap<String, String>();
 		templateMap.put("code", code);
-		templateMap.put("product", "H5555-TEST");
+		templateMap.put("product", "微信");
 		List<String> recevierList = new ArrayList<String>();
 		recevierList.add(phoneNumber);
 		BatchPublishSMSMessage sms= new BatchPublishSMSMessage();
