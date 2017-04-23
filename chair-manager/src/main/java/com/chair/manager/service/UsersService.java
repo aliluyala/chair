@@ -2,7 +2,9 @@ package com.chair.manager.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
@@ -13,6 +15,7 @@ import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.UsersMapper;
 import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.Users;
+import com.chair.manager.sms.BatchPublishSMSMessage;
 import com.chair.manager.vo.ConsumePackageVo;
 import com.chair.manager.vo.UserVo;
 
@@ -51,9 +54,16 @@ public class UsersService extends BaseService<Users> {
 		// 1.生成四位数验证码
 		String code = createCode();
 		// TODO 调用短信接口发送验证码
+		Map<String, String> templateMap = new HashMap<String, String>();
+		templateMap.put("code", code);
+		templateMap.put("product", "H5555-TEST");
+		List<String> recevierList = new ArrayList<String>();
+		recevierList.add(phoneNumber);
+		BatchPublishSMSMessage sms= new BatchPublishSMSMessage();
+		sms.sendSMS(templateMap, recevierList);
 		// 3.redis存储手机号和验证码，5分钟失效
 		String rs = jedisCluster.setex(phoneNumber, EXPIRE, code);
-		logger.info("redis集群保存" + phoneNumber + "的验证码" + code + "结果：" + rs);
+		logger.info("---redis集群保存" + phoneNumber + "的验证码" + code + "结果：" + rs);
 		return b;
 	}
 
