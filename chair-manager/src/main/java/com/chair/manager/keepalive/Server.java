@@ -143,7 +143,8 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		 */
 		private void response() throws IOException {
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-			String sendMsg = "响应成功";
+//			String sendMsg = "响应成功";
+			String sendMsg = "*QB001";
 			dos.writeUTF(sendMsg);
 			dos.flush();
 		}
