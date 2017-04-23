@@ -16,7 +16,7 @@ jdk:1.8
 	3.	zookeeper	/home/hadoop/zookeeper	2181 2182
 	4.	H5静态页面	/home/hys02/smartClient		http://www.grandart.org/admin
 	5.	数据接口服务	/home/hys02/smartServer		11000(http)  11001(ajp)  11002(manager)	http://www.grandart.org/ch
-	6.  管理台			http://www.grandart.org/ch     http://www.grandart.org  //本机测试
+	6.  管理台			http://www.grandart.org/ch     http://www.grandart.org/localtest  //本机测试
 
 
 git地址：https://github.com/liuzw220/chair.git
