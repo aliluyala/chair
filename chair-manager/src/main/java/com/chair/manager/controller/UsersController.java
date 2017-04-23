@@ -19,7 +19,7 @@ import com.chair.manager.service.UsersService;
 import redis.clients.jedis.JedisCluster;
 
 
-@RequestMapping("/users")
+@RequestMapping("/user")
 @Controller
 public class UsersController {
 	private Logger logger = Logger.getLogger(UsersController.class);
