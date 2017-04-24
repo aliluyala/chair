@@ -45,11 +45,14 @@ public class ReqParam implements Serializable {
 	 * 设备编号
 	 */
 	private String deviceNO;
-
 	/**
 	 * 消费套餐ID
 	 */
 	private Integer consumedPackageID;
+	/**
+	 * 充值批次号
+	 */
+	private String batchNo;
 
 	public Integer getConsumedPackageID() {
 		return consumedPackageID;
@@ -121,6 +124,14 @@ public class ReqParam implements Serializable {
 
 	public void setPackageID(Integer packageID) {
 		this.packageID = packageID;
+	}
+	
+	public String getBatchNo() {
+		return batchNo;
+	}
+
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
 	}
 
 	@Override
