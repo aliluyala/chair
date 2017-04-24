@@ -3,8 +3,13 @@ package com.chair.manager.keepalive;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.context.ApplicationEvent;
@@ -48,15 +53,15 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 			connWatchDog.stop();
 	}
 
-	//测试
+	// 测试
 	public static void main(String[] args) {
 		int port = Constant.PORT;
 		System.out.println("----服务器启动--端口---" + port);
 		Server server = new Server(port);
 		server.start();
 		try {
-			Thread.sleep(10*1000);
-			server.new SocketAction().send("192.168.1.176","---服务端呼叫客户端，收到请回答---");
+			Thread.sleep(10 * 1000);
+			server.new SocketAction().send("192.168.1.78", "---服务端呼叫客户端，收到请回答---");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,10 +104,10 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		Socket s;
 		boolean run = true;
 		long lastReceiveTime = System.currentTimeMillis();
-		
-		
+
 		public SocketAction() {
 		}
+
 		public SocketAction(Socket s) {
 			this.s = s;
 		}
@@ -117,6 +122,10 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 						ipMapping.put(s.getInetAddress().toString().replace("/", ""), s);// 以k-v保存ip对应的socket对象
 						receive(); // 接收消息
 						response(); // 响应消息
+
+//						receiveByInputStream();
+//						responseByOutputStream();
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 						overThis();
@@ -124,11 +133,14 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 				}
 			}
 		}
-		
+
 		/**
 		 * 发送消息
-		 * @param toClientIP 客户端IP
-		 * @param toMessage	消息内容
+		 * 
+		 * @param toClientIP
+		 *            客户端IP
+		 * @param toMessage
+		 *            消息内容
 		 * @throws IOException
 		 */
 		public void send(String toClientIP, String toMessage) throws IOException {
@@ -142,8 +154,9 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		 * 响应消息
 		 */
 		private void response() throws IOException {
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"---响应消息---"+s);
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-//			String sendMsg = "响应成功";
+			// String sendMsg = "响应成功";
 			String sendMsg = "*QB001";
 			dos.writeUTF(sendMsg);
 			dos.flush();
@@ -155,12 +168,66 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		 * @throws IOException
 		 */
 		private void receive() throws IOException {
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"---开始接收消息---"+s);
+			InputStream is = s.getInputStream();
+			System.out.println("---is.available()---"+is.available());
+			System.out.println("---is.read()---"+is.read());
 			String clientIP = s.getInetAddress().toString().replace("/", "");
 			s.setKeepAlive(true);// 设置长连接
 			DataInputStream dis = new DataInputStream(s.getInputStream());
 			String reciverMsg = dis.readUTF();
 			System.out.println("---接收客户端消息-" + clientIP + "---" + reciverMsg);
 		}
+
+		/**
+		 * 接收消息(ObjectInputStream)
+		 * 
+		 * @throws IOException
+		 * @throws ClassNotFoundException 
+		 */
+		private void receiveByObjectInputStream() throws IOException, ClassNotFoundException {
+			String clientIP = s.getInetAddress().toString().replace("/", "");
+			s.setKeepAlive(true);// 设置长连接
+			ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
+			Object reciverMsg = ois.readObject();
+			System.out.println("---接收客户端消息-" + clientIP + "---" + reciverMsg);
+		}
+
+		/**
+		 * 接收消息(InputStream)
+		 * 
+		 * @throws IOException
+		 * @throws ClassNotFoundException
+		 */
+		private void receiveByInputStream() throws IOException, ClassNotFoundException {
+			String clientIP = s.getInetAddress().toString().replace("/", "");
+			s.setKeepAlive(true);// 设置长连接
+			InputStream is = s.getInputStream();
+			int length = 0;
+			byte[] buffer = new byte[20];
+			String reciverMsg ="";
+			while (-1 != (length = is.read(buffer, 0, 20))) {
+				String str = new String(buffer, 0, length);
+				System.out.print(str);
+				reciverMsg += str;
+			}
+			System.out.println("---接收客户端消息-" + clientIP + "---" + reciverMsg);
+		}
+		
+		/**
+		 * 响应消息(OutputStream)
+		 */
+		private void responseByOutputStream() throws IOException {
+			String sendMsg = "*QB001";
+			OutputStream os = s.getOutputStream();
+			byte[] b = sendMsg.getBytes();
+			os.write(b);
+			os.flush();
+//			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+//			dos.writeUTF(sendMsg);
+//			dos.flush();
+		}
+		
 
 		/**
 		 * 客户端断开链接
