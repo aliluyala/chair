@@ -2,7 +2,6 @@ package com.chair.manager.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -13,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import redis.clients.jedis.JedisCluster;
+
 import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.pojo.ConsumedDetails;
@@ -20,9 +21,8 @@ import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.RechargeRecordService;
 import com.chair.manager.service.UsersService;
+import com.chair.manager.vo.ConsumedDetailsVo;
 import com.chair.manager.vo.RechargeRecordVo;
-
-import redis.clients.jedis.JedisCluster;
 
 
 @RequestMapping("/user")
@@ -66,6 +66,8 @@ public class UsersController {
 		res.setOpenID(param.getOpenID());
 		res.setPhoneNumber(param.getPhoneNumber());
 		res.setRechargeList(voList);
+		res.setOpenID(param.getOpenID());
+		res.setPhoneNumber(param.getPhoneNumber());
 		return new ResponseResult(res);
 	}
 	/**
@@ -79,7 +81,16 @@ public class UsersController {
 	private ResponseResult queryConsumedDetails(@RequestBody ReqParam param){
 		ConsumedDetails cd=new ConsumedDetails();
 		cd.setPhoneNumber(param.getPhoneNumber());
-		return new ResponseResult(consumedDetailsService.queryList(cd));
+		List<ConsumedDetails> rs=consumedDetailsService.queryList(cd);
+		ConsumedDetailsVo vo=new ConsumedDetailsVo();
+		List<ConsumedDetailsVo> vos=new ArrayList<ConsumedDetailsVo>();
+		for(ConsumedDetails consumed:rs){
+			ConsumedDetailsVo c=new ConsumedDetailsVo();
+			c.setConsumedDuration(consumed.getConsumedDuration());
+			c.setConsumedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(consumed.getCreateTime()));
+		}
+		vo.setConsumedList(vos);
+		return new ResponseResult(vo);
 	}
 	
 	/**
