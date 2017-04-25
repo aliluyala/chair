@@ -98,5 +98,22 @@ public class UserAccountService extends BaseService<UserAccount> {
 		userAccountMapper.saveOrUpdate(userAccount);
 	}
 	
+	/**
+	 * 查询预支付信息
+	 * @param phoneNumber
+	 * @param batchNo
+	 * @return
+	 */
+	public RechargeRecord queryPrepayInfo(String phoneNumber, String batchNo) {
+		RechargeRecord recordPraam=new RechargeRecord();
+		recordPraam.setPhoneNumbe(phoneNumber);
+		recordPraam.setBatchNo(batchNo);
+		recordPraam.setPayStatu(PayStatus.PAY_FAIL.getValue());
+		List<RechargeRecord> records = rechargeRecordMapper.select(recordPraam);
+		if(records.size() <= 0) return null;
+		System.out.println("---record---"+records.get(0));
+		return records.get(0);
+	}
+	
 
 }

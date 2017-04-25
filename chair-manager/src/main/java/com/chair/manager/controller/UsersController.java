@@ -59,7 +59,7 @@ public class UsersController {
 			RechargeRecordVo rrv = new RechargeRecordVo();
 			rrv.setRechargeAmount(rechargeRecordList.get(i).getRechargeAmount().toString());
 			rrv.setRechargeDuration(rechargeRecordList.get(i).getRechargeDuration());
-			rrv.setRechargeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(rechargeRecordList.get(i).getRechargeTime()));
+			rrv.setRechargeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(rechargeRecordList.get(i).getCreateTime()));
 			voList.add(rrv);
 		}
 		RechargeRecordVo res = new RechargeRecordVo();
@@ -88,7 +88,10 @@ public class UsersController {
 			ConsumedDetailsVo c=new ConsumedDetailsVo();
 			c.setConsumedDuration(consumed.getConsumedDuration());
 			c.setConsumedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(consumed.getCreateTime()));
+			vos.add(c);
 		}
+		vo.setOpenID(param.getOpenID());
+		vo.setPhoneNumber(param.getPhoneNumber());
 		vo.setConsumedList(vos);
 		return new ResponseResult(vo);
 	}

@@ -11,7 +11,9 @@ public class RechargeRecordVo implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String openID;
-
+	
+	private String batchNO;
+	
 	private String phoneNumber;
 
 	private String rechargeAmount;

@@ -44,6 +44,18 @@ public class UserAccountController {
 	}
 	
 	
+	/**
+	 * 查询预支付信息
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="queryPrepayInfo",method=RequestMethod.POST)
+	private ResponseResult queryPrepayInfo(@RequestBody ReqParam param){
+		return new ResponseResult(userAccountService.queryPrepayInfo(param.getPhoneNumber(),param.getBatchNo()));
+	}
+	
+	
 	
 	/**
 	 * 用户启用设备，选择消费套餐
