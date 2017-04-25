@@ -11,6 +11,7 @@ import com.chair.manager.enums.PayStatus;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.RechargePackageMapper;
 import com.chair.manager.mapper.RechargeRecordMapper;
+import com.chair.manager.mapper.UserAccountMapper;
 import com.chair.manager.pojo.RechargePackage;
 import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.pojo.UserAccount;
@@ -21,6 +22,8 @@ public class UserAccountService extends BaseService<UserAccount> {
 	private RechargePackageMapper rechargePackageMapper;
 	@Autowired
 	private RechargeRecordMapper rechargeRecordMapper;
+	@Autowired
+	private UserAccountMapper userAccountMapper;
 	/**
 	 * 用户充值
 	 * @param phoneNumber 用户手机号
@@ -89,6 +92,10 @@ public class UserAccountService extends BaseService<UserAccount> {
 		ua.setLastUpdate(new Date()); 
 		return super.updateSelective(ua);
 		
+	}
+
+	public void saveOrUpdate(UserAccount userAccount) {
+		userAccountMapper.saveOrUpdate(userAccount);
 	}
 	
 

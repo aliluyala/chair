@@ -74,7 +74,7 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="login",method=RequestMethod.POST)
 	private ResponseResult userLogin(@RequestBody ReqParam param){
-		return new ResponseResult(usersService.login(param.getPhoneNumber(), param.getIdentCode())); 
+		return new ResponseResult(usersService.login(param.getOpenID(), param.getPhoneNumber(), param.getIdentCode())); 
 	}
 	
 

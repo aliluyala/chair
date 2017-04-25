@@ -101,4 +101,12 @@ public class UserAccount {
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
+	@Override
+	public String toString() {
+		return "UserAccount [id=" + id + ", openID=" + openID + ", phoneNumber=" + phoneNumber + ", amount=" + amount
+				+ ", totalDuration=" + totalDuration + ", usedDuration=" + usedDuration + ", restDuration="
+				+ restDuration + ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + "]";
+	}
+    
 }

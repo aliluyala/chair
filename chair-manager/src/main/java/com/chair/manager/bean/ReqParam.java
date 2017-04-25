@@ -53,6 +53,20 @@ public class ReqParam implements Serializable {
 	 * 充值批次号
 	 */
 	private String batchNo;
+	/**
+	 * 微信唯一标识
+	 */
+	private String openID;
+
+	
+	
+	public String getOpenID() {
+		return openID;
+	}
+
+	public void setOpenID(String openID) {
+		this.openID = openID;
+	}
 
 	public Integer getConsumedPackageID() {
 		return consumedPackageID;
@@ -138,7 +152,8 @@ public class ReqParam implements Serializable {
 	public String toString() {
 		return "ReqParam [userID=" + userID + ", type=" + type + ", businessNO=" + businessNO + ", phoneNumber="
 				+ phoneNumber + ", packageID=" + packageID + ", identCode=" + identCode + ", deviceID=" + deviceID
-				+ ", deviceNO=" + deviceNO + ", consumedPackageID=" + consumedPackageID + "]";
+				+ ", deviceNO=" + deviceNO + ", consumedPackageID=" + consumedPackageID + ", batchNo=" + batchNo
+				+ ", openID=" + openID + "]";
 	}
 
 }
