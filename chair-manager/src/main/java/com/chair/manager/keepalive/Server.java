@@ -59,16 +59,16 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		System.out.println("----服务器启动--端口---" + port);
 		Server server = new Server(port);
 		server.start();
-		try {
-			Thread.sleep(10 * 1000);
-			server.new SocketAction().send("192.168.1.78", "---服务端呼叫客户端，收到请回答---");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(10 * 1000);
+//			server.new SocketAction().send("192.168.1.78", "---服务端呼叫客户端，收到请回答---");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	/*------------------------------------------------------------------------------------------*/
@@ -118,14 +118,19 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 					overThis();
 				} else {
 					try {
-						lastReceiveTime = System.currentTimeMillis();
-						ipMapping.put(s.getInetAddress().toString().replace("/", ""), s);// 以k-v保存ip对应的socket对象
-						receive(); // 接收消息
-						response(); // 响应消息
+						InputStream is = s.getInputStream();
+						if(is.available()>0){
+							lastReceiveTime = System.currentTimeMillis();
+							ipMapping.put(s.getInetAddress().toString().replace("/", ""), s);// 以k-v保存ip对应的socket对象
+							// receive(); // 接收消息
+							// response(); // 响应消息
 
-//						receiveByInputStream();
-//						responseByOutputStream();
-						
+							receiveByInputStream();
+							responseByOutputStream();
+
+						}else {
+							Thread.sleep(100);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 						overThis();
@@ -154,7 +159,7 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		 * 响应消息
 		 */
 		private void response() throws IOException {
-			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"---响应消息---"+s);
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---响应消息---" + s);
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 			// String sendMsg = "响应成功";
 			String sendMsg = "*QB001";
@@ -168,10 +173,10 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		 * @throws IOException
 		 */
 		private void receive() throws IOException {
-			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"---开始接收消息---"+s);
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---开始接收消息---" + s);
 			InputStream is = s.getInputStream();
-			System.out.println("---is.available()---"+is.available());
-			System.out.println("---is.read()---"+is.read());
+			System.out.println("---is.available()---" + is.available());
+			System.out.println("---is.read()---" + is.read());
 			String clientIP = s.getInetAddress().toString().replace("/", "");
 			s.setKeepAlive(true);// 设置长连接
 			DataInputStream dis = new DataInputStream(s.getInputStream());
@@ -183,7 +188,7 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		 * 接收消息(ObjectInputStream)
 		 * 
 		 * @throws IOException
-		 * @throws ClassNotFoundException 
+		 * @throws ClassNotFoundException
 		 */
 		private void receiveByObjectInputStream() throws IOException, ClassNotFoundException {
 			String clientIP = s.getInetAddress().toString().replace("/", "");
@@ -198,36 +203,41 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		 * 
 		 * @throws IOException
 		 * @throws ClassNotFoundException
+		 * @throws InterruptedException 
 		 */
-		private void receiveByInputStream() throws IOException, ClassNotFoundException {
+		private void receiveByInputStream() throws IOException, ClassNotFoundException, InterruptedException {
 			String clientIP = s.getInetAddress().toString().replace("/", "");
 			s.setKeepAlive(true);// 设置长连接
 			InputStream is = s.getInputStream();
-			int length = 0;
-			byte[] buffer = new byte[20];
-			String reciverMsg ="";
-			while (-1 != (length = is.read(buffer, 0, 20))) {
-				String str = new String(buffer, 0, length);
-				System.out.print(str);
-				reciverMsg += str;
+			String reciverMsg = "";
+			if (is.available() > 0) {
+				System.out.println("---开始接收消息---is.available()---" + is.available() + "---is.read()---" + is.read()+" --- "+s);
+				int length = 0;
+				byte[] buffer = new byte[1024];
+				while (-1 != (length = is.read(buffer, 0, 1024))) {
+					reciverMsg += new String(buffer, 0, length);
+					System.out.println("--reciverMsg--"+reciverMsg);
+					responseByOutputStream();
+				}
+			}else{
+				Thread.sleep(10);
 			}
-			System.out.println("---接收客户端消息-" + clientIP + "---" + reciverMsg);
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---接收客户端消息-" + clientIP
+					+ "---" + reciverMsg);
+			
 		}
-		
+
 		/**
 		 * 响应消息(OutputStream)
 		 */
 		private void responseByOutputStream() throws IOException {
 			String sendMsg = "*QB001";
 			OutputStream os = s.getOutputStream();
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---响应客户端消息---" + sendMsg);
 			byte[] b = sendMsg.getBytes();
 			os.write(b);
 			os.flush();
-//			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
-//			dos.writeUTF(sendMsg);
-//			dos.flush();
 		}
-		
 
 		/**
 		 * 客户端断开链接
