@@ -13,6 +13,8 @@ public class UserAccount {
 	@Id
 	 @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
+	
+    private String openID;
 
     private String phoneNumber;
 
@@ -36,7 +38,15 @@ public class UserAccount {
         this.id = id;
     }
 
-    public String getPhoneNumber() {
+    public String getOpenID() {
+		return openID;
+	}
+
+	public void setOpenID(String openID) {
+		this.openID = openID;
+	}
+
+	public String getPhoneNumber() {
         return phoneNumber;
     }
 

@@ -12,6 +12,8 @@ public class RechargeRecord {
     private Integer id;
 
     private String batchNo;
+    
+    private String openID;
 
     private String phoneNumbe;
 
@@ -41,7 +43,15 @@ public class RechargeRecord {
         return batchNo;
     }
 
-    public void setBatchNo(String batchNo) {
+    public String getOpenID() {
+		return openID;
+	}
+
+	public void setOpenID(String openID) {
+		this.openID = openID;
+	}
+
+	public void setBatchNo(String batchNo) {
         this.batchNo = batchNo == null ? null : batchNo.trim();
     }
 
