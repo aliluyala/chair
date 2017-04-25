@@ -209,21 +209,21 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 			String clientIP = s.getInetAddress().toString().replace("/", "");
 			s.setKeepAlive(true);// 设置长连接
 			InputStream is = s.getInputStream();
-			String reciverMsg = "";
 			if (is.available() > 0) {
 				System.out.println("---开始接收消息---is.available()---" + is.available() + "---is.read()---" + is.read()+" --- "+s);
 				int length = 0;
 				byte[] buffer = new byte[1024];
 				while (-1 != (length = is.read(buffer, 0, 1024))) {
+					String reciverMsg = "";
 					reciverMsg += new String(buffer, 0, length);
-					System.out.println("--reciverMsg--"+reciverMsg);
+					System.out.println("--接收来自客户端消息--"+reciverMsg);
 					responseByOutputStream();
 				}
 			}else{
 				Thread.sleep(10);
 			}
-			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---接收客户端消息-" + clientIP
-					+ "---" + reciverMsg);
+//			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---接收客户端消息-" + clientIP
+//					+ "---" + reciverMsg);
 			
 		}
 
