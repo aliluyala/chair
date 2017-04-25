@@ -103,7 +103,7 @@ public class UsersService extends BaseService<Users> {
 		}
 		// 2.查询存在则更新，不存在则新增
 		Users user = new Users();
-		user.setOpenID(openID);
+		user.setOpenId(openID);
 		user.setPhoneNumber(phoneNumber);
 		user.setCreateTime(new Date());
 		user.setLastUpdate(new Date());
@@ -113,7 +113,7 @@ public class UsersService extends BaseService<Users> {
 		
 		// 3.查询账户，存在则更新，不存在则新增
 		UserAccount userAccount = new UserAccount();
-		userAccount.setOpenID(openID);
+		userAccount.setOpenId(openID);
 		userAccount.setPhoneNumber(phoneNumber);
 		userAccount.setCreateTime(new Date());
 		userAccount.setLastUpdate(new Date());
@@ -140,6 +140,17 @@ public class UsersService extends BaseService<Users> {
 
 		return uvo;
 
+	}
+	
+	/**
+	 * 查询用户注册状态
+	 * @param openID
+	 * @return
+	 */
+	public Users queryUserRegStatus(String openID) {
+		Users user = new Users();
+		user.setOpenId(openID);
+		return (Users) usersMapper.selectByPrimaryKey(user);
 	}
 
 }

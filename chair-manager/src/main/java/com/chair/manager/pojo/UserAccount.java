@@ -14,7 +14,7 @@ public class UserAccount {
 	 @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 	
-    private String openID;
+    private String openId;
 
     private String phoneNumber;
 
@@ -38,13 +38,6 @@ public class UserAccount {
         this.id = id;
     }
 
-    public String getOpenID() {
-		return openID;
-	}
-
-	public void setOpenID(String openID) {
-		this.openID = openID;
-	}
 
 	public String getPhoneNumber() {
         return phoneNumber;
@@ -102,9 +95,17 @@ public class UserAccount {
         this.lastUpdate = lastUpdate;
     }
 
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
 	@Override
 	public String toString() {
-		return "UserAccount [id=" + id + ", openID=" + openID + ", phoneNumber=" + phoneNumber + ", amount=" + amount
+		return "UserAccount [id=" + id + ", openId=" + openId + ", phoneNumber=" + phoneNumber + ", amount=" + amount
 				+ ", totalDuration=" + totalDuration + ", usedDuration=" + usedDuration + ", restDuration="
 				+ restDuration + ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + "]";
 	}

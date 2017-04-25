@@ -6,6 +6,6 @@
 <mapper namespace="com.chair.manager.mapper.UserAccountMapper">
 
 	<insert id="saveOrUpdate" useGeneratedKeys="true" keyProperty="id">
-		insert into user_account(open_id, phone_number, create_time, last_update) values(#{openID}, #{phoneNumber},#{createTime}, #{lastUpdate}) ON DUPLICATE KEY UPDATE last_update=#{lastUpdate};
+		insert into user_account(open_id, phone_number, create_time, last_update) values(#{openId}, #{phoneNumber},#{createTime}, #{lastUpdate}) ON DUPLICATE KEY UPDATE last_update=#{lastUpdate};
 	</insert>
 </mapper>

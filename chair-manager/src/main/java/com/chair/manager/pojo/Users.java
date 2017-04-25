@@ -10,7 +10,7 @@ public class Users {
 	@Id
     private Integer id;
 	
-    private String openID;
+    private String openId;
 
     private String phoneNumber;
 
@@ -26,12 +26,14 @@ public class Users {
         this.id = id;
     }
 
-    public String getOpenID() {
-		return openID;
+
+
+	public String getOpenId() {
+		return openId;
 	}
 
-	public void setOpenID(String openID) {
-		this.openID = openID;
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 
 	public String getPhoneNumber() {
@@ -60,7 +62,7 @@ public class Users {
 
 	@Override
 	public String toString() {
-		return "Users [id=" + id + ", openID=" + openID + ", phoneNumber=" + phoneNumber + ", createTime=" + createTime
+		return "Users [id=" + id + ", openId=" + openId + ", phoneNumber=" + phoneNumber + ", createTime=" + createTime
 				+ ", lastUpdate=" + lastUpdate + "]";
 	}
     

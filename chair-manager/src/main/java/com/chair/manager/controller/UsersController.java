@@ -63,6 +63,17 @@ public class UsersController {
 		return new ResponseResult(consumedDetailsService.queryList(cd));
 	}
 	
+	/**
+	 * 发送用户验证码
+	 * @param userID 用户ID
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="queryUserRegStatus",method=RequestMethod.POST)
+	private ResponseResult queryUserStatus(@RequestBody ReqParam param){
+		return new ResponseResult(usersService.queryUserRegStatus(param.getOpenID())); 
+	}
 	
 
 	/**
