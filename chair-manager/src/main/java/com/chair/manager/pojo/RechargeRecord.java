@@ -6,106 +6,125 @@ import java.util.Date;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name="recharge_record")
+@Table(name = "recharge_record")
 public class RechargeRecord {
 	@Id
-    private Integer id;
+	private Integer id;
 
-    private String batchNo;
+	private String batchNo;
 
-    private String phoneNumbe;
+	private String openId;
 
-    private Integer rechargePackageId;
+	private String phoneNumbe;
 
-    private BigDecimal rechargeAmount;
+	private Integer rechargePackageId;
 
-    private Integer rechargeDuration;
+	private BigDecimal rechargeAmount;
 
-    private Date rechargeTime;
+	private Integer rechargeDuration;
 
-    private Integer payStatu;
+	private Date rechargeTime;
 
-    private Date createTime;
+	private Integer payStatu;
 
-    private Date lastUpdate;
+	private Date createTime;
 
-    public Integer getId() {
-        return id;
-    }
+	private Date lastUpdate;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getBatchNo() {
-        return batchNo;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setBatchNo(String batchNo) {
-        this.batchNo = batchNo == null ? null : batchNo.trim();
-    }
+	public String getBatchNo() {
+		return batchNo;
+	}
 
-    public String getPhoneNumbe() {
-        return phoneNumbe;
-    }
+	public String getOpenId() {
+		return openId;
+	}
 
-    public void setPhoneNumbe(String phoneNumbe) {
-        this.phoneNumbe = phoneNumbe == null ? null : phoneNumbe.trim();
-    }
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
 
-    public Integer getRechargePackageId() {
-        return rechargePackageId;
-    }
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo == null ? null : batchNo.trim();
+	}
 
-    public void setRechargePackageId(Integer rechargePackageId) {
-        this.rechargePackageId = rechargePackageId;
-    }
+	public String getPhoneNumbe() {
+		return phoneNumbe;
+	}
 
-    public BigDecimal getRechargeAmount() {
-        return rechargeAmount;
-    }
+	public void setPhoneNumbe(String phoneNumbe) {
+		this.phoneNumbe = phoneNumbe == null ? null : phoneNumbe.trim();
+	}
 
-    public void setRechargeAmount(BigDecimal rechargeAmount) {
-        this.rechargeAmount = rechargeAmount;
-    }
+	public Integer getRechargePackageId() {
+		return rechargePackageId;
+	}
 
-    public Integer getRechargeDuration() {
-        return rechargeDuration;
-    }
+	public void setRechargePackageId(Integer rechargePackageId) {
+		this.rechargePackageId = rechargePackageId;
+	}
 
-    public void setRechargeDuration(Integer rechargeDuration) {
-        this.rechargeDuration = rechargeDuration;
-    }
+	public BigDecimal getRechargeAmount() {
+		return rechargeAmount;
+	}
 
-    public Date getRechargeTime() {
-        return rechargeTime;
-    }
+	public void setRechargeAmount(BigDecimal rechargeAmount) {
+		this.rechargeAmount = rechargeAmount;
+	}
 
-    public void setRechargeTime(Date rechargeTime) {
-        this.rechargeTime = rechargeTime;
-    }
+	public Integer getRechargeDuration() {
+		return rechargeDuration;
+	}
 
-    public Integer getPayStatu() {
-        return payStatu;
-    }
+	public void setRechargeDuration(Integer rechargeDuration) {
+		this.rechargeDuration = rechargeDuration;
+	}
 
-    public void setPayStatu(Integer payStatu) {
-        this.payStatu = payStatu;
-    }
+	public Date getRechargeTime() {
+		return rechargeTime;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public void setRechargeTime(Date rechargeTime) {
+		this.rechargeTime = rechargeTime;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public Integer getPayStatu() {
+		return payStatu;
+	}
 
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
+	public void setPayStatu(Integer payStatu) {
+		this.payStatu = payStatu;
+	}
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
+	@Override
+	public String toString() {
+		return "RechargeRecord [id=" + id + ", batchNo=" + batchNo + ", openId=" + openId + ", phoneNumbe=" + phoneNumbe
+				+ ", rechargePackageId=" + rechargePackageId + ", rechargeAmount=" + rechargeAmount
+				+ ", rechargeDuration=" + rechargeDuration + ", rechargeTime=" + rechargeTime + ", payStatu=" + payStatu
+				+ ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + "]";
+	}
+
 }

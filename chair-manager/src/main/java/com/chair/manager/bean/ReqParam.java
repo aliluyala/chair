@@ -45,11 +45,28 @@ public class ReqParam implements Serializable {
 	 * 设备编号
 	 */
 	private String deviceNO;
-
 	/**
 	 * 消费套餐ID
 	 */
 	private Integer consumedPackageID;
+	/**
+	 * 充值批次号
+	 */
+	private String batchNo;
+	/**
+	 * 微信唯一标识
+	 */
+	private String openID;
+
+	
+	
+	public String getOpenID() {
+		return openID;
+	}
+
+	public void setOpenID(String openID) {
+		this.openID = openID;
+	}
 
 	public Integer getConsumedPackageID() {
 		return consumedPackageID;
@@ -122,12 +139,21 @@ public class ReqParam implements Serializable {
 	public void setPackageID(Integer packageID) {
 		this.packageID = packageID;
 	}
+	
+	public String getBatchNo() {
+		return batchNo;
+	}
+
+	public void setBatchNo(String batchNo) {
+		this.batchNo = batchNo;
+	}
 
 	@Override
 	public String toString() {
 		return "ReqParam [userID=" + userID + ", type=" + type + ", businessNO=" + businessNO + ", phoneNumber="
 				+ phoneNumber + ", packageID=" + packageID + ", identCode=" + identCode + ", deviceID=" + deviceID
-				+ ", deviceNO=" + deviceNO + ", consumedPackageID=" + consumedPackageID + "]";
+				+ ", deviceNO=" + deviceNO + ", consumedPackageID=" + consumedPackageID + ", batchNo=" + batchNo
+				+ ", openID=" + openID + "]";
 	}
 
 }

@@ -11,6 +11,7 @@ import com.chair.manager.enums.PayStatus;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.RechargePackageMapper;
 import com.chair.manager.mapper.RechargeRecordMapper;
+import com.chair.manager.mapper.UserAccountMapper;
 import com.chair.manager.pojo.RechargePackage;
 import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.pojo.UserAccount;
@@ -21,6 +22,8 @@ public class UserAccountService extends BaseService<UserAccount> {
 	private RechargePackageMapper rechargePackageMapper;
 	@Autowired
 	private RechargeRecordMapper rechargeRecordMapper;
+	@Autowired
+	private UserAccountMapper userAccountMapper;
 	/**
 	 * 用户充值
 	 * @param phoneNumber 用户手机号
@@ -52,18 +55,47 @@ public class UserAccountService extends BaseService<UserAccount> {
 		rr.setCreateTime(date);
 		rr.setLastUpdate(date);
 		rechargeRecordMapper.insertSelective(rr);
-		UserAccount ua=new UserAccount();
-		ua.setId(account.getId());
-		ua.setAmount((account.getAmount()!=null?account.getAmount():new BigDecimal(0)).add(rp.getRechargeAmoun()));
-		ua.setRestDuration((account.getRestDuration()!=null?account.getRestDuration():0)+rp.getRechargeDuration());
-		ua.setLastUpdate(date); 
-		super.updateSelective(ua);
 		return rr.getBatchNo();
 	}
 	
 	private String createBatchNo(Integer accountId){
 		Integer batchNo=10000+accountId;
 		return batchNo+""+System.currentTimeMillis();
+	}
+	
+	
+	/**
+	 * 支付回调方法
+	 * @param batchNo 支付批次号
+	 * @return
+	 */
+	public Integer updateRechargeStatus(String batchNo){
+		RechargeRecord recordPraam=new RechargeRecord();
+		recordPraam.setBatchNo(batchNo);
+		List<RechargeRecord> recordResult=rechargeRecordMapper.select(recordPraam);
+		if(recordResult==null||recordResult.size()==0){
+			throw new ChairException("1002","支付批次号有误");
+		}
+		RechargeRecord record=recordResult.get(0);
+		RechargeRecord r=new RechargeRecord();
+		r.setId(record.getId());
+		r.setPayStatu(PayStatus.PAY_SUCCESS.getValue());
+		//跟新充值状态(由未支付变为已支付)
+		rechargeRecordMapper.updateByPrimaryKeySelective(r);
+		UserAccount uaParam=new UserAccount();
+		uaParam.setPhoneNumber(record.getPhoneNumbe());
+		UserAccount account=super.queryList(uaParam).get(0);
+		UserAccount ua=new UserAccount();
+		ua.setId(account.getId());
+		ua.setAmount((account.getAmount()!=null?account.getAmount():new BigDecimal(0)).add(record.getRechargeAmount()));
+		ua.setRestDuration((account.getRestDuration()!=null?account.getRestDuration():0)+record.getRechargeDuration());
+		ua.setLastUpdate(new Date()); 
+		return super.updateSelective(ua);
+		
+	}
+
+	public void saveOrUpdate(UserAccount userAccount) {
+		userAccountMapper.saveOrUpdate(userAccount);
 	}
 	
 

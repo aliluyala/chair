@@ -27,6 +27,13 @@
 		<jedis.version>2.7.3</jedis.version>
 	</properties>
 	<dependencies>
+		<!-- ali短信 -->
+		<dependency>
+		    <groupId>com.aliyun.mns</groupId>
+		    <artifactId>aliyun-sdk-mns</artifactId>
+		    <version>1.1.8</version>
+		    <classifier>jar-with-dependencies</classifier>
+		</dependency>
 		<!-- 单元测试 -->
 		<dependency>
 			<groupId>junit</groupId>

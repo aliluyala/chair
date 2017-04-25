@@ -1,5 +1,10 @@
 package com.chair.manager.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,11 +20,12 @@ import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.RechargeRecordService;
 import com.chair.manager.service.UsersService;
+import com.chair.manager.vo.RechargeRecordVo;
 
 import redis.clients.jedis.JedisCluster;
 
 
-@RequestMapping("/users")
+@RequestMapping("/user")
 @Controller
 public class UsersController {
 	private Logger logger = Logger.getLogger(UsersController.class);
@@ -47,7 +53,20 @@ public class UsersController {
 	private ResponseResult queryRechargeDetails(@RequestBody ReqParam param){
 		RechargeRecord rr=new RechargeRecord();
 		rr.setPhoneNumbe(param.getPhoneNumber());
-		return new ResponseResult(rechargeRecordService.queryList(rr));
+		List<RechargeRecord>  rechargeRecordList = rechargeRecordService.queryList(rr);
+		List<RechargeRecordVo> voList = new ArrayList<RechargeRecordVo>();
+		for(int i=0; i<rechargeRecordList.size(); i++){
+			RechargeRecordVo rrv = new RechargeRecordVo();
+			rrv.setRechargeAmount(rechargeRecordList.get(i).getRechargeAmount().toString());
+			rrv.setRechargeDuration(rechargeRecordList.get(i).getRechargeDuration());
+			rrv.setRechargeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(rechargeRecordList.get(i).getRechargeTime()));
+			voList.add(rrv);
+		}
+		RechargeRecordVo res = new RechargeRecordVo();
+		res.setOpenID(param.getOpenID());
+		res.setPhoneNumber(param.getPhoneNumber());
+		res.setRechargeList(voList);
+		return new ResponseResult(res);
 	}
 	/**
 	 * 查看用户消费明细
@@ -63,6 +82,17 @@ public class UsersController {
 		return new ResponseResult(consumedDetailsService.queryList(cd));
 	}
 	
+	/**
+	 * 发送用户验证码
+	 * @param userID 用户ID
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="queryUserRegStatus",method=RequestMethod.POST)
+	private ResponseResult queryUserStatus(@RequestBody ReqParam param){
+		return new ResponseResult(usersService.queryUserRegStatus(param.getOpenID())); 
+	}
 	
 
 	/**
@@ -74,7 +104,7 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="login",method=RequestMethod.POST)
 	private ResponseResult userLogin(@RequestBody ReqParam param){
-		return new ResponseResult(usersService.login(param.getPhoneNumber(), param.getIdentCode())); 
+		return new ResponseResult(usersService.login(param.getOpenID(), param.getPhoneNumber(), param.getIdentCode())); 
 	}
 	
 

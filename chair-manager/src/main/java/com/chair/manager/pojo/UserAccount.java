@@ -13,6 +13,8 @@ public class UserAccount {
 	@Id
 	 @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
+	
+    private String openId;
 
     private String phoneNumber;
 
@@ -36,7 +38,8 @@ public class UserAccount {
         this.id = id;
     }
 
-    public String getPhoneNumber() {
+
+	public String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -91,4 +94,20 @@ public class UserAccount {
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	@Override
+	public String toString() {
+		return "UserAccount [id=" + id + ", openId=" + openId + ", phoneNumber=" + phoneNumber + ", amount=" + amount
+				+ ", totalDuration=" + totalDuration + ", usedDuration=" + usedDuration + ", restDuration="
+				+ restDuration + ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + "]";
+	}
+    
 }

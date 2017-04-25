@@ -9,6 +9,8 @@ import javax.persistence.Table;
 public class Users {
 	@Id
     private Integer id;
+	
+    private String openId;
 
     private String phoneNumber;
 
@@ -24,7 +26,17 @@ public class Users {
         this.id = id;
     }
 
-    public String getPhoneNumber() {
+
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	public String getPhoneNumber() {
         return phoneNumber;
     }
 
@@ -50,8 +62,8 @@ public class Users {
 
 	@Override
 	public String toString() {
-		return "Users [id=" + id + ", phoneNumber=" + phoneNumber + ", createTime=" + createTime + ", lastUpdate="
-				+ lastUpdate + "]";
+		return "Users [id=" + id + ", openId=" + openId + ", phoneNumber=" + phoneNumber + ", createTime=" + createTime
+				+ ", lastUpdate=" + lastUpdate + "]";
 	}
     
     

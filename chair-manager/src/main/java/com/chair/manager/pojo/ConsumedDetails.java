@@ -10,6 +10,8 @@ public class ConsumedDetails {
 	@Id
     private Integer id;
 
+    private String openId;
+	
     private String phoneNumber;
 
     private Integer consumedPackageId;
@@ -46,7 +48,16 @@ public class ConsumedDetails {
         this.id = id;
     }
 
-    public String getPhoneNumber() {
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	public String getPhoneNumber() {
         return phoneNumber;
     }
 
