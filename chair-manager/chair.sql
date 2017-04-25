@@ -37,7 +37,7 @@ CREATE TABLE `consumed_package` (
 DROP TABLE IF EXISTS `consumed_details`;
 CREATE TABLE `consumed_details` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-  `openID` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
+  `open_id` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
   `phone_number` varchar(11) NOT NULL COMMENT '用户手机号',
   `consumed_package_id` int(11) NOT NULL COMMENT '消费套餐ID',
   `consumed_duration` int(11) NOT NULL COMMENT '消费时长',
@@ -125,7 +125,7 @@ DROP TABLE IF EXISTS `recharge_record`;
 CREATE TABLE `recharge_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '账期自增ID',
   `batch_no` varchar(32) DEFAULT NULL COMMENT '充值批次号，唯一',
-  `openID` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
+  `open_id` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
   `phone_numbe` varchar(11) NOT NULL COMMENT '用户手机号',
   `recharge_package_id` int(11) DEFAULT NULL COMMENT '充值套餐ID',
   `recharge_amount` decimal(16,2) DEFAULT NULL COMMENT '充值金额',
@@ -158,7 +158,7 @@ CREATE TABLE `shop` (
 DROP TABLE IF EXISTS `user_account`;
 CREATE TABLE `user_account` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-  `openID` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
+  `open_id` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
   `phone_number` varchar(11) NOT NULL COMMENT '手机号码',
   `amount` decimal(16,2) DEFAULT NULL COMMENT '用户累计充值金额',
   `total_duration` int(11) DEFAULT NULL COMMENT '用户账户总时长（单位：分）',
@@ -167,7 +167,7 @@ CREATE TABLE `user_account` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_openID` (`openID`) USING BTREE
+  UNIQUE KEY `unique_openID` (`open_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户账户表';
 
 
@@ -177,11 +177,13 @@ CREATE TABLE `user_account` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '协议ID，自增ID',
-  `openID` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
+  `open_id` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
   `phone_number` varchar(11) NOT NULL COMMENT '手机号码',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_openID` (`openID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 COMMENT='用户表';
+  UNIQUE KEY `unique_openID` (`open_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8 COMMENT='用户表';
+
+
 
