@@ -124,10 +124,9 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 							ipMapping.put(s.getInetAddress().toString().replace("/", ""), s);// 以k-v保存ip对应的socket对象
 							// receive(); // 接收消息
 							// response(); // 响应消息
-
+							lastReceiveTime = System.currentTimeMillis();
 							receiveByInputStream();
 							responseByOutputStream();
-
 						}else {
 							Thread.sleep(100);
 						}
