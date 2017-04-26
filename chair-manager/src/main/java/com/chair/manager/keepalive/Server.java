@@ -150,9 +150,12 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		 */
 		public void send(String toClientIP, String toMessage) throws IOException {
 			Socket clientSocket = ipMapping.get(toClientIP);
-			DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
-			dos.writeUTF(toMessage);
-			dos.flush();
+			OutputStream os = clientSocket.getOutputStream();
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---发送客户端消息---" + toMessage);
+			byte[] b = toMessage.getBytes();
+			os.write(b);
+			os.flush();
+			
 		}
 
 		/**
@@ -218,7 +221,7 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 					String reciverMsg = "";
 					reciverMsg += new String(buffer, 0, length);
 					System.out.println("--接收来自客户端消息--"+reciverMsg);
-					responseByOutputStream();
+					responseByOutputStream();	//响应客户端
 				}
 			}else{
 				Thread.sleep(10);
