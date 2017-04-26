@@ -7,6 +7,8 @@ public class EasyUIResult {
     private Long total;
 
     private List<?> rows;
+    
+    private Long status=200L;
 
     public EasyUIResult() {
 
@@ -32,5 +34,14 @@ public class EasyUIResult {
     public void setRows(List<?> rows) {
         this.rows = rows;
     }
+
+	public Long getStatus() {
+		return status;
+	}
+
+	public void setStatus(Long status) {
+		this.status = status;
+	}
+    
 
 }
