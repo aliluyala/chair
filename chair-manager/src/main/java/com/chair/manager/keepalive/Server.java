@@ -118,7 +118,8 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 					overThis();
 				} else {
 					try {
-						InputStream is = s.getInputStream();
+						receiveByInputStream();	// 接收消息
+						/*InputStream is = s.getInputStream();
 						if(is.available()>0){
 							lastReceiveTime = System.currentTimeMillis();
 							ipMapping.put(s.getInetAddress().toString().replace("/", ""), s);// 以k-v保存ip对应的socket对象
@@ -129,7 +130,7 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 							responseByOutputStream();
 						}else {
 							Thread.sleep(100);
-						}
+						}*/
 					} catch (Exception e) {
 						e.printStackTrace();
 						overThis();
@@ -209,6 +210,7 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 			s.setKeepAlive(true);// 设置长连接
 			InputStream is = s.getInputStream();
 			if (is.available() > 0) {
+				ipMapping.put(clientIP, s);// 以k-v保存ip对应的socket对象
 				System.out.println("---开始接收消息---is.available()---" + is.available() + "---is.read()---" + is.read()+" --- "+s);
 				int length = 0;
 				byte[] buffer = new byte[1024];
