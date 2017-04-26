@@ -123,7 +123,7 @@ public class UsersService extends BaseService<Users> {
 		
 		List<ConsumePackageVo> ulist = new ArrayList<ConsumePackageVo>();
 		// 3.查询消费套餐列表
-		List<ConsumePackage> consumePackages = consumePackageService.queryList(new ConsumePackage());
+		List<ConsumePackage> consumePackages = consumePackageService.queryListByLimit(new ConsumePackage());
 		System.err.println("-----消费套餐列表----" + consumePackages.size());
 		for (ConsumePackage consumePackage : consumePackages) {
 			ConsumePackageVo cpvo = new ConsumePackageVo();
