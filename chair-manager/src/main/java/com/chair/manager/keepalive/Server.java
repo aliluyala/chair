@@ -16,6 +16,13 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+/**
+ * 接收消息方法：receiveByInputStream() 
+ * 响应消息方法：responseByOutputStream()
+ * 发送消息方法：send()
+ * @author Administrator
+ *
+ */
 public class Server implements ApplicationListener<ApplicationEvent> {
 
 	private int port;
@@ -221,6 +228,7 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 					String reciverMsg = "";
 					reciverMsg += new String(buffer, 0, length);
 					System.out.println("--接收来自客户端消息--"+reciverMsg);
+					//TODO  处理接收到的消息
 					responseByOutputStream();	//响应客户端
 				}
 			}else{
