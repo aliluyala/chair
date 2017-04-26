@@ -17,11 +17,14 @@ import redis.clients.jedis.JedisCluster;
 import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.pojo.ConsumedDetails;
+import com.chair.manager.pojo.RechargePackage;
 import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.service.ConsumedDetailsService;
+import com.chair.manager.service.RechargePackageService;
 import com.chair.manager.service.RechargeRecordService;
 import com.chair.manager.service.UsersService;
 import com.chair.manager.vo.ConsumedDetailsVo;
+import com.chair.manager.vo.RechargePackageVo;
 import com.chair.manager.vo.RechargeRecordVo;
 
 
@@ -40,10 +43,13 @@ public class UsersController {
 	@Autowired
 	private JedisCluster jedisCluster;
 	
+	@Autowired
+	private RechargePackageService rechargePackageService;
+	
 	
 
 	/**
-	 * 查看用户消费明细
+	 * 查看用户充值明细
 	 * @param userID 用户ID
 	 * @param phoneNumber 用户手机号
 	 * @return
@@ -70,6 +76,7 @@ public class UsersController {
 		res.setPhoneNumber(param.getPhoneNumber());
 		return new ResponseResult(res);
 	}
+	
 	/**
 	 * 查看用户消费明细
 	 * @param userID 用户ID
@@ -94,6 +101,35 @@ public class UsersController {
 		vo.setPhoneNumber(param.getPhoneNumber());
 		vo.setConsumedList(vos);
 		return new ResponseResult(vo);
+	}
+	
+	/**
+	 * 查询充值套餐列表
+	 * @param userID 用户ID
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="queryPackageList",method=RequestMethod.POST)
+	private ResponseResult queryPackageList(@RequestBody ReqParam param){
+		List<RechargePackage> rechargePackages = rechargePackageService.queryRechargeListByLimit(new RechargePackage());
+		List<RechargePackageVo> vos = new ArrayList<RechargePackageVo>();
+		RechargePackageVo vors = new RechargePackageVo();
+		System.err.println("----rechargePackages---"+rechargePackages.size());
+//		for (RechargePackage rechargePackage : rechargePackages) {
+		for(int i=0;i<rechargePackages.size();i++){
+			System.err.println("---rechargePackages.get(i)---"+rechargePackages.get(i).toString());
+			RechargePackage rechargePackage = rechargePackages.get(i);
+			RechargePackageVo vo = new  RechargePackageVo();
+			vo.setPackageID(rechargePackage.getId());
+			vo.setPackageName(rechargePackage.getPackageName());
+			vo.setPackageName(rechargePackage.getPackageName());
+			vo.setRechargeAmount(rechargePackage.getRechargeAmoun().toString());
+			vo.setRechargeDuration(rechargePackage.getRechargeDuration().toString());
+			vos.add(vo);
+		}
+		vors.setPackageList(vos);
+		return new ResponseResult(vors);
 	}
 	
 	/**

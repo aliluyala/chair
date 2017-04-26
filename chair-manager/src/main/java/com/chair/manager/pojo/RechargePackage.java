@@ -78,4 +78,13 @@ public class RechargePackage {
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
+
+	@Override
+	public String toString() {
+		return "RechargePackage [id=" + id + ", packageName=" + packageName + ", rechargeAmoun=" + rechargeAmoun
+				+ ", rechargeDuration=" + rechargeDuration + ", status=" + status + ", createTime=" + createTime
+				+ ", lastUpdate=" + lastUpdate + "]";
+	}
+    
+    
 }
