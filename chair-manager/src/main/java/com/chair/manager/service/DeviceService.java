@@ -20,5 +20,8 @@ public class DeviceService extends BaseService<Device> {
 		else
 			return null;
 	}
+	public Device queryByDeviceNO(Device d) {
+		return deviceMapper.queryByDeviceNO(d);
+	}
 
 }
