@@ -19,10 +19,12 @@ import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.Device;
 import com.chair.manager.pojo.RechargePackage;
 import com.chair.manager.pojo.RechargeRecord;
+import com.chair.manager.pojo.UserAccount;
 import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.RechargePackageService;
 import com.chair.manager.service.RechargeRecordService;
+import com.chair.manager.service.UserAccountService;
 import com.chair.manager.service.UsersService;
 import com.chair.manager.vo.ConsumePackageVo;
 import com.chair.manager.vo.ConsumedDetailsVo;
@@ -52,6 +54,9 @@ public class UsersController {
 	
 	@Autowired
 	private ConsumePackageService consumePackageService;
+	
+	@Autowired
+	private UserAccountService userAccountService;
 	
 	
 
@@ -219,6 +224,22 @@ public class UsersController {
 		}
 		rsvo.setPackageList(vos);
 		return new ResponseResult(rsvo); 
+	}
+	
+	
+	/**
+	 * 查询账户信息
+	 * @param userID 用户ID
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="queryAccountInfo",method=RequestMethod.POST)
+	private ResponseResult queryAccountInfo(@RequestBody ReqParam param){
+		UserAccount userAccount = userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber());
+		if(userAccount == null)
+			return new ResponseResult("1010", "根据openID:【"+param.getOpenID()+"】和手机号:【"+param.getPhoneNumber()+"】查询不到设备信息", null); 
+		return new ResponseResult(userAccount); 
 	}
 	
 	

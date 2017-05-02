@@ -115,5 +115,17 @@ public class UserAccountService extends BaseService<UserAccount> {
 		return records.get(0);
 	}
 	
+	/**
+	 * 根据openID和用户手机号查询账户信息
+	 * @param openID
+	 * @param phoneNumber
+	 */
+	public UserAccount queryAccountInfo(String openID, String phoneNumber) {
+		UserAccount ua = new UserAccount();
+		ua.setOpenId(openID);
+		ua.setPhoneNumber(phoneNumber);
+		return userAccountMapper.queryAccountInfoByUnique(ua);
+	}
+	
 
 }
