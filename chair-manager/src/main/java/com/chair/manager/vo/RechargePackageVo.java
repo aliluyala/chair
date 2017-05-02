@@ -59,3 +59,4 @@ public class RechargePackageVo implements Serializable {
 	public void setPackageList(List<RechargePackageVo> packageList) {
 		this.packageList = packageList;
 	}
+}
