@@ -5,4 +5,6 @@ import com.chair.manager.pojo.Device;
 
 public interface DeviceMapper extends ChairMapper<Device> {
 
+	Device queryByDeviceNO(Device d);
+
 }
