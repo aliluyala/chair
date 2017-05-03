@@ -70,9 +70,9 @@ public class UserAccountController {
 		Device d = new Device();
 		d.setDeviceNo(param.getDeviceNO());
 		Device device = deviceService.queryByDeviceNO(d);
-		logger.info("---根据设备ID：【"+param.getDeviceNO()+"】查询设备信息--->>>"+device);
+		logger.info("---根据设备NO：【"+param.getDeviceNO()+"】查询设备信息--->>>"+device);
 		boolean useAble = deviceService.isUsed(device);
-		if(useAble) 
+		if(!useAble) 
 			return new ResponseResult("2002", "设备"+param.getDeviceNO()+"无法使用", null); 
 		//查询套餐信息
 		ConsumePackage consumePackage = consumePackageService.findById(param.getConsumedPackageID());
