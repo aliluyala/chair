@@ -171,7 +171,7 @@
 				<version>2.2</version>
 				<configuration>
 					<port>8099</port>
-					<path>/</path>
+					<path>/ch</path>
 				</configuration>
 			</plugin>
 		</plugins>

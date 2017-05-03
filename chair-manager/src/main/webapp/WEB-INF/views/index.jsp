@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+ <% String chair= "ch"; %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,15 +19,15 @@
          	<li>
          		<span>充值套餐管理</span>
          		<ul>
-	         		<li data-options="attributes:{'url':'/page/recharge-add'}">新增充值套餐</li>
-	         		<li data-options="attributes:{'url':'/page/recharge-list'}">查询充值套餐</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/recharge-add'}">新增充值套餐</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/recharge-list'}">查询充值套餐</li>
 	         	</ul>
          	</li>
          	<li>
          		<span>消费套餐管理</span>
          		<ul>
-	         		<li data-options="attributes:{'url':'/page/consumed-add'}">新增充值套餐</li>
-	         		<li data-options="attributes:{'url':'/page/consumed-list'}">查询充值套餐</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consume-add'}">新增消费套餐</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consume-list'}">查询消费套餐</li>
 	         	</ul>
          	</li>
          </ul>
