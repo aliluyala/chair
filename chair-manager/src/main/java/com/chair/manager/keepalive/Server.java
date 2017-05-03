@@ -11,15 +11,23 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+import com.chair.manager.redis.JedisClusterFactory;
+import com.chair.manager.service.UsersService;
+
+import redis.clients.jedis.JedisCluster;
+
 /**
- * 接收消息方法：receiveByInputStream() 
- * 响应消息方法：responseByOutputStream()
- * 发送消息方法：send()
+ * 接收消息方法：receiveByInputStream() 响应消息方法：responseByOutputStream() 发送消息方法：send()
+ * 
  * @author Administrator
  *
  */
@@ -31,6 +39,10 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 	private ConcurrentHashMap<Class, ServerObjectAction> actionMapping = new ConcurrentHashMap<Class, ServerObjectAction>();
 	private ConcurrentHashMap<String, Socket> ipMapping = new ConcurrentHashMap<String, Socket>();
 	private Thread connWatchDog;
+	@Autowired
+	private JedisCluster jedisCluster;
+
+	private ConcurrentHashMap<String, String> ipToken = new ConcurrentHashMap<String, String>();
 
 	public Server() {
 	}
@@ -61,21 +73,24 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 	}
 
 	// 测试
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		int port = Constant.PORT;
 		System.out.println("----服务器启动--端口---" + port);
 		Server server = new Server(port);
 		server.start();
-//		try {
-//			Thread.sleep(10 * 1000);
-//			server.new SocketAction().send("192.168.1.78", "---服务端呼叫客户端，收到请回答---");
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// server.new SocketAction().resolveMessage("","*R1,SNK,00000000#");
+		// resolveMessage("");
+		// try {
+		// Thread.sleep(10 * 1000);
+		// server.new SocketAction().send("192.168.1.78",
+		// "---服务端呼叫客户端，收到请回答---");
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } catch (InterruptedException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 	}
 
 	/*------------------------------------------------------------------------------------------*/
@@ -125,19 +140,18 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 					overThis();
 				} else {
 					try {
-						receiveByInputStream();	// 接收消息
-						/*InputStream is = s.getInputStream();
-						if(is.available()>0){
-							lastReceiveTime = System.currentTimeMillis();
-							ipMapping.put(s.getInetAddress().toString().replace("/", ""), s);// 以k-v保存ip对应的socket对象
-							// receive(); // 接收消息
-							// response(); // 响应消息
-							lastReceiveTime = System.currentTimeMillis();
-							receiveByInputStream();
-							responseByOutputStream();
-						}else {
-							Thread.sleep(100);
-						}*/
+						receiveByInputStream(); // 接收消息
+						/*
+						 * InputStream is = s.getInputStream();
+						 * if(is.available()>0){ lastReceiveTime =
+						 * System.currentTimeMillis();
+						 * ipMapping.put(s.getInetAddress().toString().replace(
+						 * "/", ""), s);// 以k-v保存ip对应的socket对象 // receive(); //
+						 * 接收消息 // response(); // 响应消息 lastReceiveTime =
+						 * System.currentTimeMillis(); receiveByInputStream();
+						 * responseByOutputStream(); }else { Thread.sleep(100);
+						 * }
+						 */
 					} catch (Exception e) {
 						e.printStackTrace();
 						overThis();
@@ -158,11 +172,12 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		public void send(String toClientIP, String toMessage) throws IOException {
 			Socket clientSocket = ipMapping.get(toClientIP);
 			OutputStream os = clientSocket.getOutputStream();
-			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---发送客户端消息---" + toMessage);
+			System.out.println(
+					new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---发送客户端消息---" + toMessage);
 			byte[] b = toMessage.getBytes();
 			os.write(b);
 			os.flush();
-			
+
 		}
 
 		/**
@@ -213,7 +228,7 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 		 * 
 		 * @throws IOException
 		 * @throws ClassNotFoundException
-		 * @throws InterruptedException 
+		 * @throws InterruptedException
 		 */
 		private void receiveByInputStream() throws IOException, ClassNotFoundException, InterruptedException {
 			String clientIP = s.getInetAddress().toString().replace("/", "");
@@ -221,31 +236,73 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 			InputStream is = s.getInputStream();
 			if (is.available() > 0) {
 				ipMapping.put(clientIP, s);// 以k-v保存ip对应的socket对象
-				System.out.println("---开始接收消息---is.available()---" + is.available() + "---is.read()---" + is.read()+" --- "+s);
+				System.out.println("---开始接收消息---is.available()---" + is.available() + "---is.read()---" + is.read()
+						+ " --- " + s.toString());
 				int length = 0;
 				byte[] buffer = new byte[1024];
 				while (-1 != (length = is.read(buffer, 0, 1024))) {
 					String reciverMsg = "";
 					reciverMsg += new String(buffer, 0, length);
-					System.out.println("--接收来自客户端消息--"+reciverMsg);
-					//TODO  处理接收到的消息
-					responseByOutputStream();	//响应客户端
+					System.out.println("--接收来自客户端消息--" + reciverMsg);
+					// TODO 处理接收到的消息，解析报文
+					resolveMessage(clientIP, reciverMsg);
+					// responseByOutputStream(); //响应客户端
 				}
-			}else{
+			} else {
 				Thread.sleep(10);
 			}
-//			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---接收客户端消息-" + clientIP
-//					+ "---" + reciverMsg);
-			
+		}
+
+		// 解析报文
+		public void resolveMessage(String ip, String reciverMsg) throws IOException {
+			String regEx = "^\\*.*#$";
+			Pattern p = Pattern.compile(regEx);
+			Matcher m = p.matcher(reciverMsg);
+			boolean b = m.find();
+			System.err.println("---解析报文，匹配以*开头，以#结尾，结果为---" + b);
+			if (b) {
+				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1)
+						.split(",");
+				System.err.println("---请求的报文体为---" + requestBodys);
+				for (String key : requestBodys) {
+					System.err.println("--key--" + key);
+					if ("R1".equalsIgnoreCase(key)) { // 注册命令
+						String token = ipToken.get(ip);
+						String snk = "001";
+						if ("".equals(token) || null == token) {
+							// 生成token
+							token = "R" + new Date().getTime();
+							System.err.println("---token---" + token);
+							// TODO 保存token到redis
+							// set(ip,token);
+							// set(token,ip);
+							ipToken.put(ip, token);
+							ipToken.put(token, ip);
+						}
+						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
+						responseByOutputStream(send2ClientMsg);
+
+					} else if ("G0".equalsIgnoreCase(key)) { // 持续请求
+						String token = ipToken.get(ip);
+						String snk = "001";
+						if ("".equals(token) || null == token) {
+							snk = "000";
+						}
+						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
+						responseByOutputStream(send2ClientMsg);
+					}
+				}
+			}
 		}
 
 		/**
 		 * 响应消息(OutputStream)
 		 */
-		private void responseByOutputStream() throws IOException {
-			String sendMsg = "*QB001";
+		private void responseByOutputStream(String sendMsg) throws IOException {
+			// String sendMsg = "*QB001";
 			OutputStream os = s.getOutputStream();
-			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---响应客户端消息---" + sendMsg);
+			System.out.println(
+					new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---响应客户端消息---" + sendMsg);
 			byte[] b = sendMsg.getBytes();
 			os.write(b);
 			os.flush();
@@ -280,6 +337,14 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 			}
 		}
 
+	}
+
+	private void set(String key, String value) {
+		jedisCluster.set(key, value);
+	}
+
+	private String get(String key) {
+		return jedisCluster.get(key);
 	}
 
 }
