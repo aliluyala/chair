@@ -12,20 +12,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import redis.clients.jedis.JedisCluster;
-
 import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
+import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.ConsumedDetails;
+import com.chair.manager.pojo.Device;
 import com.chair.manager.pojo.RechargePackage;
 import com.chair.manager.pojo.RechargeRecord;
+import com.chair.manager.pojo.UserAccount;
+import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.RechargePackageService;
 import com.chair.manager.service.RechargeRecordService;
+import com.chair.manager.service.UserAccountService;
 import com.chair.manager.service.UsersService;
+import com.chair.manager.vo.ConsumePackageVo;
 import com.chair.manager.vo.ConsumedDetailsVo;
 import com.chair.manager.vo.RechargePackageVo;
 import com.chair.manager.vo.RechargeRecordVo;
+
+import redis.clients.jedis.JedisCluster;
 
 
 @RequestMapping("/user")
@@ -45,6 +51,12 @@ public class UsersController {
 	
 	@Autowired
 	private RechargePackageService rechargePackageService;
+	
+	@Autowired
+	private ConsumePackageService consumePackageService;
+	
+	@Autowired
+	private UserAccountService userAccountService;
 	
 	
 
@@ -169,6 +181,65 @@ public class UsersController {
 	private ResponseResult sendCode(@RequestBody ReqParam param){
 		usersService.sendCode(param.getPhoneNumber());
 		return new ResponseResult(null); 
+	}
+	
+
+	/**
+	 * 查询设备信息
+	 * @param userID 用户ID
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="queryDevice",method=RequestMethod.POST)
+	private ResponseResult queryDevice(@RequestBody ReqParam param){
+		Device device = usersService.queryDeviceByDeviceNO(param.getDeviceNO());
+		if(device == null)
+			return new ResponseResult("2001", "根据设备编号"+param.getDeviceNO()+"查询不到设备信息",null); 
+		return new ResponseResult(device); 
+	}
+	
+	
+	
+
+	/**
+	 * 查询消费套餐列表
+	 * @param userID 用户ID
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="queryConsumerPackageList",method=RequestMethod.POST)
+	private ResponseResult queryConsumerPackageList(@RequestBody ReqParam param){
+		List<ConsumePackage> consumePackages = consumePackageService.queryListByLimit(new ConsumePackage());
+		ConsumePackageVo rsvo = new ConsumePackageVo();
+		List<ConsumePackageVo> vos = new ArrayList<ConsumePackageVo>();
+		System.err.println("-----消费套餐列表----" + consumePackages.size());
+		for (ConsumePackage consumePackage : consumePackages) {
+			ConsumePackageVo vo = new ConsumePackageVo();
+			vo.setConsumedPackageID(consumePackage.getId());
+			vo.setConsumedPackageName(consumePackage.getPackageName());
+			vo.setConsumedPackageDuration(consumePackage.getConsumedDuration());
+			vos.add(vo);
+		}
+		rsvo.setPackageList(vos);
+		return new ResponseResult(rsvo); 
+	}
+	
+	
+	/**
+	 * 查询账户信息
+	 * @param userID 用户ID
+	 * @param phoneNumber 用户手机号
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="queryAccountInfo",method=RequestMethod.POST)
+	private ResponseResult queryAccountInfo(@RequestBody ReqParam param){
+		UserAccount userAccount = userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber());
+		if(userAccount == null)
+			return new ResponseResult("1010", "根据openID:【"+param.getOpenID()+"】和手机号:【"+param.getPhoneNumber()+"】查询不到设备信息", null); 
+		return new ResponseResult(userAccount); 
 	}
 	
 	

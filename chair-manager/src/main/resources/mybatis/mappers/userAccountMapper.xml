@@ -8,4 +8,12 @@
 	<insert id="saveOrUpdate" useGeneratedKeys="true" keyProperty="id">
 		insert into user_account(open_id, phone_number, create_time, last_update) values(#{openId}, #{phoneNumber},#{createTime}, #{lastUpdate}) ON DUPLICATE KEY UPDATE last_update=#{lastUpdate};
 	</insert>
+	
+	
+	
+	<select id="queryAccountInfoByUnique" resultType="UserAccount">
+		SELECT * FROM user_account where open_id=#{openId} and phone_number=#{phoneNumber}
+	</select>
+	
+	
 </mapper>

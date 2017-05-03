@@ -3,54 +3,60 @@ package com.chair.manager.vo;
 import java.io.Serializable;
 import java.util.List;
 
-public class RechargePackageVo
-  implements Serializable
-{
-  private static final long serialVersionUID = 1L;
-  private int packageID;
-  private String packageName;
-  private String rechargeAmount;
-  private String rechargeDuration;
-  private List<RechargePackageVo> packageList;
+/**
+ * @author yaoyuming
+ *
+ */
+public class RechargePackageVo implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-  public int getPackageID()
-  {
-    return this.packageID;
-  }
+	private int packageID;
 
-  public void setPackageID(int packageID) {
-    this.packageID = packageID;
-  }
+	private String packageName;
 
-  public String getPackageName() {
-    return this.packageName;
-  }
+	private String rechargeAmount;
 
-  public void setPackageName(String packageName) {
-    this.packageName = packageName;
-  }
+	private String rechargeDuration;
 
-  public String getRechargeAmount() {
-    return this.rechargeAmount;
-  }
+	private List<RechargePackageVo> packageList;
 
-  public void setRechargeAmount(String rechargeAmount) {
-    this.rechargeAmount = rechargeAmount;
-  }
+	public int getPackageID() {
+		return packageID;
+	}
 
-  public String getRechargeDuration() {
-    return this.rechargeDuration;
-  }
+	public void setPackageID(int packageID) {
+		this.packageID = packageID;
+	}
 
-  public void setRechargeDuration(String rechargeDuration) {
-    this.rechargeDuration = rechargeDuration;
-  }
+	public String getPackageName() {
+		return packageName;
+	}
 
-  public List<RechargePackageVo> getPackageList() {
-    return this.packageList;
-  }
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
+	}
 
-  public void setPackageList(List<RechargePackageVo> packageList) {
-    this.packageList = packageList;
-  }
+	public String getRechargeAmount() {
+		return rechargeAmount;
+	}
+
+	public void setRechargeAmount(String rechargeAmount) {
+		this.rechargeAmount = rechargeAmount;
+	}
+
+	public String getRechargeDuration() {
+		return rechargeDuration;
+	}
+
+	public void setRechargeDuration(String rechargeDuration) {
+		this.rechargeDuration = rechargeDuration;
+	}
+
+	public List<RechargePackageVo> getPackageList() {
+		return packageList;
+	}
+
+	public void setPackageList(List<RechargePackageVo> packageList) {
+		this.packageList = packageList;
+	}
 }

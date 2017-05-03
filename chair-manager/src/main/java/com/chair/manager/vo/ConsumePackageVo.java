@@ -1,6 +1,7 @@
 package com.chair.manager.vo;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ConsumePackageVo implements Serializable {
 
@@ -11,6 +12,9 @@ public class ConsumePackageVo implements Serializable {
 	private String consumedPackageName;
 
 	private Integer consumedPackageDuration;
+	
+	private List<ConsumePackageVo> packageList;
+	
 
 	public Integer getConsumedPackageID() {
 		return consumedPackageID;
@@ -35,5 +39,14 @@ public class ConsumePackageVo implements Serializable {
 	public void setConsumedPackageDuration(Integer consumedPackageDuration) {
 		this.consumedPackageDuration = consumedPackageDuration;
 	}
+
+	public List<ConsumePackageVo> getPackageList() {
+		return packageList;
+	}
+
+	public void setPackageList(List<ConsumePackageVo> packageList) {
+		this.packageList = packageList;
+	}
+	
 
 }

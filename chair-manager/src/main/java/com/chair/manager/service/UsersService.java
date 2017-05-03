@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.UsersMapper;
 import com.chair.manager.pojo.ConsumePackage;
+import com.chair.manager.pojo.Device;
 import com.chair.manager.pojo.UserAccount;
 import com.chair.manager.pojo.Users;
 import com.chair.manager.sms.BatchPublishSMSMessage;
@@ -30,10 +31,12 @@ public class UsersService extends BaseService<Users> {
 	private UsersMapper usersMapper;
 	@Autowired
 	private ConsumePackageService consumePackageService;
-	
+
 	@Autowired
 	private UserAccountService userAccountService;
-	
+
+	@Autowired
+	private DeviceService deviceService;
 
 	@Autowired
 	private JedisCluster jedisCluster;
@@ -64,7 +67,7 @@ public class UsersService extends BaseService<Users> {
 		templateMap.put("product", "微信");
 		List<String> recevierList = new ArrayList<String>();
 		recevierList.add(phoneNumber);
-		BatchPublishSMSMessage sms= new BatchPublishSMSMessage();
+		BatchPublishSMSMessage sms = new BatchPublishSMSMessage();
 		sms.sendSMS(templateMap, recevierList);
 		// 3.redis存储手机号和验证码，5分钟失效
 		String rs = jedisCluster.setex(phoneNumber, EXPIRE, code);
@@ -94,9 +97,9 @@ public class UsersService extends BaseService<Users> {
 	 */
 	public UserVo login(String openID, String phoneNumber, Integer identCode) {
 		// 1.验证登陆信息 0000测试代码
-		System.out.println("--identCode.toString()---"+identCode.toString());
-		System.out.println("--!0000.equals(identCode.toString())---"+!"1234".equals(identCode.toString()));
-		if(!"1234".equals(identCode.toString())){
+		System.out.println("--identCode.toString()---" + identCode.toString());
+		System.out.println("--!0000.equals(identCode.toString())---" + !"1234".equals(identCode.toString()));
+		if (!"1234".equals(identCode.toString())) {
 			if (!identCode.toString().equals(jedisCluster.get(phoneNumber))) {
 				throw new ChairException("1000", "验证码验证失败");
 			}
@@ -110,17 +113,17 @@ public class UsersService extends BaseService<Users> {
 		logger.debug("---添加或者更新用户表【前】--：" + user);
 		this.saveOrUpdate(user);
 		logger.debug("---添加或者更新用户表【后】--：" + user);
-		
+
 		// 3.查询账户，存在则更新，不存在则新增
 		UserAccount userAccount = new UserAccount();
 		userAccount.setOpenId(openID);
 		userAccount.setPhoneNumber(phoneNumber);
 		userAccount.setCreateTime(new Date());
 		userAccount.setLastUpdate(new Date());
-		logger.debug("---添加或者更新用户账户表【前】--："+ userAccount);
+		logger.debug("---添加或者更新用户账户表【前】--：" + userAccount);
 		userAccountService.saveOrUpdate(userAccount);
-		logger.debug("---添加或者更新用户账户表【后】--："+ userAccount);
-		
+		logger.debug("---添加或者更新用户账户表【后】--：" + userAccount);
+
 		List<ConsumePackageVo> ulist = new ArrayList<ConsumePackageVo>();
 		// 3.查询消费套餐列表
 		List<ConsumePackage> consumePackages = consumePackageService.queryListByLimit(new ConsumePackage());
@@ -142,8 +145,10 @@ public class UsersService extends BaseService<Users> {
 
 	}
 	
+
 	/**
 	 * 查询用户注册状态
+	 * 
 	 * @param openID
 	 * @return
 	 */
@@ -151,6 +156,21 @@ public class UsersService extends BaseService<Users> {
 		Users user = new Users();
 		user.setOpenId(openID);
 		return (Users) usersMapper.selectByPrimaryKey(user);
+	}
+
+	/**
+	 * 根据设备NO查询设备信息
+	 * 
+	 * @param deviceNO
+	 */
+	public Device queryDeviceByDeviceNO(String deviceNO) {
+		Device d = new Device();
+		d.setDeviceNo(deviceNO);
+		Device device = deviceService.queryByDeviceNO(d);
+		System.err.println("----查询到得设备信息---"+device);
+//		if (device == null)
+//			throw new ChairException("2001", "根据设备唯一编号：" + deviceNO + "查询不到设备");
+		return device;
 	}
 
 }
