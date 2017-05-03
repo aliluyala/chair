@@ -67,8 +67,13 @@ public class UserAccountController {
 	private ResponseResult choosePackage(@RequestBody ReqParam param){
 		logger.info("---用户启用设备，选择对应的消费套餐，入参为--->>>"+param);
 		//根据设备ID查询设备信息
-		Device device = deviceService.findById(param.getDeviceID());
-		logger.info("---根据设备ID：【"+param.getDeviceID()+"】查询设备信息--->>>"+device);
+		Device d = new Device();
+		d.setDeviceNo(param.getDeviceNO());
+		Device device = deviceService.queryByDeviceNO(d);
+		logger.info("---根据设备ID：【"+param.getDeviceNO()+"】查询设备信息--->>>"+device);
+		boolean useAble = deviceService.isUsed(device);
+		if(useAble) 
+			return new ResponseResult("2002", "设备"+param.getDeviceNO()+"无法使用", null); 
 		//查询套餐信息
 		ConsumePackage consumePackage = consumePackageService.findById(param.getConsumedPackageID());
 		logger.info("---根据用户选择的消费套餐ID：【"+param.getConsumedPackageID()+"】查询消费套餐信息--->>>"+consumePackage);
@@ -97,4 +102,6 @@ public class UserAccountController {
 		logger.info("---保存消费明细结果--->>>"+rs);
 		return new ResponseResult(null);
 	}
+	
+	
 }
