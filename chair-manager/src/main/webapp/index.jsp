@@ -6,6 +6,6 @@
 <title>测试页面</title>
 </head>
 <body >
-   项目启动成功
+   ${pageContext.request.contextPath}项目启动成功、 、 、 、
 </body>
 </html>
