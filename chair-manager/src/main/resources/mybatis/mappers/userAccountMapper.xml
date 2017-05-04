@@ -2,18 +2,29 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
 <mapper namespace="com.chair.manager.mapper.UserAccountMapper">
 
 	<insert id="saveOrUpdate" useGeneratedKeys="true" keyProperty="id">
-		insert into user_account(open_id, phone_number, create_time, last_update) values(#{openId}, #{phoneNumber},#{createTime}, #{lastUpdate}) ON DUPLICATE KEY UPDATE last_update=#{lastUpdate};
+		insert into user_account(open_id, phone_number, create_time,
+		last_update) values(#{openId}, #{phoneNumber},#{createTime},
+		#{lastUpdate}) ON DUPLICATE KEY UPDATE last_update=#{lastUpdate};
 	</insert>
-	
-	
-	
+
+
+
 	<select id="queryAccountInfoByUnique" resultType="UserAccount">
-		SELECT * FROM user_account where open_id=#{openId} and phone_number=#{phoneNumber}
+		SELECT * FROM
+		user_account where phone_number=#{phoneNumber}
 	</select>
-	
-	
+
+
+	<update id="updateUserAccountByUnique">
+		update user_account set amount = amount+#{amount},
+		total_duration = total_duration+#{totalDuration}, used_duration =
+		used_duration+#{usedDuration}, rest_duration=
+		rest_duration+#{restDuration}, last_update=now() where
+		phone_number=#{phoneNumber};
+	</update>
+
 </mapper>

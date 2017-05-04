@@ -12,10 +12,12 @@ public class RechargeRecord {
 	private Integer id;
 
 	private String batchNo;
+	
+	private String transactionId;
 
 	private String openId;
 
-	private String phoneNumbe;
+	private String phoneNumber;
 
 	private Integer rechargePackageId;
 
@@ -25,11 +27,13 @@ public class RechargeRecord {
 
 	private Date rechargeTime;
 
-	private Integer payStatu;
+	private Integer payStatus;
 
 	private Date createTime;
 
 	private Date lastUpdate;
+	
+	
 
 	public Integer getId() {
 		return id;
@@ -41,6 +45,16 @@ public class RechargeRecord {
 
 	public String getBatchNo() {
 		return batchNo;
+	}
+
+	
+	
+	public String getTransactionId() {
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
 	}
 
 	public String getOpenId() {
@@ -55,12 +69,12 @@ public class RechargeRecord {
 		this.batchNo = batchNo == null ? null : batchNo.trim();
 	}
 
-	public String getPhoneNumbe() {
-		return phoneNumbe;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setPhoneNumbe(String phoneNumbe) {
-		this.phoneNumbe = phoneNumbe == null ? null : phoneNumbe.trim();
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public Integer getRechargePackageId() {
@@ -95,12 +109,13 @@ public class RechargeRecord {
 		this.rechargeTime = rechargeTime;
 	}
 
-	public Integer getPayStatu() {
-		return payStatu;
+
+	public Integer getPayStatus() {
+		return payStatus;
 	}
 
-	public void setPayStatu(Integer payStatu) {
-		this.payStatu = payStatu;
+	public void setPayStatus(Integer payStatus) {
+		this.payStatus = payStatus;
 	}
 
 	public Date getCreateTime() {
@@ -121,10 +136,11 @@ public class RechargeRecord {
 
 	@Override
 	public String toString() {
-		return "RechargeRecord [id=" + id + ", batchNo=" + batchNo + ", openId=" + openId + ", phoneNumbe=" + phoneNumbe
-				+ ", rechargePackageId=" + rechargePackageId + ", rechargeAmount=" + rechargeAmount
-				+ ", rechargeDuration=" + rechargeDuration + ", rechargeTime=" + rechargeTime + ", payStatu=" + payStatu
-				+ ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + "]";
+		return "RechargeRecord [id=" + id + ", batchNo=" + batchNo + ", transactionId=" + transactionId + ", openId="
+				+ openId + ", phoneNumber=" + phoneNumber + ", rechargePackageId=" + rechargePackageId
+				+ ", rechargeAmount=" + rechargeAmount + ", rechargeDuration=" + rechargeDuration + ", rechargeTime="
+				+ rechargeTime + ", payStatus=" + payStatus + ", createTime=" + createTime + ", lastUpdate="
+				+ lastUpdate + "]";
 	}
 
 }

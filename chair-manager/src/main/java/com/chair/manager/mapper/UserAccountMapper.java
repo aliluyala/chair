@@ -8,5 +8,7 @@ public interface UserAccountMapper extends ChairMapper<UserAccount> {
 	void saveOrUpdate(UserAccount userAccount);
 
 	UserAccount queryAccountInfoByUnique(UserAccount ua);
+	
+	int updateUserAccountByUnique(UserAccount ua);
 
 }

@@ -22,7 +22,8 @@ public class PayController {
 	@ResponseBody
 	@RequestMapping(value="callback",method=RequestMethod.POST)
 	private void callback(@RequestBody ReqParam reqParam){
-		userAccountService.updateRechargeStatus(reqParam.getBatchNo());
+		System.err.println("------【支付成功回调】参数------"+reqParam);
+		userAccountService.updateRechargeStatus(reqParam.getPhoneNumber(), reqParam.getBatchNO(), reqParam.getTransactionID());
 	}
 	
 	

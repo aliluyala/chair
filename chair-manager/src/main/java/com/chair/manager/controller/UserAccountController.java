@@ -36,11 +36,16 @@ public class UserAccountController {
 	private ConsumedDetailsService consumedDetailsService;
 	
 	
-	
+	/**
+	 * 充值
+	 * @param param
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value="recharge",method=RequestMethod.POST)
 	private ResponseResult recharge(@RequestBody ReqParam param){
-		return new ResponseResult(userAccountService.recharge(param.getPhoneNumber(),param.getPackageID()));
+		System.err.println("------【充值】参数------"+param);
+		return new ResponseResult(userAccountService.recharge(param.getPhoneNumber(),param.getPackageID(), param.getOpenID(), param.getBatchNO()));
 	}
 	
 	
@@ -52,7 +57,8 @@ public class UserAccountController {
 	@ResponseBody
 	@RequestMapping(value="queryPrepayInfo",method=RequestMethod.POST)
 	private ResponseResult queryPrepayInfo(@RequestBody ReqParam param){
-		return new ResponseResult(userAccountService.queryPrepayInfo(param.getPhoneNumber(),param.getBatchNo()));
+		System.err.println("------【查询预支付信息】参数------"+param);
+		return new ResponseResult(userAccountService.queryPrepayInfo(param.getPhoneNumber(),param.getBatchNO()));
 	}
 	
 	

@@ -70,7 +70,7 @@ public class UsersController {
 	@RequestMapping(value="queryRechargeDetails",method=RequestMethod.POST)
 	private ResponseResult queryRechargeDetails(@RequestBody ReqParam param){
 		RechargeRecord rr=new RechargeRecord();
-		rr.setPhoneNumbe(param.getPhoneNumber());
+		rr.setPhoneNumber(param.getPhoneNumber());
 		List<RechargeRecord>  rechargeRecordList = rechargeRecordService.queryList(rr);
 		List<RechargeRecordVo> voList = new ArrayList<RechargeRecordVo>();
 		for(int i=0; i<rechargeRecordList.size(); i++){
@@ -236,9 +236,11 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="queryAccountInfo",method=RequestMethod.POST)
 	private ResponseResult queryAccountInfo(@RequestBody ReqParam param){
+		System.out.println("------【查询账户信息】参数------"+param);
 		UserAccount userAccount = userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber());
 		if(userAccount == null)
-			return new ResponseResult("1010", "根据openID:【"+param.getOpenID()+"】和手机号:【"+param.getPhoneNumber()+"】查询不到设备信息", null); 
+//			return new ResponseResult("1010", "根据openID:【"+param.getOpenID()+"】和手机号:【"+param.getPhoneNumber()+"】查询不到设备信息", null); 
+			return new ResponseResult("1010", "根据手机号:【"+param.getPhoneNumber()+"】查询不到设备信息", null); 
 		return new ResponseResult(userAccount); 
 	}
 	
