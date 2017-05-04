@@ -195,7 +195,7 @@ public class UsersController {
 	private ResponseResult queryDevice(@RequestBody ReqParam param){
 		Device device = usersService.queryDeviceByDeviceNO(param.getDeviceNO());
 		if(device == null)
-			return new ResponseResult("2001", "根据设备编号"+param.getDeviceNO()+"查询不到设备信息",null); 
+			return new ResponseResult("2001", "根据设备编号"+param.getDeviceNO()+"查询不到设备信息",null);
 		return new ResponseResult(device); 
 	}
 	

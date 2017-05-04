@@ -15,13 +15,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
-import org.springframework.stereotype.Service;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import com.chair.manager.redis.JedisClusterFactory;
-import com.chair.manager.service.UsersService;
 
 import redis.clients.jedis.JedisCluster;
 
@@ -31,7 +29,7 @@ import redis.clients.jedis.JedisCluster;
  * @author Administrator
  *
  */
-public class Server implements ApplicationListener<ApplicationEvent> {
+public class Server implements ApplicationListener<ContextRefreshedEvent> {
 
 	private int port;
 	private volatile boolean running = false;
@@ -267,23 +265,24 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 				for (String key : requestBodys) {
 					System.err.println("--key--" + key);
 					if ("R1".equalsIgnoreCase(key)) { // 注册命令
-						String token = ipToken.get(ip);
+						System.out.println("---requestBodys的第三位数---"+requestBodys[2]);
+						String token = get(ip);
 						String snk = "001";
 						if ("".equals(token) || null == token) {
 							// 生成token
 							token = "R" + new Date().getTime();
 							System.err.println("---token---" + token);
 							// TODO 保存token到redis
-							// set(ip,token);
-							// set(token,ip);
-							ipToken.put(ip, token);
-							ipToken.put(token, ip);
+							 set(ip,token);
+							 set(token,ip);
+//							ipToken.put(ip, token);
+//							ipToken.put(token, ip);
 						}
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 						responseByOutputStream(send2ClientMsg);
 
 					} else if ("G0".equalsIgnoreCase(key)) { // 持续请求
-						String token = ipToken.get(ip);
+						String token = get(ip);
 						String snk = "001";
 						if ("".equals(token) || null == token) {
 							snk = "000";
@@ -327,13 +326,14 @@ public class Server implements ApplicationListener<ApplicationEvent> {
 	}
 
 	@Override
-	public void onApplicationEvent(ApplicationEvent event) {
+	public void onApplicationEvent(ContextRefreshedEvent  event) {
 		if (event.getSource() instanceof XmlWebApplicationContext) {
 			if (((XmlWebApplicationContext) event.getSource()).getDisplayName().equals("Root WebApplicationContext")) {
 				int port = Constant.PORT;
 				System.err.println("----spring初始化Socket服务器启动，建立长连接--端口---" + port);
 				Server server = new Server(port);
 				server.start();
+				set("test","---hys---"+new Date());
 			}
 		}
 
