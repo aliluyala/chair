@@ -125,6 +125,7 @@ DROP TABLE IF EXISTS `recharge_record`;
 CREATE TABLE `recharge_record` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '账期自增ID',
   `batch_no` varchar(32) DEFAULT NULL COMMENT '充值批次号，唯一',
+  `transaction_id` varchar(128) DEFAULT NULL COMMENT '微信支付订单号',
   `open_id` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
   `phone_numbe` varchar(11) NOT NULL COMMENT '用户手机号',
   `recharge_package_id` int(11) DEFAULT NULL COMMENT '充值套餐ID',
