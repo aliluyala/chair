@@ -188,3 +188,12 @@ CREATE TABLE `users` (
 
 
 
+DROP TABLE IF EXISTS `tempRedis`;
+CREATE TABLE `tempRedis` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+  `key` varchar(32) DEFAULT NULL COMMENT 'key',
+  `value` int(11) DEFAULT NULL COMMENT 'value',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='redis';
