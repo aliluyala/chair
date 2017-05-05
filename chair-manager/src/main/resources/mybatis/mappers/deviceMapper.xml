@@ -6,12 +6,27 @@
 <mapper namespace="com.chair.manager.mapper.DeviceMapper">
 
 	<select id="queryAll" resultType="Device">
-		SELECT * FROM device ORDER BY updated DESC
+		SELECT * FROM device ORDER BY
+		updated DESC
 	</select>
 
 
 	<select id="queryByDeviceNO" resultType="Device">
-		SELECT * FROM device where device_no=#{deviceNo}
+		SELECT * FROM device
+		where device_no=#{deviceNo}
 	</select>
+
+	<insert id="saveOrUpdate" useGeneratedKeys="true" keyProperty="id">
+		insert into device(device_no, device_model, shop_id,
+		shop_location,shop_name,proxy_id,proxy_name,facroty_id,factory_name,status,create_time,last_update)
+		values(#{deviceNo}, #{deviceModel},#{shopId}, #{shopLocation},
+		#{shopName}, #{proxyId}, #{proxyName}, #{facrotyId},
+		#{factoryName},
+		#{status}, #{createTime}, #{lastUpdate}) ON
+		DUPLICATE KEY
+		UPDATE
+		last_update=#{lastUpdate};
+	</insert>
+
 
 </mapper>

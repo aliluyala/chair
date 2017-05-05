@@ -7,4 +7,5 @@ public interface DeviceMapper extends ChairMapper<Device> {
 
 	Device queryByDeviceNO(Device d);
 
+	Device saveOrUpdate(Device device);
 }

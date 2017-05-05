@@ -167,7 +167,6 @@ public class UsersService extends BaseService<Users> {
 		Device d = new Device();
 		d.setDeviceNo(deviceNO);
 		Device device = deviceService.queryByDeviceNO(d);
-		System.err.println("----查询到得设备信息---"+device);
 //		if (device == null)
 //			throw new ChairException("2001", "根据设备唯一编号：" + deviceNO + "查询不到设备");
 		return device;

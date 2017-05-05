@@ -15,11 +15,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 
+import com.chair.manager.pojo.Device;
 import com.chair.manager.redis.JedisClusterFactory;
+import com.chair.manager.service.DeviceService;
 
 import redis.clients.jedis.JedisCluster;
 
@@ -30,7 +36,7 @@ import redis.clients.jedis.JedisCluster;
  *
  */
 public class Server implements ApplicationListener<ContextRefreshedEvent> {
-
+	//*R1,000,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#
 	private int port;
 	private volatile boolean running = false;
 	private long receiveTimeDelay = Constant.RECEIVE_TIME_DELAY;
@@ -39,6 +45,9 @@ public class Server implements ApplicationListener<ContextRefreshedEvent> {
 	private Thread connWatchDog;
 	@Autowired
 	private JedisCluster jedisCluster;
+	@Autowired
+	private DeviceService deviceService;
+	
 
 	private ConcurrentHashMap<String, String> ipToken = new ConcurrentHashMap<String, String>();
 
@@ -257,13 +266,13 @@ public class Server implements ApplicationListener<ContextRefreshedEvent> {
 			Pattern p = Pattern.compile(regEx);
 			Matcher m = p.matcher(reciverMsg);
 			boolean b = m.find();
-			System.err.println("---解析报文，匹配以*开头，以#结尾，结果为---" + b);
+			System.err.println("---解析报文，匹配以*开头，以#结尾，结果为---" + b+"\n ip = "+ip);
 			if (b) {
 				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1)
 						.split(",");
-				System.err.println("---请求的报文体为---" + requestBodys);
+//				System.err.println("---请求的报文体为---" + requestBodys);
 				for (String key : requestBodys) {
-					System.err.println("--key--" + key);
+					System.err.print(key+",");
 					if ("R1".equalsIgnoreCase(key)) { // 注册命令
 						System.out.println("---requestBodys的第三位数---"+requestBodys[2]);
 						String token = get(ip);
@@ -278,7 +287,17 @@ public class Server implements ApplicationListener<ContextRefreshedEvent> {
 //							ipToken.put(ip, token);
 //							ipToken.put(token, ip);
 						}
+						//新增或者更新设备
+						Device device = new Device();
+						device.setDeviceNo(requestBodys[3]);
+						device.setStatus(1);
+						device.setLastUpdate(new Date());
+						System.out.println("------新增或者更新设备信息；前------"+device);
+						Device d = deviceService.saveOrUpdate(device);
+						System.out.println("------新增或者更新设备信息；后------"+d);
+						//响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
+						System.out.println("------ 响应客户端R1消息内容------"+send2ClientMsg);
 						responseByOutputStream(send2ClientMsg);
 
 					} else if ("G0".equalsIgnoreCase(key)) { // 持续请求
@@ -333,7 +352,8 @@ public class Server implements ApplicationListener<ContextRefreshedEvent> {
 				System.err.println("----spring初始化Socket服务器启动，建立长连接--端口---" + port);
 				Server server = new Server(port);
 				server.start();
-				set("test","---hys---"+new Date());
+				set("test","---hys---"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				get("test");
 			}
 		}
 
@@ -344,7 +364,12 @@ public class Server implements ApplicationListener<ContextRefreshedEvent> {
 	}
 
 	private String get(String key) {
-		return jedisCluster.get(key);
+		if(jedisCluster == null){
+		}
+		System.err.println("jedisCluster---"+jedisCluster+"------redis get()---"+key);
+		String res = jedisCluster.get(key);
+		System.err.println("------redis get()---"+res);
+		return res;
 	}
 
 }

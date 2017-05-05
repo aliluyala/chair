@@ -12,7 +12,12 @@ import com.chair.manager.pojo.Device;
 public class DeviceService extends BaseService<Device> {
 	@Autowired
 	private DeviceMapper deviceMapper;
-
+	
+	/**
+	 * 根据唯一约束查询设备
+	 * @param device
+	 * @return
+	 */
 	public Device findByUnique(Device device) {
 		List<Device> devices = deviceMapper.select(device);
 		if (devices != null && devices.size() > 0) {
@@ -20,10 +25,25 @@ public class DeviceService extends BaseService<Device> {
 		} else
 			return null;
 	}
-
+	
+	/**
+	 * 根据设备编号查询设备
+	 * @param d
+	 * @return
+	 */
 	public Device queryByDeviceNO(Device d) {
 		return deviceMapper.queryByDeviceNO(d);
 	}
+	
+	/**
+	 * 新增或更新设备
+	 * @param device
+	 * @return
+	 */
+	public Device saveOrUpdate(Device device){
+		return deviceMapper.saveOrUpdate(device);
+	}
+	
 	
 	/**
 	 * 判断设备是否可用
