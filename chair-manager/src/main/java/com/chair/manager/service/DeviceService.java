@@ -40,8 +40,8 @@ public class DeviceService extends BaseService<Device> {
 	 * @param device
 	 * @return
 	 */
-	public Device saveOrUpdate(Device device){
-		return deviceMapper.saveOrUpdate(device);
+	public void saveOrUpdate(Device device){
+		deviceMapper.saveOrUpdate(device);
 	}
 	
 	

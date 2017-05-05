@@ -7,7 +7,12 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
 	
-	<bean id="serverInit" class="com.chair.manager.keepalive.Server"></bean> 
+	<bean id="serverInit" class="com.chair.manager.keepalive.Server">
+		<constructor-arg name="port" value="11005"/>
+		<property name="deviceService">
+			<bean class="com.chair.manager.service.DeviceService"></bean>
+		</property>
+	</bean> 
 	
 	
 	<!-- 使用spring自带的占位符替换功能 -->
