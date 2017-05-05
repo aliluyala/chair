@@ -4,9 +4,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.mapper.DeviceMapper;
 import com.chair.manager.pojo.Device;
+
+import redis.clients.jedis.JedisCluster;
 
 @Service
 public class DeviceService extends BaseService<Device> {
@@ -50,10 +54,18 @@ public class DeviceService extends BaseService<Device> {
 	 * @param device
 	 * @return true：可用， false：不可用
 	 */
-	public boolean isUsed(Device device) {
+	public boolean isUsed(JedisCluster jedisCluster, Device device) {
+		if("00000000000000000001".equals(device.getDeviceNo()) || "00000000000000000002".equals(device.getDeviceNo())  ){
+			System.out.println("---测试数据---");
+			return true;
+		}
 		//1.判断设备是否存在
 		if(device == null) return false;
+		String token = jedisCluster.get(device.getDeviceNo());
 		//2.判断设备是否开启，发消息给硬件
+		if(StringUtils.isEmpty(token)){
+			return false;
+		}
 		return true;
 	}
 
