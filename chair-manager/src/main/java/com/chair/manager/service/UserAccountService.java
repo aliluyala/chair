@@ -96,6 +96,7 @@ public class UserAccountService extends BaseService<UserAccount> {
 		UserAccount ua=new UserAccount();
 		ua.setId(account.getId());
 		ua.setAmount((account.getAmount()!=null?account.getAmount():new BigDecimal(0)).add(record.getRechargeAmount()));
+		ua.setTotalDuration((account.getTotalDuration()!=null?account.getTotalDuration():0)+record.getRechargeDuration());
 		ua.setRestDuration((account.getRestDuration()!=null?account.getRestDuration():0)+record.getRechargeDuration());
 		ua.setLastUpdate(new Date());
 		System.err.println("------【支付回调】更新账户信息------"+ua);
