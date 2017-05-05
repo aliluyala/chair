@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chair.manager.bean.ReqParam;
+import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.service.UserAccountService;
 
 
@@ -21,9 +22,9 @@ public class PayController {
 	
 	@ResponseBody
 	@RequestMapping(value="callback",method=RequestMethod.POST)
-	private void callback(@RequestBody ReqParam reqParam){
+	private ResponseResult callback(@RequestBody ReqParam reqParam){
 		System.err.println("------【支付成功回调】参数------"+reqParam);
-		userAccountService.updateRechargeStatus(reqParam.getPhoneNumber(), reqParam.getBatchNO(), reqParam.getTransactionID());
+		return new ResponseResult(userAccountService.updateRechargeStatus(reqParam.getPhoneNumber(), reqParam.getBatchNO(), reqParam.getTransactionID()));
 	}
 	
 	
