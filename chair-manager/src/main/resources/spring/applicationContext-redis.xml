@@ -22,6 +22,10 @@ http://www.springframework.org/schema/cache/spring-cache.xsd"
 			<set>
 				<value>${redis.host}:${redis.port1}</value>
 				<value>${redis.host}:${redis.port2}</value>
+				<value>${redis.host}:${redis.port3}</value>
+				<value>${redis.host}:${redis.port4}</value>
+				<value>${redis.host}:${redis.port5}</value>
+				<value>${redis.host}:${redis.port6}</value>
 			</set>
 		</property>
 	</bean>

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.chair.manager.pojo.Device;
+import com.chair.manager.redis.JedisClusterFactory;
 import com.chair.manager.service.DeviceService;
 
 import redis.clients.jedis.JedisCluster;
@@ -181,7 +182,7 @@ public class Server {
 		 *            消息内容
 		 * @throws IOException
 		 */
-		public void send(String toClientIP, int toClientPort, String toMessage) {
+		public boolean send(String toClientIP, int toClientPort, String toMessage) {
 			// Socket clientSocket = ipMapping.get(toClientIP);
 			// Socket clientSocket = get(toClientIP);
 			try {
@@ -193,9 +194,10 @@ public class Server {
 				os.write(b);
 				os.flush();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
+				return false;
 			}
+			return true;
 		}
 
 		/**
@@ -347,17 +349,18 @@ public class Server {
 	// }
 
 	private void set(String key, String value) {
+		System.out.println("------set()------"+jedisCluster);
 		jedisCluster.set(key, value);
 	}
 
 	private String get(String key) {
-		System.err.println("jedisCluster---" + jedisCluster + "------redis get()---" + key);
+		System.out.println("------get()------"+jedisCluster);
 		String res = jedisCluster.get(key);
-		System.err.println("------redis get()---" + res);
 		return res;
 	}
 	
 	private void del(String key){
+		System.out.println("------del()------"+jedisCluster);
 		jedisCluster.del(key);
 	}
 	

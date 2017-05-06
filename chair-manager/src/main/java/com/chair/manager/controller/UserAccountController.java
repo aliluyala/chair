@@ -96,7 +96,15 @@ public class UserAccountController {
 		if (device == null || consumePackage == null) {
 			throw new ChairException("1000", "找不到设备或者消费套餐");
 		}
+		
+		// 查询账户信息
+		UserAccount userAccount = userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber());
+		int rest = userAccount.getRestDuration().intValue() - consumePackage.getConsumedDuration().intValue();
+		if (rest < 0) {
+			return new ResponseResult("1011", "账户余额不足", null);
+		}
 		// 测试数据00000000000000000001和00000000000000000002，不需要推送消息
+		boolean sendSuccess = false;
 		if (!"00000000000000000001".equals(device.getDeviceNo())
 				&& !"00000000000000000002".equals(device.getDeviceNo())) {
 			// 发送消息给硬件启动设备， 同步任务
@@ -111,16 +119,12 @@ public class UserAccountController {
 			System.out.println("------ipAndPort----" + ipAndPort);
 			String[] ips = ipAndPort.split(":");
 			System.err.println("------向客户端 " + ipAndPort + " 发送消息------" + toMessage);
-			socketAction.send(ips[0], Integer.parseInt(ips[1]), toMessage);
+			sendSuccess = socketAction.send(ips[0], Integer.parseInt(ips[1]), toMessage);
 		}
-
-		// 查询账户信息
-		UserAccount userAccount = userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber());
-		int rest = userAccount.getRestDuration().intValue() - consumePackage.getConsumedDuration().intValue();
-		if (rest < 0) {
-			return new ResponseResult("1011", "账户余额不足", null);
+		if(!sendSuccess){
+			return new ResponseResult("2003", "设备启动失败", null);
 		}
-		// 设置消费明细对象
+		// 新增消费明细
 		ConsumedDetails consumedDetails = new ConsumedDetails();
 		consumedDetails.setPhoneNumber(param.getPhoneNumber());
 		consumedDetails.setConsumedPackageId(consumePackage.getId());
@@ -138,7 +142,6 @@ public class UserAccountController {
 		consumedDetails.setLastUpdate(new Date());
 		// 保存消费明细信息
 		int rs = consumedDetailsService.save(consumedDetails);
-
 		// 更新账户信息
 		userAccount.setUsedDuration(userAccount.getUsedDuration() + consumePackage.getConsumedDuration());
 		userAccount.setRestDuration(userAccount.getRestDuration() - consumePackage.getConsumedDuration());
