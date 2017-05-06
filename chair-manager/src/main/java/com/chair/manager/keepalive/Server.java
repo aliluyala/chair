@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -36,7 +37,7 @@ public class Server {
 	private volatile boolean running = false;
 	private long receiveTimeDelay = Constant.RECEIVE_TIME_DELAY;
 	private ConcurrentHashMap<Class, ServerObjectAction> actionMapping = new ConcurrentHashMap<Class, ServerObjectAction>();
-	private ConcurrentHashMap<String, Socket> ipMapping = new ConcurrentHashMap<String, Socket>();
+	private static ConcurrentHashMap<String, Socket> ipMapping;
 	private Thread connWatchDog;
 	@Autowired
 	private JedisCluster jedisCluster;
@@ -64,6 +65,8 @@ public class Server {
 	public Server(int port) {
 		this.port = port;
 		this.start();
+		if(ipMapping == null)
+			ipMapping = new ConcurrentHashMap<String, Socket>();
 	}
 
 	public void start() {
@@ -89,20 +92,14 @@ public class Server {
 		int port = Constant.PORT;
 		System.out.println("----服务器启动--端口---" + port);
 		Server server = new Server(port);
-		server.start();
-		// server.new SocketAction().resolveMessage("","*R1,SNK,00000000#");
-		// resolveMessage("");
-		// try {
-		// Thread.sleep(10 * 1000);
-		// server.new SocketAction().send("192.168.1.78",
-		// "---服务端呼叫客户端，收到请回答---");
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+//		server.start();
+		
+		String regEx = "^\\*.*#$";
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher("*R1,001,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#\0");
+		boolean b = m.find();
+		System.out.println("---b---"+b);
+		System.out.println("*R1,001,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#\0");
 	}
 
 	/*------------------------------------------------------------------------------------------*/
@@ -185,8 +182,14 @@ public class Server {
 		public boolean send(String toClientIP, int toClientPort, String toMessage) {
 			// Socket clientSocket = ipMapping.get(toClientIP);
 //			 Socket clientSocket = get(toClientIP);
+			System.out.println("----ipMapping----"+ipMapping.size());
+//			s = ipMapping.get(toClientIP+":"+toClientPort);
+			
+			
 			try {
-				Socket clientSocket = new Socket(toClientIP, toClientPort);
+//				Socket clientSocket = new Socket(toClientIP, toClientPort);
+				Socket clientSocket = ipMapping.get(toClientIP+":"+toClientPort);
+				System.out.println(toClientIP+":"+toClientPort+"-----------clientSocket------------"+clientSocket);
 				OutputStream os = clientSocket.getOutputStream();
 				System.out.println(
 						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---发送客户端消息---" + toMessage);
@@ -213,7 +216,7 @@ public class Server {
 			s.setKeepAlive(true);// 设置长连接
 			InputStream is = s.getInputStream();
 			if (is.available() > 0) {
-				ipMapping.put(clientIP, s);// 以k-v保存ip对应的socket对象
+//				ipMapping.put(clientIP+":", s);// 以k-v保存ip对应的socket对象
 				System.out.println("---开始接收消息---is.available()---" + is.available() + "---is.read()---" + is.read()
 						+ " --- " + s.toString());
 				int length = 0;
@@ -223,7 +226,7 @@ public class Server {
 					reciverMsg += new String(buffer, 0, length);
 					System.out.println("--接收来自客户端消息--" + reciverMsg);
 					// TODO 处理接收到的消息，解析报文
-					resolveMessage(clientIP, clientPort, reciverMsg);
+					resolveMessage(clientIP, clientPort, reciverMsg.trim());
 					// responseByOutputStream(); //响应客户端
 				}
 			} else {
@@ -256,8 +259,6 @@ public class Server {
 							// TODO 保存token到redis
 //							set(ip+":"+clientPort, token);
 							set(token, ip+":"+clientPort);
-							ipToken.put(ip+":"+clientPort, token);
-							ipToken.put(token, ip+":"+clientPort);
 						}
 
 						// 新增或者更新设备
@@ -271,8 +272,8 @@ public class Server {
 						System.out.println("------新增或者更新设备信息；后------" + device);
 						set(requestBodys[3], token);
 						set(ip+":"+clientPort, requestBodys[3]);
-						ipToken.put(requestBodys[3], token);
-						ipToken.put(token, requestBodys[3]);
+						ipMapping.put(ip+":"+clientPort, s);
+						System.err.println("-----------ipMapping-------------------"+ipMapping.get(ip+":"+clientPort));
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 						System.out.println("------ 响应客户端R1消息内容------" + send2ClientMsg);

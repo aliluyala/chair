@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.UsersMapper;
 import com.chair.manager.pojo.ConsumePackage;
