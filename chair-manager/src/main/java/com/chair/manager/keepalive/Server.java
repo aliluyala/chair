@@ -184,7 +184,7 @@ public class Server {
 		 */
 		public boolean send(String toClientIP, int toClientPort, String toMessage) {
 			// Socket clientSocket = ipMapping.get(toClientIP);
-			// Socket clientSocket = get(toClientIP);
+//			 Socket clientSocket = get(toClientIP);
 			try {
 				Socket clientSocket = new Socket(toClientIP, toClientPort);
 				OutputStream os = clientSocket.getOutputStream();
