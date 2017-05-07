@@ -98,11 +98,9 @@ public class UsersService extends BaseService<Users> {
 	 */
 	public UserVo login(String openID, String phoneNumber, Integer identCode) {
 		// 1.验证登陆信息 0000测试代码
-		System.out.println("--identCode.toString()---" + identCode.toString());
-		System.out.println("--!0000.equals(identCode.toString())---" + !"1234".equals(identCode.toString()));
 		if (!"1234".equals(identCode.toString())) {
 			if (!identCode.toString().equals(jedisCluster.get(phoneNumber))) {
-				throw new ChairException("1000", "验证码验证失败");
+				throw new ChairException("1013", "验证码"+identCode+"验证失败");
 			}
 		}
 		// 2.查询存在则更新，不存在则新增
@@ -168,8 +166,8 @@ public class UsersService extends BaseService<Users> {
 		Device d = new Device();
 		d.setDeviceNo(deviceNO);
 		Device device = deviceService.queryByDeviceNO(d);
-//		if (device == null)
-//			throw new ChairException("2001", "根据设备唯一编号：" + deviceNO + "查询不到设备");
+		if (device == null)
+			throw new ChairException("2001", "根据设备编号"+deviceNO+"查询不到设备信息");
 		return device;
 	}
 

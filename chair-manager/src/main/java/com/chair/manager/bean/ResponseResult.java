@@ -29,10 +29,10 @@ public class ResponseResult {
 		this.data = data;
 	}
 
-	public ResponseResult(String errorCode, Object data) {
+	public ResponseResult(String errorCode, String errorMsg) {
 		super();
 		this.errorCode = errorCode;
-		this.data = data;
+		this.errorMsg = errorMsg;
 	}
 	public ResponseResult(Object data) {
 		super();

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
+import com.chair.manager.exception.ChairException;
 import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.Device;
@@ -69,6 +70,7 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="queryRechargeDetails",method=RequestMethod.POST)
 	private ResponseResult queryRechargeDetails(@RequestBody ReqParam param){
+		logger.info("------【查询充值明细】---参数>>>"+param);
 		RechargeRecord rr=new RechargeRecord();
 		rr.setPhoneNumber(param.getPhoneNumber());
 		List<RechargeRecord>  rechargeRecordList = rechargeRecordService.queryList(rr);
@@ -84,8 +86,6 @@ public class UsersController {
 		res.setOpenID(param.getOpenID());
 		res.setPhoneNumber(param.getPhoneNumber());
 		res.setRechargeList(voList);
-		res.setOpenID(param.getOpenID());
-		res.setPhoneNumber(param.getPhoneNumber());
 		return new ResponseResult(res);
 	}
 	
@@ -98,6 +98,7 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="queryConsumedDetails",method=RequestMethod.POST)
 	private ResponseResult queryConsumedDetails(@RequestBody ReqParam param){
+		logger.info("------【查询消费明细】---参数>>>"+param);
 		ConsumedDetails cd=new ConsumedDetails();
 		cd.setPhoneNumber(param.getPhoneNumber());
 		List<ConsumedDetails> rs=consumedDetailsService.queryList(cd);
@@ -124,13 +125,11 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="queryPackageList",method=RequestMethod.POST)
 	private ResponseResult queryPackageList(@RequestBody ReqParam param){
+		logger.info("------【查询充值套餐列表】---参数>>>"+param);
 		List<RechargePackage> rechargePackages = rechargePackageService.queryRechargeListByLimit(new RechargePackage());
 		List<RechargePackageVo> vos = new ArrayList<RechargePackageVo>();
 		RechargePackageVo vors = new RechargePackageVo();
-		System.err.println("----rechargePackages---"+rechargePackages.size());
-//		for (RechargePackage rechargePackage : rechargePackages) {
 		for(int i=0;i<rechargePackages.size();i++){
-			System.err.println("---rechargePackages.get(i)---"+rechargePackages.get(i).toString());
 			RechargePackage rechargePackage = rechargePackages.get(i);
 			RechargePackageVo vo = new  RechargePackageVo();
 			vo.setPackageID(rechargePackage.getId());
@@ -145,7 +144,7 @@ public class UsersController {
 	}
 	
 	/**
-	 * 发送用户验证码
+	 * 查看用户注册状态
 	 * @param userID 用户ID
 	 * @param phoneNumber 用户手机号
 	 * @return
@@ -153,6 +152,7 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="queryUserRegStatus",method=RequestMethod.POST)
 	private ResponseResult queryUserStatus(@RequestBody ReqParam param){
+		logger.info("------【查询用户状态】---参数>>>"+param);
 		return new ResponseResult(usersService.queryUserRegStatus(param.getOpenID())); 
 	}
 	
@@ -166,6 +166,7 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="login",method=RequestMethod.POST)
 	private ResponseResult userLogin(@RequestBody ReqParam param){
+		logger.info("------【登陆】---参数>>>"+param);
 		return new ResponseResult(usersService.login(param.getOpenID(), param.getPhoneNumber(), param.getIdentCode())); 
 	}
 	
@@ -179,6 +180,7 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="sendCode",method=RequestMethod.POST)
 	private ResponseResult sendCode(@RequestBody ReqParam param){
+		logger.info("------【发送验证码】---参数>>>"+param);
 		usersService.sendCode(param.getPhoneNumber());
 		return new ResponseResult(null); 
 	}
@@ -193,11 +195,8 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="queryDevice",method=RequestMethod.POST)
 	private ResponseResult queryDevice(@RequestBody ReqParam param){
-		System.err.println("------【查询设备信息】参数------"+param);
-		Device device = usersService.queryDeviceByDeviceNO(param.getDeviceNO());
-		if(device == null)
-			return new ResponseResult("2001", "根据设备编号"+param.getDeviceNO()+"查询不到设备信息",null);
-		return new ResponseResult(device); 
+		logger.info("------【查询设备信息】---参数>>>"+param);
+		return new ResponseResult(usersService.queryDeviceByDeviceNO(param.getDeviceNO())); 
 	}
 	
 	
@@ -212,6 +211,7 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="queryConsumerPackageList",method=RequestMethod.POST)
 	private ResponseResult queryConsumerPackageList(@RequestBody ReqParam param){
+		logger.info("------【查询消费套餐列表】---参数>>>"+param);
 		List<ConsumePackage> consumePackages = consumePackageService.queryListByLimit(new ConsumePackage());
 		ConsumePackageVo rsvo = new ConsumePackageVo();
 		List<ConsumePackageVo> vos = new ArrayList<ConsumePackageVo>();
@@ -237,12 +237,8 @@ public class UsersController {
 	@ResponseBody
 	@RequestMapping(value="queryAccountInfo",method=RequestMethod.POST)
 	private ResponseResult queryAccountInfo(@RequestBody ReqParam param){
-		System.out.println("------【查询账户信息】参数------"+param);
-		UserAccount userAccount = userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber());
-		if(userAccount == null)
-//			return new ResponseResult("1010", "根据openID:【"+param.getOpenID()+"】和手机号:【"+param.getPhoneNumber()+"】查询不到设备信息", null); 
-			return new ResponseResult("1010", "根据手机号:【"+param.getPhoneNumber()+"】查询不到设备信息", null); 
-		return new ResponseResult(userAccount); 
+		logger.info("------【查询账户信息】---参数>>>"+param);
+		return new ResponseResult(userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber())); 
 	}
 	
 	

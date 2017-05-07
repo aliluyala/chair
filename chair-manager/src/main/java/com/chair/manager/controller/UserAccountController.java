@@ -86,10 +86,9 @@ public class UserAccountController {
 		d.setDeviceNo(param.getDeviceNO());
 		Device device = deviceService.queryByDeviceNO(d);
 		logger.info("---根据设备NO：【" + param.getDeviceNO() + "】查询设备信息--->>>" + device);
-		boolean useAble = deviceService.isUsed(jedisCluster, device);
-		System.out.println("---useAble---" + useAble);
-		if (!useAble)
-			return new ResponseResult("2001", "设备" + param.getDeviceNO() + "找不到设备", null);
+		deviceService.isUsed(jedisCluster, device);
+//		if (!useAble)
+//			throw new ChairException("2001", "设备" + param.getDeviceNO() + "找不到设备");
 		// 查询套餐信息
 		ConsumePackage consumePackage = consumePackageService.findById(param.getConsumedPackageID());
 		logger.info("---根据用户选择的消费套餐ID：【" + param.getConsumedPackageID() + "】查询消费套餐信息--->>>" + consumePackage);
@@ -101,7 +100,8 @@ public class UserAccountController {
 		UserAccount userAccount = userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber());
 		int rest = userAccount.getRestDuration().intValue() - consumePackage.getConsumedDuration().intValue();
 		if (rest < 0) {
-			return new ResponseResult("1011", "账户余额不足", null);
+			logger.error("账户【"+userAccount.getId()+"】余额不足");
+			throw new ChairException("1011", "账户余额不足");
 		}
 		// 测试数据00000000000000000001和00000000000000000002，不需要推送消息
 		boolean sendSuccess = false;
@@ -112,17 +112,12 @@ public class UserAccountController {
 			SocketAction socketAction = server.new SocketAction();
 			String toMessage = "*T0,001," + consumePackage.getConsumedDuration() + "#";
 			String ipAndPort = jedisCluster.get(device.getDeviceNo());
-//			if (StringUtils.isEmpty(token)) {
-//				return new ResponseResult("2001", "根据设备编号" + param.getDeviceNO() + "找不到启动的设备。", null);
-//			}
-//			String ipAndPort = jedisCluster.get(token);
-			System.out.println("------【根据设备编号"+device.getDeviceNo()+"从redis.get()中获取ip】---------" + ipAndPort);
+			System.out.println("------【根据设备编号"+device.getDeviceNo()+"从redis.get()中获取ip】-----向客户端【" + ipAndPort+"】发送消息------" + toMessage);
 			String[] ips = ipAndPort.split(":");
-			System.err.println("------向客户端 " + ipAndPort + " 发送消息------" + toMessage);
 			sendSuccess = socketAction.send(ips[0], Integer.parseInt(ips[1]), toMessage);
 		}
 		if(!sendSuccess){
-			return new ResponseResult("2003", "设备启动失败", null);
+			throw new ChairException("2003", "消息发送不成功");
 		}
 		// 新增消费明细
 		ConsumedDetails consumedDetails = new ConsumedDetails();

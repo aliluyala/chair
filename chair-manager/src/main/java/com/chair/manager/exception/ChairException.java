@@ -1,10 +1,9 @@
 package com.chair.manager.exception;
 
+import org.springframework.web.bind.annotation.ControllerAdvice;
+
 public class ChairException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	/**

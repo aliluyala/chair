@@ -3,6 +3,8 @@ package com.chair.manager.keepalive;
 
 import org.apache.log4j.Logger;
 
+import com.chair.manager.exception.ChairException;
+
 
 /**
  * 长链接数据常量
@@ -25,9 +27,9 @@ public class Constant {
 			logger.error("-----This's error-----");
 			try {
 				Thread.sleep(10*1000);
+				int i = 1/0;
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new ChairException("1000", "TEST-exception");
 			}
 		}
 		

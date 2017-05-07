@@ -2,11 +2,14 @@ package com.chair.manager.service;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.chair.manager.bean.ResponseResult;
+import com.chair.manager.controller.UsersController;
+import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.DeviceMapper;
 import com.chair.manager.pojo.Device;
 
@@ -14,6 +17,7 @@ import redis.clients.jedis.JedisCluster;
 
 @Service
 public class DeviceService extends BaseService<Device> {
+	private static Logger logger = Logger.getLogger(DeviceService.class);
 	@Autowired
 	private DeviceMapper deviceMapper;
 	
@@ -61,14 +65,14 @@ public class DeviceService extends BaseService<Device> {
 		}
 		//1.判断设备是否存在
 		if(device == null) {
-			System.out.println("------设备不存在数据库------");
-			return false;
+			logger.error("------设备不存在数据库------");
+			throw new ChairException("2001", "查询不到设备信息");
 		}
 		String ipAndPort = jedisCluster.get(device.getDeviceNo());
 		//2.判断设备是否开启，发消息给硬件
 		if(StringUtils.isEmpty(ipAndPort)){
-			System.out.println("------通过【"+device.getDeviceNo()+"】在redis中找不到对应的设备IP地址------");
-			return false;
+			logger.error("------通过【"+device.getDeviceNo()+"】在redis中找不到对应的设备IP地址------");
+			throw new ChairException("2001", "查询不到设备信息");
 		}
 		return true;
 	}
