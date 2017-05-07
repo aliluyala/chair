@@ -60,10 +60,14 @@ public class DeviceService extends BaseService<Device> {
 			return true;
 		}
 		//1.判断设备是否存在
-		if(device == null) return false;
-		String token = jedisCluster.get(device.getDeviceNo());
+		if(device == null) {
+			System.out.println("------设备不存在数据库------");
+			return false;
+		}
+		String ipAndPort = jedisCluster.get(device.getDeviceNo());
 		//2.判断设备是否开启，发消息给硬件
-		if(StringUtils.isEmpty(token)){
+		if(StringUtils.isEmpty(ipAndPort)){
+			System.out.println("------通过【"+device.getDeviceNo()+"】在redis中找不到对应的设备IP地址------");
 			return false;
 		}
 		return true;

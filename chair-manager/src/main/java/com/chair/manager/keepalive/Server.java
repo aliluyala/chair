@@ -1,12 +1,8 @@
 package com.chair.manager.keepalive;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -19,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.chair.manager.pojo.Device;
-import com.chair.manager.redis.JedisClusterFactory;
 import com.chair.manager.service.DeviceService;
 
 import redis.clients.jedis.JedisCluster;
@@ -37,7 +32,8 @@ public class Server {
 	private volatile boolean running = false;
 	private long receiveTimeDelay = Constant.RECEIVE_TIME_DELAY;
 	private ConcurrentHashMap<Class, ServerObjectAction> actionMapping = new ConcurrentHashMap<Class, ServerObjectAction>();
-	private static ConcurrentHashMap<String, Socket> ipMapping;
+	private static ConcurrentHashMap<String, Socket> ipSocket;
+	private ConcurrentHashMap<String, String> ipToken = new ConcurrentHashMap<String, String>();
 	private Thread connWatchDog;
 	@Autowired
 	private JedisCluster jedisCluster;
@@ -52,7 +48,6 @@ public class Server {
 		this.deviceService = deviceService;
 	}
 
-	private ConcurrentHashMap<String, String> ipToken = new ConcurrentHashMap<String, String>();
 
 	public Server() {
 	}
@@ -65,8 +60,8 @@ public class Server {
 	public Server(int port) {
 		this.port = port;
 		this.start();
-		if(ipMapping == null)
-			ipMapping = new ConcurrentHashMap<String, Socket>();
+		if(ipSocket == null)
+			ipSocket = new ConcurrentHashMap<String, Socket>();
 	}
 
 	public void start() {
@@ -182,14 +177,13 @@ public class Server {
 		public boolean send(String toClientIP, int toClientPort, String toMessage) {
 			// Socket clientSocket = ipMapping.get(toClientIP);
 //			 Socket clientSocket = get(toClientIP);
-			System.out.println("----ipMapping----"+ipMapping.size());
+//			System.out.println("----ipMapping----"+ipSocket.size());
 //			s = ipMapping.get(toClientIP+":"+toClientPort);
 			
 			
 			try {
-//				Socket clientSocket = new Socket(toClientIP, toClientPort);
-				Socket clientSocket = ipMapping.get(toClientIP+":"+toClientPort);
-				System.out.println(toClientIP+":"+toClientPort+"-----------clientSocket------------"+clientSocket);
+				Socket clientSocket = ipSocket.get(toClientIP+":"+toClientPort);
+				System.out.println("------【向"+toClientIP+":"+toClientPort+" 发送消息，获取socket对象】------"+clientSocket);
 				OutputStream os = clientSocket.getOutputStream();
 				System.out.println(
 						new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---发送客户端消息---" + toMessage);
@@ -240,25 +234,23 @@ public class Server {
 			Pattern p = Pattern.compile(regEx);
 			Matcher m = p.matcher(reciverMsg);
 			boolean b = m.find();
-			System.err.println("---解析报文，匹配以*开头，以#结尾，结果为---" + b + "\n ip:port = " + ip+":"+clientPort);
+			System.err.println("---【解析报文，匹配以*开头，以#结尾，结果为】---" + b + "\n ip:port = " + ip+":"+clientPort);
 			if (b) {
 				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1)
 						.split(",");
-				// System.err.println("---请求的报文体为---" + requestBodys);
 				for (String key : requestBodys) {
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 注册命令
 						System.out.println(jedisCluster + "---requestBodys的第三位数---" + requestBodys[2]);
-						// String token = get(ip);
-						String token = ipToken.get(ip+":"+clientPort);
+						String token = get(ip+":"+clientPort);
+//						String token = ipToken.get(ip+":"+clientPort);
 						String snk = "001";
 						if ("".equals(token) || null == token) {
-							// 生成token
+							// 生成token，并且保存到redis
 							token = "R" + new Date().getTime();
 							System.err.println("---token---" + token);
-							// TODO 保存token到redis
-//							set(ip+":"+clientPort, token);
-							set(token, ip+":"+clientPort);
+							set(ip+":"+clientPort, token);
+//							set(token, ip+":"+clientPort);
 						}
 
 						// 新增或者更新设备
@@ -267,19 +259,19 @@ public class Server {
 						device.setStatus(1);
 						device.setLastUpdate(new Date());
 						device.setCreateTime(new Date());
-						System.out.println("------新增或者更新设备信息；前------" + device);
+//						System.out.println("------新增或者更新设备信息；前------" + device);
 						deviceService.saveOrUpdate(device);
 						System.out.println("------新增或者更新设备信息；后------" + device);
-						set(requestBodys[3], token);
-						set(ip+":"+clientPort, requestBodys[3]);
-						ipMapping.put(ip+":"+clientPort, s);
-						System.err.println("-----------ipMapping-------------------"+ipMapping.get(ip+":"+clientPort));
+						set(token, requestBodys[3]);
+						set(requestBodys[3], ip+":"+clientPort);
+						ipSocket.put(ip+":"+clientPort, s);
+//						System.err.println("-----------ipSocket-------------------"+ipSocket.get(ip+":"+clientPort));
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 						System.out.println("------ 响应客户端R1消息内容------" + send2ClientMsg);
 						responseByOutputStream(send2ClientMsg);
 
-					} else if ("G0".equalsIgnoreCase(key)) { // 持续请求
+					} else if ("G0".equalsIgnoreCase(key)) { // 保持连接，H0
 						String token = get(ip);
 						String snk = "001";
 						if ("".equals(token) || null == token) {
@@ -296,7 +288,6 @@ public class Server {
 		 * 响应消息(OutputStream)
 		 */
 		private void responseByOutputStream(String sendMsg) throws IOException {
-			// String sendMsg = "*QB001";
 			OutputStream os = s.getOutputStream();
 			System.out.println(
 					new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---响应客户端消息---" + sendMsg);
@@ -322,9 +313,10 @@ public class Server {
 			String clientIP = s.getInetAddress().toString().replace("/", "");
 			int clientPort = s.getPort();
 			System.out.println("---客户端断开连接----"+clientIP+":"+clientPort);
-			String ccid = get(clientIP+":"+clientPort);
-			System.out.println("-----ccid-----"+ccid);
+			String token = get(clientIP+":"+clientPort);
+			String ccid = get(token);
 			del(clientIP+":"+clientPort);
+			del(token);
 			del(ccid);
 			System.out.println("关闭：" + s.getRemoteSocketAddress());
 		}
@@ -350,18 +342,18 @@ public class Server {
 	// }
 
 	private void set(String key, String value) {
-		System.out.println("------set()------"+jedisCluster);
+		System.out.println("------【保存redis.set()】------key："+key+"\t value："+value);
 		jedisCluster.set(key, value);
 	}
 
 	private String get(String key) {
-		System.out.println("------get()------"+jedisCluster);
+		System.out.println("------【查询redis.get()】------key："+key);
 		String res = jedisCluster.get(key);
 		return res;
 	}
 	
 	private void del(String key){
-		System.out.println("------del()------"+jedisCluster);
+		System.out.println("------【删除redis.del()】------key："+key);
 		jedisCluster.del(key);
 	}
 	
