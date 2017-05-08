@@ -1,5 +1,6 @@
 package com.chair.manager.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -12,6 +13,7 @@ import com.chair.manager.controller.UsersController;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.DeviceMapper;
 import com.chair.manager.pojo.Device;
+import com.chair.manager.vo.DeviceVo;
 
 import redis.clients.jedis.JedisCluster;
 
@@ -75,6 +77,39 @@ public class DeviceService extends BaseService<Device> {
 			throw new ChairException("2001", "查询不到设备信息");
 		}
 		return true;
+	}
+	
+	
+	/**
+	 * 查询设备列表
+	 */
+	public DeviceVo queryDeviceList() {
+		List<Device> devices =  deviceMapper.select(null);
+		if(devices.size() <= 0){
+			logger.info("查询不到设备列表");
+			return null;
+		}
+		List<DeviceVo> deviceVos = new ArrayList<DeviceVo>();
+		DeviceVo vos = new DeviceVo();
+		for (Device device : devices) {
+			DeviceVo vo = new DeviceVo();
+			vo.setDeviceID(device.getId());
+			vo.setDeviceNO(device.getDeviceNo());
+			vo.setDeviceModel(device.getDeviceModel());
+			vo.setShopID(device.getShopId());
+			vo.setShopLocation(device.getShopLocation());
+			vo.setShopName(device.getShopName());
+			vo.setProxyID(device.getProxyId());
+			vo.setProxyName(device.getProxyName());
+			vo.setFacrotyID(device.getFacrotyId());
+			vo.setFactoryName(device.getFactoryName());
+			vo.setStatus(device.getStatus());
+			vo.setCreateTime(device.getCreateTime().toString());
+			vo.setLastUpdate(device.getLastUpdate().toString());
+			deviceVos.add(vo);
+		}
+		vos.setDeviceList(deviceVos);
+		return vos;
 	}
 
 }
