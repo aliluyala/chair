@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.chair.manager.exception.ChairException;
 import com.chair.manager.pojo.Device;
 import com.chair.manager.service.DeviceService;
 
@@ -88,14 +89,14 @@ public class Server {
 		int port = Constant.PORT;
 		System.out.println("----服务器启动--端口---" + port);
 		Server server = new Server(port);
-//		server.start();
+		server.start();
 		
 		String regEx = "^\\*.*#$";
 		Pattern p = Pattern.compile(regEx);
 		Matcher m = p.matcher("*R1,001,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#\0");
 		boolean b = m.find();
-		System.out.println("---b---"+b);
-		System.out.println("*R1,001,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#\0");
+//		System.out.println("---b---"+b);
+//		System.out.println("*R1,001,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#\0");
 	}
 
 	/*------------------------------------------------------------------------------------------*/
@@ -214,7 +215,7 @@ public class Server {
 					logger.info("--接收来自客户端消息--" + reciverMsg);
 					// TODO 处理接收到的消息，解析报文
 					resolveMessage(clientIP, clientPort, reciverMsg.trim());
-					// responseByOutputStream(); //响应客户端
+//					responseByOutputStream("from server"); //响应客户端
 				}
 			} else {
 				Thread.sleep(10);
@@ -295,7 +296,8 @@ public class Server {
 				try {
 					s.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("socket关闭失败，失败原因："+e.getMessage());
+					throw new ChairException("-1", "系统错误");
 				}
 			}
 			
