@@ -53,7 +53,7 @@ public class UserAccountController {
 	@ResponseBody
 	@RequestMapping(value = "recharge", method = RequestMethod.POST)
 	private ResponseResult recharge(@RequestBody ReqParam param) {
-		System.err.println("------【充值】参数------" + param);
+		logger.info("------【充值】参数------" + param);
 		return new ResponseResult(userAccountService.recharge(param.getPhoneNumber(), param.getPackageID(),
 				param.getOpenID(), param.getBatchNO()));
 	}
@@ -67,7 +67,7 @@ public class UserAccountController {
 	@ResponseBody
 	@RequestMapping(value = "queryPrepayInfo", method = RequestMethod.POST)
 	private ResponseResult queryPrepayInfo(@RequestBody ReqParam param) {
-		System.err.println("------【查询预支付信息】参数------" + param);
+		logger.info("------【查询预支付信息】参数------" + param);
 		return new ResponseResult(userAccountService.queryPrepayInfo(param.getPhoneNumber(), param.getBatchNO()));
 	}
 
@@ -140,11 +140,7 @@ public class UserAccountController {
 		// 更新账户信息
 		userAccount.setUsedDuration(userAccount.getUsedDuration() + consumePackage.getConsumedDuration());
 		userAccount.setRestDuration(userAccount.getRestDuration() - consumePackage.getConsumedDuration());
-		
 		userAccountService.updateSelective(userAccount);
-		
-		
-		
 		logger.info("---保存消费明细结果--->>>" + rs);
 		return new ResponseResult(null);
 	}
