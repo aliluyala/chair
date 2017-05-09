@@ -8,12 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.chair.manager.bean.EasyUIResult;
 import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.controller.UsersController;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.DeviceMapper;
 import com.chair.manager.pojo.Device;
+import com.chair.manager.pojo.RechargePackage;
 import com.chair.manager.vo.DeviceVo;
+import com.github.pagehelper.PageInfo;
 
 import redis.clients.jedis.JedisCluster;
 
@@ -110,6 +113,17 @@ public class DeviceService extends BaseService<Device> {
 		}
 		vos.setDeviceList(deviceVos);
 		return vos;
+	}
+
+	/**
+	 * 分页查询设备信息
+	 * @param page 页面
+	 * @param rows 页面大小
+	 * @return
+	 */
+	public EasyUIResult queryDeviceListForPage(Integer page, Integer rows) {
+		PageInfo<Device> pageInfo= super.queryListPage(new Device(), page, rows);
+		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
 	}
 
 }
