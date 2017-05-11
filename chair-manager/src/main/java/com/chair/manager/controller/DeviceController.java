@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chair.manager.bean.EasyUIResult;
+import com.chair.manager.pojo.Device;
 import com.chair.manager.service.DeviceService;
 
 @RequestMapping("/device")
@@ -18,6 +19,8 @@ public class DeviceController {
 	
 	@Autowired
 	private DeviceService deviceService;
+	
+	
 
 	
 	/**
@@ -31,7 +34,21 @@ public class DeviceController {
 		return deviceService.queryDeviceListForPage(page, rows);
 	}
 	
-
+	
+	/**
+	 * 新增设备（管理台前端）
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="save",method=RequestMethod.POST)
+	private EasyUIResult addDevice(Device deivce){
+		logger.info("------【新增设备】参数------"+deivce);
+		return new EasyUIResult();
+	}
+	
+	
+	
 	/**
 	 * 删除设备（管理台前端）
 	 * @param param
@@ -45,8 +62,4 @@ public class DeviceController {
 	}
 	
 	
-	public static void main(String[] args) {
-		Integer i =123;
-		System.out.println(i.intValue());
-	}
 }
