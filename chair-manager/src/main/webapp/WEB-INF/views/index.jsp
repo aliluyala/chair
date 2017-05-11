@@ -36,7 +36,7 @@
 	         	<%-- 	<li data-options="attributes:{'url':'/<%=chair%>/page/factory-add'}">新增厂家</li>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consume-list'}">新增代理</li>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consume-list'}">新增商家</li> --%>
-	         		<li data-options="attributes:{'url':'/<%=chair%>/page/device-list'}">新增设备</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/device-list'}">设备管理</li>
 	         	</ul>
          	</li>
          </ul>

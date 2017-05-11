@@ -30,4 +30,23 @@ public class DeviceController {
 	private EasyUIResult queryDeviceListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows){
 		return deviceService.queryDeviceListForPage(page, rows);
 	}
+	
+
+	/**
+	 * 删除设备（管理台前端）
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="batDel",method=RequestMethod.POST)
+	private Integer delDevice(@RequestParam("ids") Integer[] ids){
+		logger.info("---将要删除的设备ids--->>>"+ids);
+		return deviceService.deleteByIds(ids);
+	}
+	
+	
+	public static void main(String[] args) {
+		Integer i =123;
+		System.out.println(i.intValue());
+	}
 }

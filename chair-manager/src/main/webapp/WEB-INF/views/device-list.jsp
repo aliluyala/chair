@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div>
-    <table class="easyui-datagrid" id="consumeList" title="套餐列表" 
+    <table class="easyui-datagrid" id="deviceList" title="套餐列表" 
 	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/device/list',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
 	    <thead>
 	        <tr>
@@ -27,7 +27,7 @@
 	    </thead>
 	</table>
 	</div>
-<div id="consumeAdd" class="easyui-window" title="新增设备" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/device-add'" style="width:800px;height:600px;padding:10px;">
+<div id="addDevice" class="easyui-window" title="新增设备" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/device-add'" style="width:800px;height:600px;padding:10px;">
         The window content.
 </div>
 <script type="text/javascript">
@@ -53,9 +53,37 @@ var toolbar = [{
     text:'新增',
     iconCls:'icon-add',
     handler:function(){
-    	$('#consumeAdd').window('open');
+    	$('#addDevice').window('open');
+    }
+},{
+    text:'删除',
+    iconCls:'icon-remove',
+    handler:function(){
+    	var rows = $('#deviceList').datagrid('getSelections');
+    	if(rows){
+    		//alert("---rows---"+JSON.stringify(rows))
+        	var ids = "";
+        	for(var i=0; i<rows.length; i++){
+        		ids = rows[i].id + "," + ids;  
+        	}
+    		$.messager.confirm('Confirm','确定删除该设备吗？',function(r){
+    			$.post('/<%=chair%>/device/batDel',{ids:ids},function(result){
+					if (result){
+						$('#deviceList').datagrid('reload');	// reload the user data
+					} else {
+						alert("---删除设备失败---")
+						/* $.messager.show({	// show error message
+							title: 'Error',
+							msg: result.errorMsg
+						}); */
+					}
+				},'json');
+    		});
+    	}
     }
 }];
+
+
 </script>
 </body>
 </html>

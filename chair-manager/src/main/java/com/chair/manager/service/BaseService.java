@@ -104,7 +104,7 @@ public abstract class BaseService<T> {
      * @param id
      * @return
      */
-    public Integer deleteById(Long id){
+    public Integer deleteById(Integer id){
         return this.mapper.deleteByPrimaryKey(id);
     }
     
@@ -113,7 +113,7 @@ public abstract class BaseService<T> {
      * @param ids
      * @return
      */
-    public Integer deleteByIds(Long[] ids){
+    public Integer deleteByIds(Integer[] ids){
         return this.mapper.deleteByIDS(ids);
     }
 
