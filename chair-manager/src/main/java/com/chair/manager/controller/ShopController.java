@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.chair.manager.pojo.Shop;
 import com.chair.manager.service.ShopService;
@@ -33,4 +34,5 @@ public class ShopController {
 		List<Shop> shops = shopService.queryList(null);
 		return shops;
 	}
+	
 }
