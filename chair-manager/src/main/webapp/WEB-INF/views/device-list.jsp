@@ -17,17 +17,17 @@
 	        	<th data-options="field:'id',width:60">ID</th>
 	            <th data-options="field:'deviceNo',width:200">设备编号</th>
 	            <th data-options="field:'deviceModel',width:100">设备型号</th>
-	            <th data-options="field:'shopLocation',width:100">店铺位置</th>
-	            <th data-options="field:'shopName',width:100">店铺名称</th>
-	            <th data-options="field:'proxyName',width:100">代理名称</th>
 	            <th data-options="field:'factoryName',width:100">厂家名称</th>
+	            <th data-options="field:'proxyName',width:100">代理名称</th>
+	            <th data-options="field:'shopName',width:100">店铺名称</th>
+	            <th data-options="field:'shopLocation',width:100">店铺位置</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
 	            <th data-options="field:'lastUpdate',width:130,align:'center',formatter:formatDate">更新日期</th>
 	        </tr>
 	    </thead>
 	</table>
 	</div>
-<div id="addDevice" class="easyui-window" title="新增设备" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/device-add'" style="width:800px;height:600px;padding:10px;">
+<div id="deivceAdd" class="easyui-window" title="新增设备" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/device-add'" style="width:800px;height:600px;padding:10px;">
         The window content.
 </div>
 <script type="text/javascript">
@@ -53,7 +53,7 @@ var toolbar = [{
     text:'新增',
     iconCls:'icon-add',
     handler:function(){
-    	$('#addDevice').window('open');
+    	$('#deivceAdd').window('open');
     }
 },{
     text:'删除',

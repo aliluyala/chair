@@ -6,28 +6,29 @@
 	    <table cellpadding="5">
 	        <tr>
 	            <td>设备编号:</td>
-	            <td><input class="easyui-textbox" type="text" name="packageName" data-options="required:true" style="width: 280px;"></input></td>
+	            <td><input class="easyui-textbox" type="text" name="deviceNo" data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
 	        <tr>
 	            <td>设备型号:</td>
-	            <td><input class="easyui-textbox" type="text" name="consumedDuration"  data-options="required:true" style="width: 280px;"></input></td>
-	        </tr>
-	        <tr>
-	            <td>店铺位置:</td>
-	            <td><input class="easyui-textbox" type="text" name="consumedDuration"  data-options="required:true" style="width: 280px;"></input></td>
-	        </tr>
-	        <tr>
-	            <td>店铺名称:</td>
-	            <td><input class="easyui-textbox" type="text" name="consumedDuration"  data-options="required:true" style="width: 280px;"></input></td>
-	        </tr>
-	        <tr>
-	            <td>代理名称:</td>
-	            <td><input class="easyui-textbox" type="text" name="consumedDuration"  data-options="required:true" style="width: 280px;"></input></td>
+	            <td><input class="easyui-textbox" type="text" name="deviceModel"  data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
 	        <tr>
 	            <td>厂家名称:</td>
-	            <td><input class="easyui-textbox" type="text" name="consumedDuration"  data-options="required:true" style="width: 280px;"></input></td>
+	             <td><input class="easyui-combobox" name="facrotyId" data-options="valueField:'id',textField:'factoryName',url:'/<%=chair%>/factory/list',prompt:'请选择'" style="width: 280px;"></input></td> 
+	           <!-- <td><input class="easyui-combobox" name="id" data-options="valueField:'id',textField:'factoryName',data:[{id:1,factoryName:'A'},{id:2,factoryName:'B'}]" style="width: 280px;"></input></td>-->
 	        </tr>
+	        <tr>
+	            <td>代理名称:</td>
+	            <td><input class="easyui-combobox" name="proxyId" data-options="valueField:'id',textField:'proxyName',url:'/<%=chair%>/proxy/list',prompt:'请选择'" style="width: 280px;"></input></td>
+	        </tr>
+    	    <tr>
+	            <td>店铺名称:</td>
+	            <td><input class="easyui-combobox" name="shopId" data-options="valueField:'id',textField:'shopName',url:'/<%=chair%>/shop/list',prompt:'请选择'" style="width: 280px;"></input></td>
+	        </tr>
+	       <!--  <tr>
+	            <td>店铺位置:</td>
+	            <td><input class="easyui-textbox" type="text" name="shopLocation"  data-options="required:true" style="width: 280px;"></input></td>
+	        </tr> --> 
 	    </table>
 	</form>
 	<div style="padding:5px">
@@ -41,18 +42,22 @@
 			$.messager.alert('提示','表单还未填写完成!');
 			return ;
 		}
-		$.post('/<%=chair%>/consume/save',$("#content").serialize(), function(data){
+		$.post('/<%=chair%>/device/save',$("#content").serialize(), function(data){
 			if(data.status == 200){
-				$.messager.alert('提示','新增套餐成功!');
-				$('#consumeAdd').window('close');
-				$("#consumeList").datagrid("reload");
+				$.messager.alert('提示','新增设备成功!');
+				$('#deivceAdd').window('close');
+				$("#deviceList").datagrid("reload");
 				clearForm();
 			}else{
-				$.messager.alert('提示','新增套餐失败!');
+				$.messager.alert('提示','新增设备失败!');
 			}
 		});
 	}
 	function clearForm(){
 		$('#content').form('reset');
+	}
+	
+	function showLocation(shopName){
+		alert("---showLocation()---"+shopName)
 	}
 </script>
