@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chair.manager.bean.EasyUIResult;
@@ -33,6 +34,19 @@ public class FactoryController {
 		logger.info("------【查询工厂列表】------");
 		List<Factory> factorys = factoryService.queryList(null);
 		return factorys;
-		// return deviceService.queryDeviceListForPage();
 	}
+	
+	
+	/**
+	 * 查询厂家列表，分页（管理台前端）
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="listForPage",method=RequestMethod.POST)
+	private EasyUIResult queryDeviceListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows){
+		return factoryService.queryDeviceListForPage(page, rows);
+	}
+	
+	
 }
