@@ -8,4 +8,9 @@
 	<insert id="saveOrUpdate" useGeneratedKeys="true" keyProperty="id">
 		insert into users(open_id, phone_number, create_time, last_update) values(#{openId}, #{phoneNumber},#{createTime}, #{lastUpdate}) ON DUPLICATE KEY UPDATE last_update=#{lastUpdate};
 	</insert>
+	
+	<select id="selectByOpenID" resultType="Users">
+		SELECT * FROM
+		users where open_id=#{openId}
+	</select>
 </mapper>

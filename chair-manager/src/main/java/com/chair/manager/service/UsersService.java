@@ -151,9 +151,7 @@ public class UsersService extends BaseService<Users> {
 	 * @return
 	 */
 	public Users queryUserRegStatus(String openID) {
-		Users user = new Users();
-		user.setOpenId(openID);
-		return (Users) usersMapper.selectByPrimaryKey(user);
+		return usersMapper.selectByOpenID(openID);
 	}
 
 	/**
