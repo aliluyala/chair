@@ -19,24 +19,24 @@
          	<li>
          		<span>充值套餐管理</span>
          		<ul>
-	         		<li data-options="attributes:{'url':'/<%=chair%>/page/recharge-add'}">新增充值套餐</li>
+	         		<%-- <li data-options="attributes:{'url':'/<%=chair%>/page/recharge-add'}">新增充值套餐</li> --%>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/recharge-list'}">查询充值套餐</li>
 	         	</ul>
          	</li>
          	<li>
          		<span>消费套餐管理</span>
          		<ul>
-	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consume-add'}">新增消费套餐</li>
+	         		<%-- <li data-options="attributes:{'url':'/<%=chair%>/page/consume-add'}">新增消费套餐</li> --%>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consume-list'}">查询消费套餐</li>
 	         	</ul>
          	</li>
          	<li>
          		<span>数据管理</span>
          		<ul>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/device-list'}">设备管理</li>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/factory-list'}">厂家管理</li>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/proxy-list'}">代理管理</li>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/shop-list'}">商家管理</li> 
-	         		<li data-options="attributes:{'url':'/<%=chair%>/page/device-list'}">设备管理</li>
 	         	</ul>
          	</li>
          </ul>

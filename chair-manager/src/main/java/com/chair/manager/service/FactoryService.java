@@ -9,7 +9,7 @@ import com.github.pagehelper.PageInfo;
 @Service
 public class FactoryService extends BaseService<Factory> {
 
-	public EasyUIResult queryDeviceListForPage(Integer page, Integer rows) {
+	public EasyUIResult queryFactoryListForPage(Integer page, Integer rows) {
 		PageInfo<Factory> pageInfo= super.queryListPage(new Factory(), page, rows);
 		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
 	}
