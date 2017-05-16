@@ -2,6 +2,7 @@ package com.chair.manager.controller;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,16 +18,29 @@ import com.chair.manager.service.RechargePackageService;
 @RequestMapping("/recharge")
 @Controller
 public class RechargePackageControler {
+	private Logger logger = Logger.getLogger(RechargePackageControler.class);
+	
 
 	@Autowired
 	private RechargePackageService rechargeRecordService;
 
 
-	@RequestMapping(value="list",method=RequestMethod.POST)
+	/**
+	 * 查询充值套餐列表，分页（管理台前端）
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value="listForPage",method=RequestMethod.POST)
 	@ResponseBody
 	public EasyUIResult rechargeList(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows){
 		return  rechargeRecordService.queryPage(page,rows);
 	}
+	
+	/**
+	 * 新增充值套餐（管理台前端）
+	 * @param param
+	 * @return
+	 */
 	@RequestMapping(value="save",method=RequestMethod.POST)
 	@ResponseBody
 	public EasyUIResult saveRecharge(RechargePackage rp){
@@ -38,5 +52,19 @@ public class RechargePackageControler {
 		return rs;
 
 	}
+	
+
+	/**
+	 * 删除充值套餐（管理台前端）
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="batDel",method=RequestMethod.POST)
+	private Integer delDevice(@RequestParam("ids") Integer[] ids){
+		logger.info("---将要删除的充值套餐ids--->>>"+ids);
+		return rechargeRecordService.deleteByIds(ids);
+	}
+	
 
 }

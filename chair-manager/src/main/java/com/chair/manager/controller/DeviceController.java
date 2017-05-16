@@ -42,12 +42,12 @@ public class DeviceController {
 
 	
 	/**
-	 * 查询设备列表（管理台前端）
+	 * 查询设备列表，分页（管理台前端）
 	 * @param param
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="list",method=RequestMethod.POST)
+	@RequestMapping(value="listForPage",method=RequestMethod.POST)
 	private EasyUIResult queryDeviceListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows){
 		return deviceService.queryDeviceListForPage(page, rows);
 	}
