@@ -8,17 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import redis.clients.jedis.JedisCluster;
+
 import com.chair.manager.bean.EasyUIResult;
-import com.chair.manager.bean.ResponseResult;
-import com.chair.manager.controller.UsersController;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.DeviceMapper;
 import com.chair.manager.pojo.Device;
-import com.chair.manager.pojo.RechargePackage;
 import com.chair.manager.vo.DeviceVo;
 import com.github.pagehelper.PageInfo;
-
-import redis.clients.jedis.JedisCluster;
 
 @Service
 public class DeviceService extends BaseService<Device> {

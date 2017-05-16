@@ -11,7 +11,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.chair.manager.bean.ResponseResult;
+import redis.clients.jedis.JedisCluster;
+
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.UsersMapper;
 import com.chair.manager.pojo.ConsumePackage;
@@ -21,8 +22,6 @@ import com.chair.manager.pojo.Users;
 import com.chair.manager.sms.BatchPublishSMSMessage;
 import com.chair.manager.vo.ConsumePackageVo;
 import com.chair.manager.vo.UserVo;
-
-import redis.clients.jedis.JedisCluster;
 
 @Service
 public class UsersService extends BaseService<Users> {

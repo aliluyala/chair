@@ -65,10 +65,6 @@ public class UserAccountService extends BaseService<UserAccount> {
 		return rr.getBatchNo();
 	}
 
-	private String createBatchNo(Integer accountId) {
-		Integer batchNo = 10000 + accountId;
-		return batchNo + "" + System.currentTimeMillis();
-	}
 
 	/**
 	 * 支付回调方法

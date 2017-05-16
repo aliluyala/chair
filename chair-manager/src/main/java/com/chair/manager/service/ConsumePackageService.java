@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.chair.manager.bean.EasyUIResult;
 import com.chair.manager.mapper.ConsumePackageMapper;
 import com.chair.manager.pojo.ConsumePackage;
-import com.chair.manager.pojo.RechargePackage;
 import com.github.pagehelper.PageInfo;
 
 @Service
