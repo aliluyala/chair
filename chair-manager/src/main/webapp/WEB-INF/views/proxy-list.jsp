@@ -65,11 +65,7 @@ var toolbar = [{
 					if (result){
 						$('#proxyList').datagrid('reload');	// reload the user data
 					} else {
-						alert("---删除代理失败---")
-						/* $.messager.show({	// show error message
-							title: 'Error',
-							msg: result.errorMsg
-						}); */
+						$.messager.alert('提示','删除代理失败!');
 					}
 				},'json');
     		});

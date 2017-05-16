@@ -39,6 +39,13 @@
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/shop-list'}">商家管理</li> 
 	         	</ul>
          	</li>
+         	<li>
+         		<span>统计管理</span>
+         		<ul>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/rechargeRecord-list'}">充值统计</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consumeRecord-list'}">消费统计</li>
+	         	</ul>
+         	</li>
          </ul>
     </div>
     <div data-options="region:'center',title:''">

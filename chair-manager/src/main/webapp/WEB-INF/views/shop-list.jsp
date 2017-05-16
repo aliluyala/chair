@@ -66,11 +66,7 @@ var toolbar = [{
 					if (result){
 						$('#shopList').datagrid('reload');	// reload the user data
 					} else {
-						alert("---删除商家失败---")
-						/* $.messager.show({	// show error message
-							title: 'Error',
-							msg: result.errorMsg
-						}); */
+						$.messager.alert('提示','删除商家失败!');
 					}
 				},'json');
     		});

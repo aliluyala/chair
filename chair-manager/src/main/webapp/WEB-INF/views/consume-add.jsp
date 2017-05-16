@@ -27,12 +27,12 @@
 		}
 		$.post('/<%=chair%>/consume/save',$("#content").serialize(), function(data){
 			if(data.status == 200){
-				$.messager.alert('提示','新增套餐成功!');
+				$.messager.alert('提示','新增消费套餐成功!');
 				$('#consumeAdd').window('close');
 				$("#consumeList").datagrid("reload");
 				clearForm();
 			}else{
-				$.messager.alert('提示','新增套餐失败!');
+				$.messager.alert('提示','新增消费套餐失败!');
 			}
 		});
 	}

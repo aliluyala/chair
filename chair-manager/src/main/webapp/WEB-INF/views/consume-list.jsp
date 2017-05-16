@@ -5,12 +5,12 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>充值套餐管理</title>
+<title>消费套餐管理</title>
 </head>
 <body>
 	<div>
-    <table class="easyui-datagrid" id="consumeList" title="套餐列表" 
-	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/consume/list',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
+    <table class="easyui-datagrid" id="consumeList" title="消费套餐列表" 
+	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/consume/listForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
 	    <thead>
 	        <tr>
 	        	<th data-options="field:'ck',checkbox:true"></th>
@@ -51,6 +51,32 @@ var toolbar = [{
     iconCls:'icon-add',
     handler:function(){
     	$('#consumeAdd').window('open');
+    }
+},{
+    text:'删除',
+    iconCls:'icon-remove',
+    handler:function(){
+    	var rows = $('#consumeList').datagrid('getSelections');
+    	if(rows){
+    		//alert("---rows---"+JSON.stringify(rows))
+        	var ids = "";
+        	for(var i=0; i<rows.length; i++){
+        		ids = rows[i].id + "," + ids;  
+        	}
+    		$.messager.confirm('Confirm','确定删除此消费套餐吗？',function(r){
+    			$.post('/<%=chair%>/consume/batDel',{ids:ids},function(result){
+					if (result){
+						$('#factoryList').datagrid('reload');	// reload the user data
+					} else {
+						alert("---删除消费套餐失败---")
+						/* $.messager.show({	// show error message
+							title: 'Error',
+							msg: result.errorMsg
+						}); */
+					}
+				},'json');
+    		});
+    	}
     }
 }];
 </script>

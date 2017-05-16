@@ -71,11 +71,7 @@ var toolbar = [{
 					if (result){
 						$('#deviceList').datagrid('reload');	// reload the user data
 					} else {
-						alert("---删除设备失败---")
-						/* $.messager.show({	// show error message
-							title: 'Error',
-							msg: result.errorMsg
-						}); */
+						$.messager.alert('提示','删除设备失败!');
 					}
 				},'json');
     		});
