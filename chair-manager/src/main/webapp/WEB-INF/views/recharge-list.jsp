@@ -9,8 +9,8 @@
 </head>
 <body>
 	<div>
-    <table class="easyui-datagrid" id="rechargeList" title="套餐列表" 
-	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/recharge/list',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
+    <table class="easyui-datagrid" id="rechargeList" title="充值套餐列表" 
+	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/recharge/listForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
 	    <thead>
 	        <tr>
 	        	<th data-options="field:'ck',checkbox:true"></th>
@@ -25,7 +25,7 @@
 	    </thead>
 	</table>
 	</div>
-<div id="rechargeAdd" class="easyui-window" title="新增套餐" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/recharge-add'" style="width:800px;height:600px;padding:10px;">
+<div id="rechargeAdd" class="easyui-window" title="新增充值套餐" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/recharge-add'" style="width:800px;height:600px;padding:10px;">
         The window content.
 </div>
 <script type="text/javascript">
@@ -52,6 +52,28 @@ var toolbar = [{
     iconCls:'icon-add',
     handler:function(){
     	$('#rechargeAdd').window('open');
+    }
+},{
+    text:'删除',
+    iconCls:'icon-remove',
+    handler:function(){
+    	var rows = $('#rechargeList').datagrid('getSelections');
+    	if(rows){
+    		//alert("---rows---"+JSON.stringify(rows))
+        	var ids = "";
+        	for(var i=0; i<rows.length; i++){
+        		ids = rows[i].id + "," + ids;  
+        	}
+    		$.messager.confirm('Confirm','确定删除此充值套餐吗？',function(r){
+    			$.post('/<%=chair%>/recharge/batDel',{ids:ids},function(result){
+					if (result){
+						$('#rechargeList').datagrid('reload');	// reload the user data
+					} else {
+						$.messager.alert('提示','删除充值套餐失败!');
+					}
+				},'json');
+    		});
+    	}
     }
 }];
 </script>

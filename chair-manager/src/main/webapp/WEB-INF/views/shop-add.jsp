@@ -8,6 +8,10 @@
 	            <td>商家名称:</td>
 	            <td><input class="easyui-textbox" type="text" name="shopName" data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
+	        <tr>
+	            <td>商家地址:</td>
+	            <td><input class="easyui-textbox" type="text" name="shopLocation" data-options="required:true" style="width: 280px;"></input></td>
+	        </tr>
 	    </table>
 	</form>
 	<div style="padding:5px">

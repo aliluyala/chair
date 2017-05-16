@@ -24,7 +24,7 @@
 	    </thead>
 	</table>
 	</div>
-<div id="consumeAdd" class="easyui-window" title="新增套餐" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/consume-add'" style="width:800px;height:600px;padding:10px;">
+<div id="consumeAdd" class="easyui-window" title="新增消费套餐" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/consume-add'" style="width:800px;height:600px;padding:10px;">
         The window content.
 </div>
 <script type="text/javascript">
@@ -66,13 +66,9 @@ var toolbar = [{
     		$.messager.confirm('Confirm','确定删除此消费套餐吗？',function(r){
     			$.post('/<%=chair%>/consume/batDel',{ids:ids},function(result){
 					if (result){
-						$('#factoryList').datagrid('reload');	// reload the user data
+						$('#consumeList').datagrid('reload');	// reload the user data
 					} else {
-						alert("---删除消费套餐失败---")
-						/* $.messager.show({	// show error message
-							title: 'Error',
-							msg: result.errorMsg
-						}); */
+						$.messager.alert('提示','删除消费套餐失败!');
 					}
 				},'json');
     		});
