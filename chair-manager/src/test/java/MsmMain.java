@@ -1,7 +1,4 @@
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.chair.manager.service.ManagerService;
-import com.chair.manager.service.UsersService;
 
 
 public class MsmMain {

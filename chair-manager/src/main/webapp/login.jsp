@@ -12,7 +12,7 @@
        	<div style="margin-left: 50px;margin-top: 50px;">
        		<div style="margin-bottom:20px;">
 	            <div>
-	            	用户名: <input name="username" class="easyui-textbox" data-options="required:true" style="width:200px;height:32px" value="admin"/>
+	            	用户名: <input name="user" class="easyui-textbox" data-options="required:true" style="width:200px;height:32px" value="admin"/>
 	            </div>
 	        </div>
 	        <div style="margin-bottom:20px">
@@ -28,9 +28,9 @@
     
     <script type="text/javascript">
     	$("#login").click(function(){
-    		var username = $("[name=username]").val();
+    		var user = $("[name=user]").val();
     		var password = $("[name=password]").val();
-    		$.post('/<%=chair%>/manager/login',{username:username,password:password}, function(data){
+    		$.post('/<%=chair%>/manager/login',{user:user,password:password}, function(data){
     			if(data.status == 200){
     				window.location.href="/<%=chair%>/page/index";
     			}else{
