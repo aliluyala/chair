@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
      <% String chair= "ch"; %>
 <div style="padding:10px 10px 10px 10px">
-	<form id="content" method="post">
+	<form id="shopContent" method="post">
 	    <table cellpadding="5">
 	        <tr>
 	            <td>商家名称:</td>
@@ -21,11 +21,11 @@
 </div>
 <script type="text/javascript">
 	function submitForm(){
-		if(!$('#content').form('validate')){
+		if(!$('#shopContent').form('validate')){
 			$.messager.alert('提示','表单还未填写完成!');
 			return ;
 		}
-		$.post('/<%=chair%>/shop/save',$("#content").serialize(), function(data){
+		$.post('/<%=chair%>/shop/save',$("#shopContent").serialize(), function(data){
 			if(data.status == 200){
 				$.messager.alert('提示','新增商家成功!');
 				$('#shopAdd').window('close');

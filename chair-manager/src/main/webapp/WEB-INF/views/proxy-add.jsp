@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
      <% String chair= "ch"; %>
 <div style="padding:10px 10px 10px 10px">
-	<form id="content" method="post">
+	<form id="proxyContent" method="post">
 	    <table cellpadding="5">
 	        <tr>
 	            <td>代理名称:</td>
@@ -17,11 +17,11 @@
 </div>
 <script type="text/javascript">
 	function submitForm(){
-		if(!$('#content').form('validate')){
+		if(!$('#proxyContent').form('validate')){
 			$.messager.alert('提示','表单还未填写完成!');
 			return ;
 		}
-		$.post('/<%=chair%>/proxy/save',$("#content").serialize(), function(data){
+		$.post('/<%=chair%>/proxy/save',$("#proxyContent").serialize(), function(data){
 			if(data.status == 200){
 				$.messager.alert('提示','新增代理成功!');
 				$('#proxyAdd').window('close');
