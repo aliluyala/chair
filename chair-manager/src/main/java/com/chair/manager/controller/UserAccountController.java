@@ -104,7 +104,7 @@ public class UserAccountController {
 			throw new ChairException("1011", "账户余额不足");
 		}
 		// 测试数据00000000000000000001和00000000000000000002，不需要推送消息
-		boolean sendSuccess = false;
+		boolean sendSuccess = true;
 		if (!"00000000000000000001".equals(device.getDeviceNo())
 				&& !"00000000000000000002".equals(device.getDeviceNo())) {
 			// 发送消息给硬件启动设备， 同步任务

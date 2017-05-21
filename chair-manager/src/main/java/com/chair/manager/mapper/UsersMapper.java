@@ -8,4 +8,6 @@ public interface UsersMapper extends ChairMapper<Users> {
 	void saveOrUpdate(Users u);
 	
 	Users selectByOpenID(String openID);
+
+	Users selectByPhoneNumber(String phoneNumber);
 }

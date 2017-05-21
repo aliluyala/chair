@@ -58,6 +58,12 @@ public class UsersService extends BaseService<Users> {
 	 * @param phoneNumber
 	 */
 	public boolean sendCode(String phoneNumber) {
+		// 0. 查询手机号是否被注册
+		Users user = usersMapper.selectByPhoneNumber(phoneNumber);
+		if(user != null){
+			throw new ChairException("1014", "该手机号已被注册");
+		}
+		
 		boolean b = true;
 		// 1.生成四位数验证码
 		String code = createCode();

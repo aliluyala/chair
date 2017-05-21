@@ -13,4 +13,11 @@
 		SELECT * FROM
 		users where open_id=#{openId}
 	</select>
+	
+	<select id="selectByPhoneNumber" resultType="Users">
+		SELECT * FROM
+		users where phone_number=#{phoneNumber}
+	</select>
+	
+	
 </mapper>
