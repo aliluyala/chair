@@ -54,7 +54,7 @@
 		});
 	}
 	function clearForm(){
-		$('#content').form('reset');
+		$('#deviceContent').form('reset');
 	}
 	
 	function showLocation(shopName){

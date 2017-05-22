@@ -17,17 +17,12 @@
     <div data-options="region:'west',title:'菜单',split:true" style="width:180px;">
     	<ul id="menu" class="easyui-tree" style="margin-top: 10px;margin-left: 5px;">
          	<li>
-         		<span>充值套餐管理</span>
+         		<span>套餐管理</span>
          		<ul>
 	         		<%-- <li data-options="attributes:{'url':'/<%=chair%>/page/recharge-add'}">新增充值套餐</li> --%>
-	         		<li data-options="attributes:{'url':'/<%=chair%>/page/recharge-list'}">查询充值套餐</li>
-	         	</ul>
-         	</li>
-         	<li>
-         		<span>消费套餐管理</span>
-         		<ul>
 	         		<%-- <li data-options="attributes:{'url':'/<%=chair%>/page/consume-add'}">新增消费套餐</li> --%>
-	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consume-list'}">查询消费套餐</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/recharge-list'}">充值套餐管理</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consume-list'}">消费套餐管理</li>
 	         	</ul>
          	</li>
          	<li>
@@ -42,8 +37,8 @@
          	<li>
          		<span>统计管理</span>
          		<ul>
-	         		<li data-options="attributes:{'url':'/<%=chair%>/page/rechargeRecord-list'}">充值统计</li>
-	         		<li data-options="attributes:{'url':'/<%=chair%>/page/consumeRecord-list'}">消费统计</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/statistics-recharge-list'}">充值统计</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/statistics-consume-list'}">消费统计</li>
 	         	</ul>
          	</li>
          </ul>

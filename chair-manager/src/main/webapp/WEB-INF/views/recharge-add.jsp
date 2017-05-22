@@ -41,6 +41,6 @@
 		});
 	}
 	function clearForm(){
-		$('#content').form('reset');
+		$('#rechargePackageContent').form('reset');
 	}
 </script>

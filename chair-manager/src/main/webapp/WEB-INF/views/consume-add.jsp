@@ -37,6 +37,6 @@
 		});
 	}
 	function clearForm(){
-		$('#content').form('reset');
+		$('#consumePackageContent').form('reset');
 	}
 </script>

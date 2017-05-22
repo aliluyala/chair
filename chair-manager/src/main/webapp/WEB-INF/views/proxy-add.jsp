@@ -33,7 +33,7 @@
 		});
 	}
 	function clearForm(){
-		$('#content').form('reset');
+		$('#proxyContent').form('reset');
 	}
 	
 </script>
