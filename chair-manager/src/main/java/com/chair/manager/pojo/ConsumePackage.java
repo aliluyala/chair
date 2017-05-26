@@ -12,6 +12,8 @@ public class ConsumePackage {
 
 	private String packageName;
 
+	private Integer type;
+
 	private Integer consumedDuration;
 
 	private Integer status;
@@ -26,6 +28,14 @@ public class ConsumePackage {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
 	public String getPackageName() {
@@ -70,8 +80,9 @@ public class ConsumePackage {
 
 	@Override
 	public String toString() {
-		return "ConsumePackage [id=" + id + ", packageName=" + packageName + ", consumedDuration=" + consumedDuration
-				+ ", status=" + status + ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + "]";
+		return "ConsumePackage [id=" + id + ", packageName=" + packageName + ", type=" + type + ", consumedDuration="
+				+ consumedDuration + ", status=" + status + ", createTime=" + createTime + ", lastUpdate=" + lastUpdate
+				+ "]";
 	}
 
 }

@@ -12,6 +12,16 @@ public class UserVo implements Serializable {
 	private String phoneNumber;
 
 	private List<ConsumePackageVo> packageList;
+	
+	private List<ConsumePackageVo> couponList;
+
+	public List<ConsumePackageVo> getCouponList() {
+		return couponList;
+	}
+
+	public void setCouponList(List<ConsumePackageVo> couponList) {
+		this.couponList = couponList;
+	}
 
 	public Integer getUserID() {
 		return userID;

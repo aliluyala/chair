@@ -99,9 +99,13 @@ public class UsersService extends BaseService<Users> {
 		// 1.验证登陆信息 0000测试代码
 		if (!"1234".equals(identCode.toString())) {
 			if (!identCode.toString().equals(jedisCluster.get(phoneNumber))) {
-				throw new ChairException("1013", "验证码"+identCode+"验证失败");
+				throw new ChairException("1013", "验证码" + identCode + "验证失败");
 			}
 		}
+
+		// 判断用户是否是新用户
+		boolean newUsers = isNewUser(openID);
+		
 		// 2.查询存在则更新，不存在则新增
 		Users user = new Users();
 		user.setOpenId(openID);
@@ -122,27 +126,47 @@ public class UsersService extends BaseService<Users> {
 		userAccountService.saveOrUpdate(userAccount);
 		logger.debug("---添加或者更新用户账户表【后】--：" + userAccount);
 
-		List<ConsumePackageVo> ulist = new ArrayList<ConsumePackageVo>();
+		List<ConsumePackageVo> packageList = new ArrayList<ConsumePackageVo>();
+		List<ConsumePackageVo> couponList = new ArrayList<ConsumePackageVo>();
 		// 3.查询消费套餐列表
-		List<ConsumePackage> consumePackages = consumePackageService.queryListByLimit(new ConsumePackage());
-		System.err.println("-----消费套餐列表----" + consumePackages.size());
+		// List<ConsumePackage> consumePackages =
+		// consumePackageService.queryListByLimit(new ConsumePackage());
+		List<ConsumePackage> consumePackages = consumePackageService.queryList(null);
+		int packagelimit = 0;
 		for (ConsumePackage consumePackage : consumePackages) {
+			System.err.println(consumePackage);
 			ConsumePackageVo cpvo = new ConsumePackageVo();
 			cpvo.setConsumedPackageID(consumePackage.getId());
+			cpvo.setType(consumePackage.getType());
 			cpvo.setConsumedPackageName(consumePackage.getPackageName());
 			cpvo.setConsumedPackageDuration(consumePackage.getConsumedDuration());
-			ulist.add(cpvo);
+			if (consumePackage.getType() == 1 && packagelimit < 4) {
+				packageList.add(cpvo);
+				packagelimit++;
+			} else if (consumePackage.getType() == 2 && newUsers) {
+				logger.info("---新用户注册---" + user);
+				couponList.add(cpvo);
+			}
 		}
 
 		UserVo uvo = new UserVo();
 		uvo.setPhoneNumber(phoneNumber);
 		uvo.setUserID(user.getId());
-		uvo.setPackageList(ulist);
-
+		uvo.setPackageList(packageList);
+		uvo.setCouponList(couponList);
 		return uvo;
 
 	}
 	
+	/**
+	 * 判断用户是否是新用户
+	 * @param openID
+	 * @return
+	 */
+	private boolean isNewUser(String openID) {
+		Users u = this.queryUserRegStatus(openID);
+		return (u == null) ? true : false;
+	}
 
 	/**
 	 * 查询用户注册状态
@@ -164,8 +188,15 @@ public class UsersService extends BaseService<Users> {
 		d.setDeviceNo(deviceNO);
 		Device device = deviceService.queryByDeviceNO(d);
 		if (device == null)
-			throw new ChairException("2001", "根据设备编号"+deviceNO+"查询不到设备信息");
+			throw new ChairException("2001", "根据设备编号" + deviceNO + "查询不到设备信息");
 		return device;
 	}
 
+	public static void main(String[] args) {
+		Date d1 = new Date();
+		Date d2 = new Date();
+		System.out.println(d1.getTime());
+		System.out.println(d2.getTime());
+		System.out.println(d1.getTime() == d2.getTime());
+	}
 }
