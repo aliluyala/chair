@@ -22,8 +22,8 @@
 	        	<th data-options="field:'id',width:60">ID</th>
 	            <th data-options="field:'batchNo',width:200">充值批次号</th>
 	            <th data-options="field:'phoneNumber',width:100">手机号</th>
-	            <th data-options="field:'rechargeAmount',width:100">充值金额（单位：元）</th>
-	            <th data-options="field:'rechargeDuration',width:100">充值时长（单位：分钟）</th>
+	            <th data-options="field:'rechargeAmount',width:150">充值金额（单位：元）</th>
+	            <th data-options="field:'rechargeDuration',width:150">充值时长（单位：分钟）</th>
 	            <th data-options="field:'payStatus',width:100">支付状态</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
 	            <th data-options="field:'lastUpdate',width:130,align:'center',formatter:formatDate">更新日期</th>
