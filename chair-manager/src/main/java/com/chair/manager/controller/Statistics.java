@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +47,7 @@ public class Statistics {
 			@RequestParam("phoneNumber") String phoneNumber) {
 		System.err.println("---查询充值记录，分页---page：" + page + "\t rows：" + rows + "\t phoneNumber：" + phoneNumber);
 		RechargeRecord record = new RechargeRecord();
-		if (!"0".equals(phoneNumber))
+		if (!StringUtils.isEmpty(phoneNumber))
 			record.setPhoneNumber(phoneNumber);
 		return rechargeRecordService.queryPage(record, page, rows);
 	}

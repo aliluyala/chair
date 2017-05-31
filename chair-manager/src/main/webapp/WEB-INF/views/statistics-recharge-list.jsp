@@ -11,11 +11,11 @@
 	<div>
 	<div data-options="region:'north',split:false,border:false,title:'查询条件',collapsed:false,iconCls:'icon-search'" >  
        手机号： <input class="easyui-numberbox" name="phoneNumber"  style="width: 180px;"></input>
-       &nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"  onclick="doSearch()">查询</a>  
+       &nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"  onclick="doSearchRecord()">查询</a>  
     </div>
 	
     <table class="easyui-datagrid" id="statisticsRechargeList" title="充值统计列表" 
-	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/statistics/listRecordForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10],queryParams:{phoneNumber:0}">
+	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/statistics/listRecordForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10],queryParams:{phoneNumber:''}">
 	    <thead>
 	        <tr>
 	        	<th data-options="field:'ck',checkbox:true"></th>
@@ -56,7 +56,7 @@ function getSelectionsIds(){
 var toolbar = [];
 
 //条件查询
-function doSearch(){
+function doSearchRecord(){
 	var phoneNumber = $("[name='phoneNumber']").val();
 	console.log("---phoneNumber--->>>"+phoneNumber);
 	var queryParameter = $('#statisticsRechargeList').datagrid("options").queryParams;  

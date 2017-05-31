@@ -13,7 +13,7 @@
        工厂： <input class="easyui-combobox" name="facrotyId" data-options="valueField:'id',textField:'factoryName',url:'/<%=chair%>/factory/list',prompt:'请选择'" style="width: 80px;"></input>
 	代理：<input class="easyui-combobox" name="proxyId" data-options="valueField:'id',textField:'proxyName',url:'/<%=chair%>/proxy/list',prompt:'请选择'" style="width: 80px;"></input>
 	商铺：<input class="easyui-combobox" name="shopId" data-options="valueField:'id',textField:'shopName',url:'/<%=chair%>/shop/list',prompt:'请选择'" style="width: 80px;"></input>  
-       &nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"  onclick="doSearch()">查询</a>  
+       &nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"  onclick="doSearchConsume()">查询</a>  
     </div>
 	
     <table class="easyui-datagrid" id="statisticsConsumeList" title="消费统计列表" 
@@ -60,15 +60,15 @@ function getSelectionsIds(){
 var toolbar = [];
 
 //条件查询
-function doSearch(){
+function doSearchConsume(){
 	var factoryID = $("[name='facrotyId']").val();
 	var proxyID = $("[name='proxyId']").val();
 	var shopID = $("[name='shopId']").val();
-	console.log("查询消费明细---factoryID--->>>"+factoryID+" \n proxyID--->>>"+proxyID+"\n shopID--->>>"+shopID);
 	var queryParameter = $('#statisticsConsumeList').datagrid("options").queryParams;  
-    queryParameter.factoryID = factoryID;  
-    queryParameter.proxyID = factoryID;  
-    queryParameter.shopID = factoryID;  
+    queryParameter.factoryID = factoryID ? factoryID : 0;  
+    queryParameter.proxyID = proxyID ? proxyID : 0;  
+    queryParameter.shopID = shopID ? shopID : 0;  
+    console.log("查询消费明细---factoryID--->>>"+queryParameter.factoryID+" \n proxyID--->>>"+proxyID+"\n shopID--->>>"+shopID);
 	$("#statisticsConsumeList").datagrid("reload");  
 }
 
