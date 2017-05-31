@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div>
-    <table class="easyui-datagrid" id="deviceList" title="套餐列表" 
+    <table class="easyui-datagrid" id="deviceList" title="设备列表" 
 	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/device/listForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
 	    <thead>
 	        <tr>
