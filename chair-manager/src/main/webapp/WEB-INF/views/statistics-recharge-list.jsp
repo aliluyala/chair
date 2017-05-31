@@ -15,8 +15,13 @@
         data-options="valueField:'id',textField:'factoryName',
         url:'/<%=chair%>/factory/list',prompt:'请选择'" style="width: 280px;"></input>
     </div> 
+	<div data-options="region:'north',split:false,border:false,title:'查询条件',collapsed:false,iconCls:'icon-search'" >  
+       手机号： <input class="easyui-numberbox" name="phoneNumber"  style="width: 180px;"></input>
+       &nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"  onclick="doSearchRecord()">查询</a>  
+    </div>
+	
     <table class="easyui-datagrid" id="statisticsRechargeList" title="充值统计列表" 
-	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/statistics/listForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10],queryParams:{params:123}">
+	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/statistics/listRecordForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10],queryParams:{phoneNumber:''}">
 	    <thead>
 	        <tr>
 	        	<th data-options="field:'ck',checkbox:true"></th>
@@ -37,6 +42,7 @@
 </div>
 
 <script type="text/javascript">
+
 function formatDate(val,row){
 	var now = new Date(val);
 	return now.format("yyyy-MM-dd hh:mm:ss");
@@ -56,47 +62,17 @@ function getSelectionsIds(){
 	return ids;
 }
 
-//入参
-var queryParams = {
-	params:{
-		factoryID:1,
-		proxyID:2,
-		shopID:3
-	}
-}
-
-
 //自定义工具栏
-var toolbar = [{
-    text:'新增',
-    iconCls:'icon-add',
-    handler:function(){
-    	/* $('#rechargeAdd').window('open'); */
-    }
-},{
-    text:'删除',
-    iconCls:'icon-remove',
-    handler:function(){
-    	var rows = $('#statisticsRechargeList').datagrid('getSelections');
-    	rows = 0;
-    	if(rows){
-    		//alert("---rows---"+JSON.stringify(rows))
-        	var ids = "";
-        	for(var i=0; i<rows.length; i++){
-        		ids = rows[i].id + "," + ids;  
-        	}
-    		$.messager.confirm('Confirm','确定删除此充值套餐吗？',function(r){
-    			$.post('/<%=chair%>/recharge/batDel',{ids:ids},function(result){
-					if (result){
-						$('#rechargeList').datagrid('reload');	// reload the user data
-					} else {
-						$.messager.alert('提示','删除充值套餐失败!');
-					}
-				},'json');
-    		});
-    	}
-    }
-}];
+var toolbar = [];
+
+//条件查询
+function doSearchRecord(){
+	var phoneNumber = $("[name='phoneNumber']").val();
+	console.log("---phoneNumber--->>>"+phoneNumber);
+	var queryParameter = $('#statisticsRechargeList').datagrid("options").queryParams;  
+    queryParameter.phoneNumber = phoneNumber;  
+	$("#statisticsRechargeList").datagrid("reload");  
+}
 
 </script>
 </body>
