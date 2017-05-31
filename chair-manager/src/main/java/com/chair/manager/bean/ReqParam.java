@@ -63,9 +63,18 @@ public class ReqParam implements Serializable {
 	 */
 	private String transactionID;
 	
+	private Object params;
 
 	
 	
+	public Object getParams() {
+		return params;
+	}
+
+	public void setParams(Object params) {
+		this.params = params;
+	}
+
 	public String getTransactionID() {
 		return transactionID;
 	}

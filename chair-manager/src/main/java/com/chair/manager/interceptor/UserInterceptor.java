@@ -17,7 +17,7 @@ public class UserInterceptor implements HandlerInterceptor {
 		if(request.getSession().getAttribute("user")!=null){
 			return true;
 		}
-		String url="/"+request.getRequestURI().split("/")[1]+"/login.jsp";
+		String url="/ch/login.jsp";	//写死
 		LOGGER.debug("登录失败超时\t跳转页面url="+url);
 		response.sendRedirect(url);
 		return false;

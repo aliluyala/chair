@@ -22,7 +22,7 @@ public class RechargePackageControler {
 	
 
 	@Autowired
-	private RechargePackageService rechargeRecordService;
+	private RechargePackageService rechargePackageService;
 
 
 	/**
@@ -33,7 +33,7 @@ public class RechargePackageControler {
 	@RequestMapping(value="listForPage",method=RequestMethod.POST)
 	@ResponseBody
 	public EasyUIResult rechargeList(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows){
-		return  rechargeRecordService.queryPage(page,rows);
+		return  rechargePackageService.queryPage(page,rows);
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class RechargePackageControler {
 		rp.setCreateTime(new Date());
 		rp.setLastUpdate(new Date());
 		rp.setStatus(1);
-		rechargeRecordService.save(rp);
+		rechargePackageService.save(rp);
 		EasyUIResult rs= new EasyUIResult();
 		return rs;
 
@@ -63,7 +63,7 @@ public class RechargePackageControler {
 	@RequestMapping(value="batDel",method=RequestMethod.POST)
 	private Integer delDevice(@RequestParam("ids") Integer[] ids){
 		logger.info("---将要删除的充值套餐ids--->>>"+ids);
-		return rechargeRecordService.deleteByIds(ids);
+		return rechargePackageService.deleteByIds(ids);
 	}
 	
 
