@@ -9,6 +9,12 @@
 </head>
 <body>
 	<div>
+	 <div id="DIV_toolbar" Style="margin:0px; padding:5px">  
+        类型： 
+        <input class="easyui-combobox" name="facrotyId" 
+        data-options="valueField:'id',textField:'factoryName',
+        url:'/<%=chair%>/factory/list',prompt:'请选择'" style="width: 280px;"></input>
+    </div> 
     <table class="easyui-datagrid" id="statisticsRechargeList" title="充值统计列表" 
 	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/statistics/listForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10],queryParams:{params:123}">
 	    <thead>
@@ -30,16 +36,6 @@
         The window content.
 </div>
 
-   <div id="DIV_toolbar" Style="margin:0px; padding:5px">  
-        类型：  
-        <select id="ccfff" class="easyui-combobox" name="factoryID" style="width:100px;" >  
-            <option selected="selected">请选择..</option>    
-            <option value="1">通知</option>  
-            <option value="2">公告</option>  
-            <option value="3">新闻</option>  
-            <option value="4">政策</option>  
-        </select>  
-    </div> 
 <script type="text/javascript">
 function formatDate(val,row){
 	var now = new Date(val);
@@ -102,15 +98,6 @@ var toolbar = [{
     }
 }];
 
-$('#cc').combobox({
-	url:'/<%=chair%>/factory/list',
-	valueField:'factoryID',
-	textField:'factoryID',
-	onLoadSuccess:function(data){
-		data = data[0];
-		data.id;
-	}
-	}); 
 </script>
 </body>
 </html>
