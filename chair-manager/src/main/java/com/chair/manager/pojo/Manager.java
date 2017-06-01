@@ -49,11 +49,6 @@ public class Manager {
 	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
-	@Override
-	public String toString() {
-		return "Manager [id=" + id + ", user=" + user + ", password=" + password + ", type=" + type + ", createTime="
-				+ createTime + ", lastUpdate=" + lastUpdate + "]";
-	}
 	
 	
 }

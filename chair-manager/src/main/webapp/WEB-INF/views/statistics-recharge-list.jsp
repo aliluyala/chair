@@ -9,6 +9,12 @@
 </head>
 <body>
 	<div>
+	 <div id="DIV_toolbar" Style="margin:0px; padding:5px">  
+        类型： 
+        <input class="easyui-combobox" name="facrotyId" 
+        data-options="valueField:'id',textField:'factoryName',
+        url:'/<%=chair%>/factory/list',prompt:'请选择'" style="width: 280px;"></input>
+    </div> 
 	<div data-options="region:'north',split:false,border:false,title:'查询条件',collapsed:false,iconCls:'icon-search'" >  
        手机号： <input class="easyui-numberbox" name="phoneNumber"  style="width: 180px;"></input>
        &nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"  onclick="doSearchRecord()">查询</a>  
@@ -31,6 +37,10 @@
 	    </thead>
 	</table>
 	</div>
+<div id="rechargeAdd" class="easyui-window" title="新增充值套餐" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/recharge-add'" style="width:800px;height:600px;padding:10px;">
+        The window content.
+</div>
+
 <script type="text/javascript">
 
 function formatDate(val,row){
