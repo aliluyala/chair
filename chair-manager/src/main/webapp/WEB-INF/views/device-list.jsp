@@ -30,6 +30,11 @@
 <div id="deivceAdd" class="easyui-window" title="新增设备" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/device-add'" style="width:800px;height:600px;padding:10px;">
         The window content.
 </div>
+
+<div id="deivceEdit" class="easyui-window" title="编辑设备" data-options="modal:true,closed:true,iconCls:'icon-edit',href:'/<%=chair%>/page/device-edit'" style="width:800px;height:600px;padding:10px;">
+        The window content.
+</div>
+
 <script type="text/javascript">
 function formatDate(val,row){
 	var now = new Date(val);
@@ -56,6 +61,12 @@ var toolbar = [{
     	$('#deivceAdd').window('open');
     }
 },{
+    text:'编辑',
+    iconCls:'icon-edit',
+    handler:function(){
+    	$('#deivceEdit').window('open');
+    }
+},{
     text:'删除',
     iconCls:'icon-remove',
     handler:function(){
@@ -67,13 +78,15 @@ var toolbar = [{
         		ids = rows[i].id + "," + ids;  
         	}
     		$.messager.confirm('Confirm','确定删除该设备吗？',function(r){
-    			$.post('/<%=chair%>/device/batDel',{ids:ids},function(result){
-					if (result){
-						$('#deviceList').datagrid('reload');	// reload the user data
-					} else {
-						$.messager.alert('提示','删除设备失败!');
-					}
-				},'json');
+    			if (r){
+	    			$.post('/<%=chair%>/device/batDel',{ids:ids},function(result){
+						if (result){
+							$('#deviceList').datagrid('reload');	// reload the user data
+						} else {
+							$.messager.alert('提示','删除设备失败!');
+						}
+					},'json');
+    			}
     		});
     	}
     }

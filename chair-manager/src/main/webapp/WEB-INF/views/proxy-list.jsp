@@ -61,13 +61,15 @@ var toolbar = [{
         		ids = rows[i].id + "," + ids;  
         	}
     		$.messager.confirm('Confirm','确定删除这些代理吗？',function(r){
-    			$.post('/<%=chair%>/proxy/batDel',{ids:ids},function(result){
-					if (result){
-						$('#proxyList').datagrid('reload');	// reload the user data
-					} else {
-						$.messager.alert('提示','删除代理失败!');
-					}
-				},'json');
+    			if (r){
+	    			$.post('/<%=chair%>/proxy/batDel',{ids:ids},function(result){
+						if (result){
+							$('#proxyList').datagrid('reload');	// reload the user data
+						} else {
+							$.messager.alert('提示','删除代理失败!');
+						}
+					},'json');
+    			}
     		});
     	}
     }

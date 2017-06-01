@@ -65,13 +65,15 @@ var toolbar = [{
         		ids = rows[i].id + "," + ids;  
         	}
     		$.messager.confirm('Confirm','确定删除此充值套餐吗？',function(r){
-    			$.post('/<%=chair%>/recharge/batDel',{ids:ids},function(result){
-					if (result){
-						$('#rechargeList').datagrid('reload');	// reload the user data
-					} else {
-						$.messager.alert('提示','删除充值套餐失败!');
-					}
-				},'json');
+    			if (r){
+	    			$.post('/<%=chair%>/recharge/batDel',{ids:ids},function(result){
+						if (result){
+							$('#rechargeList').datagrid('reload');	// reload the user data
+						} else {
+							$.messager.alert('提示','删除充值套餐失败!');
+						}
+					},'json');
+    			}
     		});
     	}
     }

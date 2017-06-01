@@ -62,13 +62,15 @@ var toolbar = [{
         		ids = rows[i].id + "," + ids;  
         	}
     		$.messager.confirm('Confirm','确定删除该厂家吗？',function(r){
-    			$.post('/<%=chair%>/factory/batDel',{ids:ids},function(result){
-					if (result){
-						$('#factoryList').datagrid('reload');	// reload the user data
-					} else {
-						$.messager.alert('提示','删除厂家失败!');
-					}
-				},'json');
+    			if (r){
+	    			$.post('/<%=chair%>/factory/batDel',{ids:ids},function(result){
+						if (result){
+							$('#factoryList').datagrid('reload');	// reload the user data
+						} else {
+							$.messager.alert('提示','删除厂家失败!');
+						}
+					},'json');
+    			}
     		});
     	}
     }

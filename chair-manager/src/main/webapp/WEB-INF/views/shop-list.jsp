@@ -62,13 +62,15 @@ var toolbar = [{
         		ids = rows[i].id + "," + ids;  
         	}
     		$.messager.confirm('Confirm','确定删除这些商家吗？',function(r){
-    			$.post('/<%=chair%>/shop/batDel',{ids:ids},function(result){
-					if (result){
-						$('#shopList').datagrid('reload');	// reload the user data
-					} else {
-						$.messager.alert('提示','删除商家失败!');
-					}
-				},'json');
+				if (r){
+					$.post('/<%=chair%>/shop/batDel',{ids:ids},function(result){
+						if (result){
+							$('#shopList').datagrid('reload');	// reload the user data
+						} else {
+							$.messager.alert('提示','删除商家失败!');
+						}
+					},'json');
+				}
     		});
     	}
     }

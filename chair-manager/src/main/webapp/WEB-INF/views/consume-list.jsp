@@ -64,13 +64,15 @@ var toolbar = [{
         		ids = rows[i].id + "," + ids;  
         	}
     		$.messager.confirm('Confirm','确定删除此消费套餐吗？',function(r){
-    			$.post('/<%=chair%>/consume/batDel',{ids:ids},function(result){
-					if (result){
-						$('#consumeList').datagrid('reload');	// reload the user data
-					} else {
-						$.messager.alert('提示','删除消费套餐失败!');
-					}
-				},'json');
+    			if (r){
+	    			$.post('/<%=chair%>/consume/batDel',{ids:ids},function(result){
+						if (result){
+							$('#consumeList').datagrid('reload');	// reload the user data
+						} else {
+							$.messager.alert('提示','删除消费套餐失败!');
+						}
+					},'json');
+    			}
     		});
     	}
     }
