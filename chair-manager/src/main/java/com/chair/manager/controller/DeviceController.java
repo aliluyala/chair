@@ -116,7 +116,7 @@ public class DeviceController {
 		deivce.setStatus(1);
 //		deivce.setCreateTime(new Date());
 		deivce.setLastUpdate(new Date());
-		int saveRs = deviceService.update(deivce);
+		int saveRs = deviceService.updateSelective(deivce);
 		if(saveRs <= 0) throw new ChairException("-2", getClass()+",SQL操作失败。"); 
 		return new EasyUIResult();
 	}
