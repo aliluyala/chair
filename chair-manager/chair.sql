@@ -193,18 +193,39 @@ DROP TABLE IF EXISTS `user_coupon`;
 CREATE TABLE `user_coupon` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '协议ID，自增ID',
   `open_id` varchar(128) DEFAULT NULL COMMENT '微信唯一标示',
-  `phone_number` varchar(11) NOT NULL COMMENT '手机号码',
-  `duration` int(11) NOT NULL COMMENT '优惠券时长',
-  `expTime` datetime NOT NULL COMMENT '过期时间',
-  `status` int(11) NOT NULL COMMENT '状态
+  `phone_number` varchar(11) DEFAULT NULL COMMENT '手机号码',
+  `duration` int(11) DEFAULT NULL COMMENT '优惠券时长',
+  `expTime` datetime DEFAULT NULL COMMENT '过期时间',
+  `status` int(11) DEFAULT 1 COMMENT '状态
 									1.可用
 									2.已使用
 									过期',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `unique_openID` (`open_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8 COMMENT='用户优惠券表';
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='用户优惠券表';
+
+
+-- ----------------------------
+-- Table structure for card
+-- ----------------------------
+DROP TABLE IF EXISTS `card`;
+CREATE TABLE `card` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '协议ID，自增ID',
+  `duration` int(11) DEFAULT NULL COMMENT '卡券优惠时长',
+  `status` varchar(11) DEFAULT 1 COMMENT '状态
+									1：生效（默认）
+									2：不生效',
+  `status` int(2) DEFAULT 1 COMMENT '状态
+									1.可用
+									2.已使用
+									过期',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='用户优惠券表';
+
+
 
 
 
