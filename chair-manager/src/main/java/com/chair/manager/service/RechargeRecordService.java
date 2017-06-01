@@ -17,8 +17,8 @@ public class RechargeRecordService extends BaseService<RechargeRecord> {
 	 * @param rows 页面大小
 	 * @return
 	 */
-	public EasyUIResult queryPage(Integer page, Integer rows) {
-		PageInfo<RechargeRecord> pageInfo=super.queryListPage(new RechargeRecord(), page, rows);
+	public EasyUIResult queryPage(RechargeRecord record, Integer page, Integer rows) {
+		PageInfo<RechargeRecord> pageInfo=super.queryListPage(record, page, rows);
 		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
 	}
 }
