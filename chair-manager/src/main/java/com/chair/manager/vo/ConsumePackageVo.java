@@ -9,8 +9,6 @@ public class ConsumePackageVo implements Serializable {
 
 	private Integer consumedPackageID;
 
-	private Integer type;
-
 	private String consumedPackageName;
 
 	private Integer consumedPackageDuration;
@@ -49,12 +47,5 @@ public class ConsumePackageVo implements Serializable {
 		this.packageList = packageList;
 	}
 
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
 
 }

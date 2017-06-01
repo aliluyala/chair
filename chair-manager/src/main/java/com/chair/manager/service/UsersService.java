@@ -105,7 +105,7 @@ public class UsersService extends BaseService<Users> {
 
 		// 判断用户是否是新用户
 		boolean newUsers = isNewUser(openID);
-		
+
 		// 2.查询存在则更新，不存在则新增
 		Users user = new Users();
 		user.setOpenId(openID);
@@ -125,41 +125,34 @@ public class UsersService extends BaseService<Users> {
 		logger.debug("---添加或者更新用户账户表【前】--：" + userAccount);
 		userAccountService.saveOrUpdate(userAccount);
 		logger.debug("---添加或者更新用户账户表【后】--：" + userAccount);
-
-		List<ConsumePackageVo> packageList = new ArrayList<ConsumePackageVo>();
-		List<ConsumePackageVo> couponList = new ArrayList<ConsumePackageVo>();
+		
+		// 4.查询优惠券
+		
+		
+		
 		// 3.查询消费套餐列表
-		// List<ConsumePackage> consumePackages =
-		// consumePackageService.queryListByLimit(new ConsumePackage());
-		List<ConsumePackage> consumePackages = consumePackageService.queryList(null);
-		int packagelimit = 0;
+//		List<ConsumePackageVo> packageList = new ArrayList<ConsumePackageVo>();
+		/*List<ConsumePackage> consumePackages = consumePackageService.queryListByLimit(new ConsumePackage());
 		for (ConsumePackage consumePackage : consumePackages) {
 			System.err.println(consumePackage);
 			ConsumePackageVo cpvo = new ConsumePackageVo();
 			cpvo.setConsumedPackageID(consumePackage.getId());
-			cpvo.setType(consumePackage.getType());
 			cpvo.setConsumedPackageName(consumePackage.getPackageName());
 			cpvo.setConsumedPackageDuration(consumePackage.getConsumedDuration());
-			if (consumePackage.getType() == 1 && packagelimit < 4) {
-				packageList.add(cpvo);
-				packagelimit++;
-			} else if (consumePackage.getType() == 2 && newUsers) {
-				logger.info("---新用户注册---" + user);
-				couponList.add(cpvo);
-			}
-		}
+			packageList.add(cpvo);
+		}*/
 
 		UserVo uvo = new UserVo();
 		uvo.setPhoneNumber(phoneNumber);
 		uvo.setUserID(user.getId());
-		uvo.setPackageList(packageList);
-		uvo.setCouponList(couponList);
+//		uvo.setPackageList(packageList);
 		return uvo;
 
 	}
-	
+
 	/**
 	 * 判断用户是否是新用户
+	 * 
 	 * @param openID
 	 * @return
 	 */

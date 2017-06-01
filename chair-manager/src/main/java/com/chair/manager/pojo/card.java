@@ -5,14 +5,12 @@ import java.util.Date;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name = "consumed_package")
-public class ConsumePackage {
+@Table(name = "card")
+public class card {
 	@Id
 	private Integer id;
 
-	private String packageName;
-
-	private Integer consumedDuration;
+	private Integer duration;
 
 	private Integer status;
 
@@ -28,20 +26,12 @@ public class ConsumePackage {
 		this.id = id;
 	}
 
-	public String getPackageName() {
-		return packageName;
+	public Integer getDuration() {
+		return duration;
 	}
 
-	public void setPackageName(String packageName) {
-		this.packageName = packageName == null ? null : packageName.trim();
-	}
-
-	public Integer getConsumedDuration() {
-		return consumedDuration;
-	}
-
-	public void setConsumedDuration(Integer consumedDuration) {
-		this.consumedDuration = consumedDuration;
+	public void setDuration(Integer duration) {
+		this.duration = duration;
 	}
 
 	public Integer getStatus() {
@@ -70,8 +60,8 @@ public class ConsumePackage {
 
 	@Override
 	public String toString() {
-		return "ConsumePackage [id=" + id + ", packageName=" + packageName + ", consumedDuration=" + consumedDuration
-				+ ", status=" + status + ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + "]";
+		return "card [id=" + id + ", duration=" + duration + ", status=" + status + ", createTime=" + createTime
+				+ ", lastUpdate=" + lastUpdate + "]";
 	}
 
 }
