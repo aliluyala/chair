@@ -5,7 +5,7 @@
 	<form id="deviceContent" method="post">
 	    <table cellpadding="5">
 	        <tr>
-	            <td>设备编号:</td>
+	            <td>设备编号:<input type="hidden" name="id" style="width: 280px;"></input>	</td>
 	            <td><input class="easyui-textbox" type="text" name="deviceNo" data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
 	        <tr>
