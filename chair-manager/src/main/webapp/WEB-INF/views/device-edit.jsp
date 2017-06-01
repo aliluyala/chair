@@ -42,7 +42,7 @@
 			$.messager.alert('提示','表单还未填写完成!');
 			return ;
 		}
-		$.post('/<%=chair%>/device/save',$("#deviceContent").serialize(), function(data){
+		$.post('/<%=chair%>/device/edit',$("#deviceContent").serialize(), function(data){
 			if(data.status == 200){
 				$.messager.alert('提示','编辑设备成功!');
 				$('#deivceEdit').window('close');
@@ -57,7 +57,4 @@
 		$('#deviceContent').form('reset');
 	}
 	
-	function showLocation(shopName){
-		alert("---showLocation()---"+shopName)
-	}
 </script>

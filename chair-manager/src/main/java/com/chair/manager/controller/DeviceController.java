@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,8 +40,6 @@ public class DeviceController {
 	private ShopService shopService;
 	
 	
-
-	
 	/**
 	 * 查询设备列表，分页（管理台前端）
 	 * @param param
@@ -48,8 +47,11 @@ public class DeviceController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="listForPage",method=RequestMethod.POST)
-	private EasyUIResult queryDeviceListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows){
-		return deviceService.queryDeviceListForPage(page, rows);
+	private EasyUIResult queryDeviceListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows , @RequestParam("deviceNo") String deviceNO){
+		Device device = new Device();
+		if(!StringUtils.isEmpty(deviceNO))
+			device.setDeviceNo(deviceNO);
+		return deviceService.queryDeviceListForPage(device, page, rows);
 	}
 	
 	
@@ -94,5 +96,29 @@ public class DeviceController {
 		return deviceService.deleteByIds(ids);
 	}
 	
+	
+	/**
+	 * 编辑设备（管理台前端）
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="edit",method=RequestMethod.POST)
+	private EasyUIResult updateDevice(Device deivce){
+		logger.info("------【编辑设备】参数------"+deivce);
+		Factory factory = factoryService.findById(deivce.getFacrotyId());
+		FactoryProxy factoryProxy = factoryProxyService.findById(deivce.getProxyId());
+		Shop shop = shopService.findById(deivce.getShopId());
+		deivce.setFactoryName(factory.getFactoryName());
+		deivce.setProxyName(factoryProxy.getProxyName());
+		deivce.setShopName(shop.getShopName());
+		deivce.setShopLocation(shop.getShopLocation());
+		deivce.setStatus(1);
+//		deivce.setCreateTime(new Date());
+		deivce.setLastUpdate(new Date());
+		int saveRs = deviceService.update(deivce);
+		if(saveRs <= 0) throw new ChairException("-2", getClass()+",SQL操作失败。"); 
+		return new EasyUIResult();
+	}
 	
 }

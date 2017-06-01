@@ -118,8 +118,8 @@ public class DeviceService extends BaseService<Device> {
 	 * @param rows 页面大小
 	 * @return
 	 */
-	public EasyUIResult queryDeviceListForPage(Integer page, Integer rows) {
-		PageInfo<Device> pageInfo= super.queryListPage(new Device(), page, rows);
+	public EasyUIResult queryDeviceListForPage(Device device ,Integer page, Integer rows) {
+		PageInfo<Device> pageInfo= super.queryListPage(device, page, rows);
 		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
 	}
 

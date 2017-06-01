@@ -10,7 +10,7 @@
 <body>
 	<div>
 		<div data-options="region:'north',split:false,border:false,title:'查询条件',collapsed:false,iconCls:'icon-search'" >  
-       设备编号： <input class="easyui-numberbox" name="deviceNo"  style="width: 180px;"></input>
+       设备编号： <input class="easyui-textbox" name="deviceNo"  style="width: 180px;"></input>
        &nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"  onclick="doSearchDevice()">查询</a>  
     </div>
     <table class="easyui-datagrid" id="deviceList" title="设备列表" 
@@ -41,14 +41,6 @@
 
 <script type="text/javascript">
 
-//条件查询
-function doSearchDevice(){
-	var deviceNo = $("[name='deviceNo']").val();
-	console.log("---deviceNo--->>>"+deviceNo);
-	var queryParameter = $('#deviceList').datagrid("options").queryParams;  
-    queryParameter.deviceNo = deviceNo;  
-	$("#deviceList").datagrid("reload");  
-}
 function formatDate(val,row){
 	var now = new Date(val);
 	return now.format("yyyy-MM-dd hh:mm:ss");
@@ -78,7 +70,6 @@ var toolbar = [{
     iconCls:'icon-edit',
     handler:function(){
     	var ids = getSelectionsIds();
-    	alert("ids="+ids)
     	if(ids.length == 0){
     		$.messager.alert('提示','必须选择一个设备才能编辑!');
     		return ;
@@ -121,6 +112,14 @@ var toolbar = [{
     }
 }];
 
+//条件查询
+function doSearchDevice(){
+	var deviceNo = $("[name='deviceNo']").val();
+	console.log("---deviceNo--->>>"+deviceNo);
+	var queryParameter = $('#deviceList').datagrid("options").queryParams;  
+    queryParameter.deviceNo = deviceNo;  
+	$("#deviceList").datagrid("reload");  
+}
 
 </script>
 </body>
