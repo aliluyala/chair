@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name = "card")
-public class card {
+public class Card {
 	@Id
 	private Integer id;
 
