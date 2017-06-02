@@ -116,7 +116,7 @@ public class UserAccountController {
 			String[] ips = ipAndPort.split(":");
 			sendSuccess = socketAction.send(ips[0], Integer.parseInt(ips[1]), toMessage);
 		}
-		if(!sendSuccess){
+		if(!sendSuccess && !"00000000000000000001".equals(device.getDeviceNo())){
 			throw new ChairException("2003", "消息发送不成功");
 		}
 		// 新增消费明细
