@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.chair.manager.mapper.RechargeRecordMapper">
+
+	
+	<select id="queryRechargeRechargeList" resultType="RechargeRecord">
+		<!-- SELECT * FROM recharge_record where open_id=#{openId} and phone_number=#{phoneNumber} and pay_status=#{payStatus} ORDER BY last_update DESC; -->
+		SELECT * FROM recharge_record where open_id=#{openId} and pay_status=#{payStatus} ORDER BY last_update DESC;
+	</select>
+	
+</mapper>
