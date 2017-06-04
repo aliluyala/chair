@@ -83,30 +83,16 @@ public class ManagerController {
 		return managerService.queryListForPage(manager, page, rows);
 	}
 	
-	/**
-	 * 查询厂家列表（管理台前端）
-	 * 
-	 * @param param
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "queryFactoryList", method = RequestMethod.POST)
-	private List<Manager> queryFactoryList() {
-		Manager manager = new Manager();
-		manager.setType(1); // 厂家
-		List<Manager> factorys = managerService.queryList(manager);
-		return factorys;
-	}	
 	
 	/**
-	 * 新增代理（管理台前端）
+	 * 新增代理/商家（管理台前端）
 	 * @param param
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value="add",method=RequestMethod.POST)
 	private EasyUIResult add(Manager manager){
-		logger.info("------【新增代理】参数------"+manager);
+		logger.info("------【新增代理/商家】参数------"+manager);
 		if(manager.getType() == 2){
 			Manager factoryManager = managerService.findById(manager.getFactoryId());
 			if(factoryManager == null){
@@ -130,14 +116,14 @@ public class ManagerController {
 	}
 	
 	/**
-	 * 编辑代理（管理台前端）
+	 * 编辑代理/商家（管理台前端）
 	 * @param param
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value="edit",method=RequestMethod.POST)
 	private EasyUIResult edit(Manager manager){
-		logger.info("------【编辑代理】参数------"+manager);
+		logger.info("------【编辑代理/商家】参数------"+manager);
 		if(manager.getType() == 2){
 			Manager factoryManager = managerService.findById(manager.getFactoryId());
 			if(factoryManager == null){
@@ -159,19 +145,17 @@ public class ManagerController {
 	}
 	
 	/**
-	 * 批量删除代理（管理台前端）
+	 * 批量删除代理/商家（管理台前端）
 	 * @param param
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value="delete",method=RequestMethod.POST)
 	private Integer del(@RequestParam("ids") Integer[] ids, @RequestParam("type") Integer type){
-		logger.info("---将要删除的代理ids--->>>"+ids);
+		logger.info("---将要删除的代理/商家ids--->>>"+ids);
 		return managerService.deleteByIds(ids);
 	}
 	
-
-	/*------------------------------------------管理台页面，商家管理-------------------------------------------------*/
 	/**
 	 * 查询商家列表，分页（管理台前端）
 	 * 
@@ -194,12 +178,42 @@ public class ManagerController {
 	 * @return
 	 */
 	@ResponseBody
+	@RequestMapping(value = "queryFactoryList", method = RequestMethod.POST)
+	private List<Manager> queryFactoryList() {
+		Manager manager = new Manager();
+		manager.setType(1); // 厂家
+		List<Manager> factorys = managerService.queryList(manager);
+		return factorys;
+	}	
+	
+	/**
+	 * 查询厂家列表（管理台前端）
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
 	@RequestMapping(value = "queryProxyList", method = RequestMethod.POST)
 	private List<Manager> queryProxyList() {
 		Manager manager = new Manager();
 		manager.setType(2); // 代理
 		List<Manager> proxys = managerService.queryList(manager);
 		return proxys;
+	}	
+	
+	/**
+	 * 查询商家列表（管理台前端）
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "queryShopList", method = RequestMethod.POST)
+	private List<Manager> queryShopList() {
+		Manager manager = new Manager();
+		manager.setType(3); // 商家
+		List<Manager> shops = managerService.queryList(manager);
+		return shops;
 	}	
 
 }
