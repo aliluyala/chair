@@ -16,6 +16,10 @@
 	            <td>充值时长:</td>
 	            <td><input class="easyui-textbox" type="text" name="rechargeDuration"  data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
+	        <tr>
+            <td>是否有效:</td>
+            <td><input class="easyui-combobox" name="status" data-options="valueField:'status',textField:'rechargePeackageStatus',data:[{status:1,rechargePeackageStatus:'有效'},{status:2,rechargePeackageStatus:'无效'}],prompt:'请选择'" style="width: 280px;"></input></td>
+        </tr>
 	    </table>
 	</form>
 	<div style="padding:5px">

@@ -6,7 +6,7 @@
 <mapper namespace="com.chair.manager.mapper.RechargePackageMapper">
 
 	<select id="queryRechargeListByLimit" resultType="RechargePackage">
-		SELECT * FROM recharge_package ORDER BY create_time DESC limit 4
+		SELECT * FROM recharge_package where status=1 ORDER BY create_time DESC limit 4 
 	</select>
 	
 </mapper>

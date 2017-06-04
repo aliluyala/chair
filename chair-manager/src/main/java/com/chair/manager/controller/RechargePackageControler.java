@@ -46,7 +46,7 @@ public class RechargePackageControler {
 	public EasyUIResult saveRecharge(RechargePackage rp){
 		rp.setCreateTime(new Date());
 		rp.setLastUpdate(new Date());
-		rp.setStatus(1);
+//		rp.setStatus(1);
 		rechargePackageService.save(rp);
 		EasyUIResult rs= new EasyUIResult();
 		return rs;
