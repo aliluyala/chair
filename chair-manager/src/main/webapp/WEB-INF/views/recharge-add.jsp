@@ -23,12 +23,12 @@
 	    </table>
 	</form>
 	<div style="padding:5px">
-	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
-	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
+	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitFormByRecharge()">提交</a>
+	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearFormByRecharge()">重置</a>
 	</div>
 </div>
 <script type="text/javascript">
-	function submitForm(){
+	function submitFormByRecharge(){
 		if(!$('#rechargePackageContent').form('validate')){
 			$.messager.alert('提示','表单还未填写完成!');
 			return ;
@@ -44,7 +44,7 @@
 			}
 		});
 	}
-	function clearForm(){
+	function clearFormByRecharge(){
 		$('#rechargePackageContent').form('reset');
 	}
 </script>

@@ -6,7 +6,7 @@
 <mapper namespace="com.chair.manager.mapper.ConsumePackageMapper">
 
 	<select id="queryListByLimit" resultType="ConsumePackage">
-		SELECT * FROM consumed_package ORDER BY create_time DESC limit 4
+		SELECT * FROM consumed_package where status = 1 ORDER BY create_time DESC limit 4
 	</select>
 	
 </mapper>

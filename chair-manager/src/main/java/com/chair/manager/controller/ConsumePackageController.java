@@ -45,7 +45,7 @@ public class ConsumePackageController {
 	public EasyUIResult saveRecharge(ConsumePackage cp) {
 		cp.setCreateTime(new Date());
 		cp.setLastUpdate(new Date());
-		cp.setStatus(1);
+//		cp.setStatus(1);
 		consumePackageService.save(cp);
 		EasyUIResult rs = new EasyUIResult();
 		return rs;

@@ -17,7 +17,7 @@
 	        	<th data-options="field:'id',width:60">ID</th>
 	            <th data-options="field:'packageName',width:200">套餐名称</th>
 	            <th data-options="field:'consumedDuration',width:100">消费时长</th>
-	            <th data-options="field:'status',width:100">套餐状态</th>
+	            <th data-options="field:'status',width:100,formatter:formatStatus">套餐状态</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
 	            <th data-options="field:'lastUpdate',width:130,align:'center',formatter:formatDate">更新日期</th>
 	        </tr>
@@ -28,6 +28,12 @@
         The window content.
 </div>
 <script type="text/javascript">
+
+function formatStatus(val,row){
+	return val == 1 ? "有效" : "无效";
+}
+
+
 function formatDate(val,row){
 	var now = new Date(val);
 	return now.format("yyyy-MM-dd hh:mm:ss");
@@ -50,6 +56,7 @@ var toolbar = [{
     text:'新增',
     iconCls:'icon-add',
     handler:function(){
+		$('#consumePackageContent').form('reset');
     	$('#consumeAdd').window('open');
     }
 },{

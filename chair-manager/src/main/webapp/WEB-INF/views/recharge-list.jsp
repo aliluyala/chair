@@ -31,14 +31,8 @@
 <script type="text/javascript">
 
 function formatStatus(val,row){
-	if(val == 1){
-		return "有效";
-	}else{
-		return "无效";
-	}
+	return val==1 ? "有效" : "无效";
 }
-
-
 
 function formatDate(val,row){
 	var now = new Date(val);
@@ -62,6 +56,7 @@ var toolbar = [{
     text:'新增',
     iconCls:'icon-add',
     handler:function(){
+		$('#rechargePackageContent').form('reset');
     	$('#rechargeAdd').window('open');
     }
 },{
