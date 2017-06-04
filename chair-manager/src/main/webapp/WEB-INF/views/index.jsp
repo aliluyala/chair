@@ -29,7 +29,7 @@
          		<span>数据管理</span>
          		<ul>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/device-list'}">设备管理</li>
-	         		<li data-options="attributes:{'url':'/<%=chair%>/page/factory-list'}">厂家管理</li>
+	         		<%--<li data-options="attributes:{'url':'/<%=chair%>/page/factory-list'}">厂家管理</li>--%>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/proxy-list'}">代理管理</li>
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/shop-list'}">商家管理</li> 
 	         	</ul>

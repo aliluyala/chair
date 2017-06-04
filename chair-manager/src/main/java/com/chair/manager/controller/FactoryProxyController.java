@@ -1,5 +1,8 @@
 package com.chair.manager.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.chair.manager.bean.EasyUIResult;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.pojo.FactoryProxy;
+import com.chair.manager.pojo.Manager;
 import com.chair.manager.service.FactoryProxyService;
+import com.chair.manager.service.ManagerService;
+
+import sun.misc.BASE64Encoder;
 
 @RequestMapping("/proxy")
 @Controller
@@ -23,9 +30,13 @@ public class FactoryProxyController {
 
 	@Autowired
 	private FactoryProxyService factoryProxyService;
+	
+	@Autowired
+	private ManagerService managerService;
+	
 
 	/**
-	 * 查询搭理列表（管理台前端）
+	 * 查询代理列表（管理台前端）
 	 * 
 	 * @param param
 	 * @return
@@ -58,12 +69,25 @@ public class FactoryProxyController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="save",method=RequestMethod.POST)
-	private EasyUIResult addProxy(FactoryProxy proxy){
+	private EasyUIResult addProxy(FactoryProxy proxy, @RequestParam("user") String user, @RequestParam("password") String password){
 		logger.info("------【新增代理】参数------"+proxy);
 		proxy.setCreateTime(new Date());
 		proxy.setLastUpdate(new Date());
+		
+		//新增管理员
+		Manager manager = new Manager();
+		manager.setUser(user);
+		manager.setPassword(new ManagerService().getMd5(password));
+		manager.setType(2);
+		manager.setCreateTime(new Date());
+		manager.setLastUpdate(new Date());
+		managerService.save(manager);
+		
 		int saveRs = factoryProxyService.save(proxy);
-		if(saveRs <= 0) throw new ChairException("-2", getClass()+",SQL操作失败。"); 
+		if(saveRs <= 0) throw new ChairException("-2", getClass()+",SQL操作失败。");
+		
+		
+		
 		return new EasyUIResult();
 	}
 	
@@ -80,5 +104,28 @@ public class FactoryProxyController {
 		return factoryProxyService.deleteByIds(ids);
 	}
 	
+	
+	  /**利用MD5进行加密
+     * @param str  待加密的字符串
+     * @return  加密后的字符串
+     * @throws NoSuchAlgorithmException  没有这种产生消息摘要的算法
+     * @throws UnsupportedEncodingException  
+     */
+    public static String EncoderByMd5(String str) throws NoSuchAlgorithmException, UnsupportedEncodingException{
+        //确定计算方法
+        MessageDigest md5=MessageDigest.getInstance("MD5");
+        BASE64Encoder base64en = new BASE64Encoder();
+        //加密后的字符串
+        md5.digest(str.getBytes("utf-8"));
+        String newstr=base64en.encode(md5.digest(str.getBytes("utf-8")));
+        return newstr;
+    }
+	
+	
+	public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+//		System.out.println(EncoderByMd5("123456"));
+//		new ManagerService().getMd5("123456");
+		System.out.println(new ManagerService().getMd5("123456"));
+	}
 	
 }

@@ -226,8 +226,33 @@ CREATE TABLE `card` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='用户优惠券表';
 
 
+DROP TABLE IF EXISTS `manager`;
+CREATE TABLE `manager` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '管理员ID，自增ID',
+  `user` varchar(64) DEFAULT NULL COMMENT '管理员用户名',
+  `password` varchar(64) DEFAULT NULL COMMENT '管理员密码',
+  `type` int(11) DEFAULT 1 COMMENT '管理员角色
+									1：超级管理员（厂家）
+									2：代理
+									3：商家',
+  `factory_id` int(11) DEFAULT NULL COMMENT '厂家ID，type=2，3时此字段有值',
+  `factory_name` varchar(64) DEFAULT NULL COMMENT '厂家名称，type=1，2，3时此字段有值',
+  `proxy_id` int(11) DEFAULT NULL COMMENT '代理ID，type=3时此字段有值',
+  `proxy_name` varchar(64) DEFAULT NULL COMMENT '代理名称，type=2，3时此字段有值',
+  `shop_id` int(11) DEFAULT NULL COMMENT '商家ID',
+  `shop_name` varchar(64) DEFAULT NULL COMMENT '商家名称，type=3时此字段有值',
+  `shop_location` varchar(64) DEFAULT NULL COMMENT '商家地址，type=3时此字段有值',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 
+insert into manager values(1,'admin',MD5('123456'),1,null,'我是厂家',null,null,null,null,null,now(),now());
+insert into manager values(2,'admin',MD5('123456'),2,1,'我是厂家',null,'我是代理1',null,null,null,now(),now());
+insert into manager values(3,'admin',MD5('123456'),2,1,'我是厂家',null,'我是代理2',null,null,null,now(),now());
+insert into manager values(4,'admin',MD5('123456'),3,1,'我是厂家',2,'我是代理1',null,'我是商家1','我事商家1地址',now(),now());
+insert into manager values(5,'admin',MD5('123456'),3,1,'我是厂家',3,'我是代理2',null,'我是商家2','我事商家2地址',now(),now());
 
 
 DROP TABLE IF EXISTS `tempRedis`;

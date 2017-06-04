@@ -7,11 +7,20 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.chair.manager.bean.EasyUIResult;
+import com.chair.manager.pojo.FactoryProxy;
 import com.chair.manager.pojo.Manager;
+import com.github.pagehelper.PageInfo;
 
 @Service
 public class ManagerService extends BaseService<Manager> {
 	private static Logger LOGGER = Logger.getLogger(ManagerService.class);
+	
+	/**
+	 * 用户登陆业务
+	 * @param manager
+	 * @return
+	 */
 	public Manager login(Manager manager){
 		manager.setPassword(getMd5(manager.getPassword()));
 		List<Manager> result= super.queryList(manager);
@@ -22,6 +31,12 @@ public class ManagerService extends BaseService<Manager> {
 		return null;
 	}
 
+	
+	/**
+	 * 获取MD5加密串
+	 * @param plainText
+	 * @return
+	 */
 	public  String getMd5(String plainText) {  
 		try {  
 			MessageDigest md = MessageDigest.getInstance("MD5");  
@@ -47,5 +62,16 @@ public class ManagerService extends BaseService<Manager> {
 
 	}  
 
+	/**
+	 * 查询管理员分页
+	 * @param manager
+	 * @param page
+	 * @param rows
+	 * @return
+	 */
+	public EasyUIResult queryListForPage(Manager manager, Integer page, Integer rows) {
+		PageInfo<Manager> pageInfo= super.queryListPage(manager, page, rows);
+		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
+	}
 
 }

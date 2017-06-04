@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chair.manager.bean.EasyUIResult;
 import com.chair.manager.exception.ChairException;
+import com.chair.manager.pojo.Manager;
 import com.chair.manager.pojo.Shop;
+import com.chair.manager.service.ManagerService;
 import com.chair.manager.service.ShopService;
 
 @RequestMapping("/shop")
@@ -23,6 +25,9 @@ public class ShopController {
 
 	@Autowired
 	private ShopService shopService;
+
+	@Autowired
+	private ManagerService managerService;
 
 	/**
 	 * 查询厂家列表（管理台前端）
@@ -37,46 +42,57 @@ public class ShopController {
 		List<Shop> shops = shopService.queryList(null);
 		return shops;
 	}
-	
-	
+
 	/**
 	 * 查询商家列表，分页（管理台前端）
+	 * 
 	 * @param param
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="listForPage",method=RequestMethod.POST)
-	private EasyUIResult queryProxyListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows){
+	@RequestMapping(value = "listForPage", method = RequestMethod.POST)
+	private EasyUIResult queryProxyListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows) {
 		return shopService.queryShopListForPage(page, rows);
 	}
-	
-	
+
 	/**
 	 * 新增商家（管理台前端）
+	 * 
 	 * @param param
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="save",method=RequestMethod.POST)
-	private EasyUIResult addProxy(Shop shop){
-		logger.info("------【新增商家】参数------"+shop);
+	@RequestMapping(value = "save", method = RequestMethod.POST)
+	private EasyUIResult addProxy(Shop shop) {
+		logger.info("------【新增商家】参数------" + shop);
 		shop.setCreateTime(new Date());
 		shop.setLastUpdate(new Date());
+
+		// 新增管理员
+		Manager manager = new Manager();
+//		manager.setUser(shop.getUser());
+//		manager.setPassword(shop.getPassword());
+		manager.setType(3);
+		manager.setCreateTime(new Date());
+		manager.setLastUpdate(new Date());
+		managerService.save(manager);
+
 		int saveRs = shopService.save(shop);
-		if(saveRs <= 0) throw new ChairException("-2", getClass()+",SQL操作失败。"); 
+		if (saveRs <= 0)
+			throw new ChairException("-2", getClass() + ",SQL操作失败。");
 		return new EasyUIResult();
 	}
-	
-	
+
 	/**
 	 * 批量删除商家（管理台前端）
+	 * 
 	 * @param param
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="batDel",method=RequestMethod.POST)
-	private Integer delProxy(@RequestParam("ids") Integer[] ids){
-		logger.info("---将要删除的商家ids--->>>"+ids);
+	@RequestMapping(value = "batDel", method = RequestMethod.POST)
+	private Integer delProxy(@RequestParam("ids") Integer[] ids) {
+		logger.info("---将要删除的商家ids--->>>" + ids);
 		return shopService.deleteByIds(ids);
 	}
 }

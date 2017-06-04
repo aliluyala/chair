@@ -10,11 +10,12 @@
 <body>
 	<div>
     <table class="easyui-datagrid" id="shopList" title="商家列表" 
-	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/shop/listForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
+	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/manager/listShopForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
 	    <thead>
 	        <tr>
 	        	<th data-options="field:'ck',checkbox:true"></th>
 	        	<th data-options="field:'id',width:60">ID</th>
+	            <th data-options="field:'proxyName',width:200">所属代理名称</th>
 	            <th data-options="field:'shopName',width:200">商家名称</th>
 	            <th data-options="field:'shopLocation',width:200">商家地址</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
@@ -23,9 +24,15 @@
 	    </thead>
 	</table>
 	</div>
+	
 <div id="shopAdd" class="easyui-window" title="新增商家" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/shop-add'" style="width:800px;height:600px;padding:10px;">
         The window content.
 </div>
+        
+<div id="shopEdit" class="easyui-window" title="编辑商家" data-options="modal:true,closed:true,iconCls:'icon-edit',href:'/<%=chair%>/page/shop-edit'" style="width:800px;height:600px;padding:10px;">
+        The window content.
+</div>
+        
 <script type="text/javascript">
 function formatDate(val,row){
 	var now = new Date(val);
@@ -35,9 +42,9 @@ function formatBirthday(val,row){
 	var now = new Date(val);
 	return now.format("yyyy-MM-dd");
 }
-function getSelectionsIds(){
-	var consumeList = $("#consumeList");
-	var sels = consumeList.datagrid("getSelections");
+function getSelectionsIdsByShop(){
+	var shopList = $("#shopList");
+	var sels = shopList.datagrid("getSelections");
 	var ids = [];
 	for(var i in sels){
 		ids.push(sels[i].id);
@@ -52,27 +59,47 @@ var toolbar = [{
     	$('#shopAdd').window('open');
     }
 },{
+    text:'编辑',
+    iconCls:'icon-edit',
+    handler:function(){
+    	var ids = getSelectionsIdsByShop();
+    	if(ids.length == 0){
+    		$.messager.alert('提示','必须选择一个商家');
+    		return ;
+    	}
+    	if(ids.indexOf(',') > 0){
+    		$.messager.alert('提示','只能选择一个商家!');
+    		return ;
+    	}
+    	$("#shopEdit").window({
+    		onLoad :function(){
+    			//回显数据
+    			var data = $("#shopList").datagrid("getSelections")[0];
+    			$("#shopEdit").form("load", data);
+    		}
+    	}).window("open");
+    }
+},{
     text:'删除',
     iconCls:'icon-remove',
     handler:function(){
-    	var rows = $('#shopList').datagrid('getSelections');
-    	if(rows){
-        	var ids = "";
-        	for(var i=0; i<rows.length; i++){
-        		ids = rows[i].id + "," + ids;  
-        	}
-    		$.messager.confirm('Confirm','确定删除这些商家吗？',function(r){
-				if (r){
-					$.post('/<%=chair%>/shop/batDel',{ids:ids},function(result){
-						if (result){
-							$('#shopList').datagrid('reload');	// reload the user data
-						} else {
-							$.messager.alert('提示','删除商家失败!');
-						}
-					},'json');
-				}
-    		});
-    	}
+		var ids = getSelectionsIdsByShop();
+		if(ids.length == 0){
+			$.messager.alert('提示','必须选择一个商家!');
+			return ;
+		}
+	
+		$.messager.confirm('Confirm','确定删除这些商家吗？',function(r){
+			if (r){
+    			$.post('/<%=chair%>/manager/delete',{ids:ids,type:3},function(result){
+					if (result){
+						$('#shopList').datagrid('reload');	// reload the user data
+					} else {
+						$.messager.alert('提示','删除商家失败!');
+					}
+				},'json');
+			}
+		});
     }
 }];
 

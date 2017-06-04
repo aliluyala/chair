@@ -69,10 +69,13 @@ public class UsersController {
 	private ResponseResult queryRechargeDetails(@RequestBody ReqParam param){
 		logger.info("------【查询充值明细】---参数>>>"+param);
 		RechargeRecord rr=new RechargeRecord();
+		rr.setOpenId(param.getOpenID());
 		rr.setPhoneNumber(param.getPhoneNumber());
-		List<RechargeRecord>  rechargeRecordList = rechargeRecordService.queryList(rr);
+		rr.setPayStatus(2);	//已支付
+		List<RechargeRecord>  rechargeRecordList = rechargeRecordService.queryRechargeRechargeList(rr);
 		List<RechargeRecordVo> voList = new ArrayList<RechargeRecordVo>();
 		for(int i=0; i<rechargeRecordList.size(); i++){
+			if(rechargeRecordList.get(i).getPayStatus() != 2 ) continue;
 			RechargeRecordVo rrv = new RechargeRecordVo();
 			rrv.setRechargeAmount(rechargeRecordList.get(i).getRechargeAmount().toString());
 			rrv.setRechargeDuration(rechargeRecordList.get(i).getRechargeDuration());
@@ -97,6 +100,7 @@ public class UsersController {
 	private ResponseResult queryConsumedDetails(@RequestBody ReqParam param){
 		logger.info("------【查询消费明细】---参数>>>"+param);
 		ConsumedDetails cd=new ConsumedDetails();
+		cd.setOpenId(param.getOpenID());
 		cd.setPhoneNumber(param.getPhoneNumber());
 		List<ConsumedDetails> rs=consumedDetailsService.queryList(cd);
 		ConsumedDetailsVo vo=new ConsumedDetailsVo();

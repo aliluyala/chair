@@ -10,11 +10,12 @@
 <body>
 	<div>
     <table class="easyui-datagrid" id="proxyList" title="代理列表" 
-	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/proxy/listForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
+	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/manager/listProxyForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10]">
 	    <thead>
 	        <tr>
 	        	<th data-options="field:'ck',checkbox:true"></th>
 	        	<th data-options="field:'id',width:60">ID</th>
+	            <th data-options="field:'factoryName',width:200">所属厂家名称</th>
 	            <th data-options="field:'proxyName',width:200">代理名称</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
 	            <th data-options="field:'lastUpdate',width:130,align:'center',formatter:formatDate">更新日期</th>
@@ -22,9 +23,15 @@
 	    </thead>
 	</table>
 	</div>
+	
 <div id="proxyAdd" class="easyui-window" title="新增代理" data-options="modal:true,closed:true,iconCls:'icon-save',href:'/<%=chair%>/page/proxy-add'" style="width:800px;height:600px;padding:10px;">
         The window content.
 </div>
+
+<div id="proxyEdit" class="easyui-window" title="编辑代理" data-options="modal:true,closed:true,iconCls:'icon-edit',href:'/<%=chair%>/page/proxy-edit'" style="width:800px;height:600px;padding:10px;">
+        The window content.
+</div>
+        
 <script type="text/javascript">
 function formatDate(val,row){
 	var now = new Date(val);
@@ -34,9 +41,9 @@ function formatBirthday(val,row){
 	var now = new Date(val);
 	return now.format("yyyy-MM-dd");
 }
-function getSelectionsIds(){
-	var consumeList = $("#consumeList");
-	var sels = consumeList.datagrid("getSelections");
+function getSelectionsIdsByProxy(){
+	var proxyList = $("#proxyList");
+	var sels = proxyList.datagrid("getSelections");
 	var ids = [];
 	for(var i in sels){
 		ids.push(sels[i].id);
@@ -51,27 +58,47 @@ var toolbar = [{
     	$('#proxyAdd').window('open');
     }
 },{
+    text:'编辑',
+    iconCls:'icon-edit',
+    handler:function(){
+    	var ids = getSelectionsIdsByProxy();
+    	if(ids.length == 0){
+    		$.messager.alert('提示','必须选择一个代理');
+    		return ;
+    	}
+    	if(ids.indexOf(',') > 0){
+    		$.messager.alert('提示','只能选择一个代理!');
+    		return ;
+    	}
+    	$("#proxyEdit").window({
+    		onLoad :function(){
+    			//回显数据
+    			var data = $("#proxyList").datagrid("getSelections")[0];
+    			$("#proxyEdit").form("load", data);
+    		}
+    	}).window("open");
+    }
+},{
     text:'删除',
     iconCls:'icon-remove',
     handler:function(){
-    	var rows = $('#proxyList').datagrid('getSelections');
-    	if(rows){
-        	var ids = "";
-        	for(var i=0; i<rows.length; i++){
-        		ids = rows[i].id + "," + ids;  
-        	}
-    		$.messager.confirm('Confirm','确定删除这些代理吗？',function(r){
-    			if (r){
-	    			$.post('/<%=chair%>/proxy/batDel',{ids:ids},function(result){
-						if (result){
-							$('#proxyList').datagrid('reload');	// reload the user data
-						} else {
-							$.messager.alert('提示','删除代理失败!');
-						}
-					},'json');
-    			}
-    		});
+    	var ids = getSelectionsIdsByProxy();
+    	if(ids.length == 0){
+    		$.messager.alert('提示','必须选择一个代理!');
+    		return ;
     	}
+    	
+    	$.messager.confirm('Confirm','确定删除这些代理吗？',function(r){
+			if (r){
+    			$.post('/<%=chair%>/manager/delete',{ids:ids,type:2},function(result){
+					if (result){
+						$('#proxyList').datagrid('reload');	// reload the user data
+					} else {
+						$.messager.alert('提示','删除代理失败!');
+					}
+				},'json');
+			}
+		});
     }
 }];
 

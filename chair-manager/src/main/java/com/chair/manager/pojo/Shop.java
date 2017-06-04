@@ -5,56 +5,76 @@ import java.util.Date;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name="shop")
+@Table(name = "shop")
 public class Shop {
 	@Id
-    private Integer id;
+	private Integer id;
 
-    private String shopName;
+	private Integer proxyId;
 
-    private String shopLocation;
+	private String proxyName;
 
-    private Date createTime;
+	private String shopName;
 
-    private Date lastUpdate;
+	private String shopLocation;
 
-    public Integer getId() {
-        return id;
-    }
+	private Date createTime;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	private Date lastUpdate;
 
-    public String getShopName() {
-        return shopName;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setShopName(String shopName) {
-        this.shopName = shopName == null ? null : shopName.trim();
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public String getShopLocation() {
-        return shopLocation;
-    }
+	public Integer getProxyId() {
+		return proxyId;
+	}
 
-    public void setShopLocation(String shopLocation) {
-        this.shopLocation = shopLocation == null ? null : shopLocation.trim();
-    }
+	public void setProxyId(Integer proxyId) {
+		this.proxyId = proxyId;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public String getProxyName() {
+		return proxyName;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setProxyName(String proxyName) {
+		this.proxyName = proxyName;
+	}
 
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
+	public String getShopName() {
+		return shopName;
+	}
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+	public void setShopName(String shopName) {
+		this.shopName = shopName == null ? null : shopName.trim();
+	}
+
+	public String getShopLocation() {
+		return shopLocation;
+	}
+
+	public void setShopLocation(String shopLocation) {
+		this.shopLocation = shopLocation == null ? null : shopLocation.trim();
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
 }
