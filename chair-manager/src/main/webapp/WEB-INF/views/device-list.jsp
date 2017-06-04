@@ -49,9 +49,9 @@ function formatBirthday(val,row){
 	var now = new Date(val);
 	return now.format("yyyy-MM-dd");
 }
-function getSelectionsIds(){
-	var consumeList = $("#deviceList");
-	var sels = consumeList.datagrid("getSelections");
+function getSelectionsIdsByDevice(){
+	var deviceList = $("#deviceList");
+	var sels = deviceList.datagrid("getSelections");
 	var ids = [];
 	for(var i in sels){
 		ids.push(sels[i].id);
@@ -69,7 +69,7 @@ var toolbar = [{
     text:'编辑',
     iconCls:'icon-edit',
     handler:function(){
-    	var ids = getSelectionsIds();
+    	var ids = getSelectionsIdsByDevice();
     	if(ids.length == 0){
     		$.messager.alert('提示','必须选择一个设备才能编辑!');
     		return ;
