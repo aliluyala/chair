@@ -309,6 +309,8 @@ public class Server {
 			del(clientIP+":"+clientPort);
 			del(token);
 			del(ccid);
+			//删除记录设备是否正在使用的记录
+//			del("T"+ccid);
 			logger.info("关闭：" + s.getRemoteSocketAddress());
 		}
 

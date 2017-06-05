@@ -67,7 +67,7 @@ public class DeviceService extends BaseService<Device> {
 		}
 		//1.判断设备是否存在
 		if(device == null) {
-			logger.error("------设备不存在数据库------");
+			logger.error("------查询不到设备信息------");
 			throw new ChairException("2001", "查询不到设备信息");
 		}
 		String ipAndPort = jedisCluster.get(device.getDeviceNo());

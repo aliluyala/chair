@@ -31,7 +31,6 @@ import com.chair.manager.vo.RechargeRecordVo;
 
 import redis.clients.jedis.JedisCluster;
 
-
 @RequestMapping("/user")
 @Controller
 public class UsersController {
@@ -42,44 +41,81 @@ public class UsersController {
 	@Autowired
 	private ConsumedDetailsService consumedDetailsService;
 	@Autowired
-	private UsersService  usersService;
+	private UsersService usersService;
 
 	@Autowired
 	private JedisCluster jedisCluster;
-	
+
 	@Autowired
 	private RechargePackageService rechargePackageService;
-	
+
 	@Autowired
 	private ConsumePackageService consumePackageService;
-	
+
 	@Autowired
 	private UserAccountService userAccountService;
-	
-	
 
 	/**
-	 * 查看用户充值明细
-	 * @param userID 用户ID
-	 * @param phoneNumber 用户手机号
+	 * 查看用户注册状态
+	 * @param param
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="queryRechargeDetails",method=RequestMethod.POST)
-	private ResponseResult queryRechargeDetails(@RequestBody ReqParam param){
-		logger.info("------【查询充值明细】---参数>>>"+param);
-		RechargeRecord rr=new RechargeRecord();
+	@RequestMapping(value = "queryUserRegStatus", method = RequestMethod.POST)
+	private ResponseResult queryUserStatus(@RequestBody ReqParam param) {
+		logger.info("------【查询用户状态】---参数>>>" + param);
+		return new ResponseResult(usersService.queryUserRegStatus(param.getOpenID()));
+	}
+
+	/**
+	 * 发送用户验证码
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "sendCode", method = RequestMethod.POST)
+	private ResponseResult sendCode(@RequestBody ReqParam param) {
+		logger.info("------【发送验证码】---参数>>>" + param);
+		usersService.sendCode(param.getPhoneNumber());
+		return new ResponseResult(null);
+	}
+
+	
+	/**
+	 * 用户登录
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	private ResponseResult userLogin(@RequestBody ReqParam param) {
+		logger.info("------【注册/登陆】---参数>>>" + param);
+		return new ResponseResult(usersService.login(param.getOpenID(), param.getPhoneNumber(), param.getIdentCode()));
+	}
+	
+	/**
+	 * 查看用户充值明细
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "queryRechargeDetails", method = RequestMethod.POST)
+	private ResponseResult queryRechargeDetails(@RequestBody ReqParam param) {
+		logger.info("------【根据openID查询充值明细】---参数>>>" + param);
+		RechargeRecord rr = new RechargeRecord();
 		rr.setOpenId(param.getOpenID());
-		rr.setPhoneNumber(param.getPhoneNumber());
-		rr.setPayStatus(2);	//已支付
-		List<RechargeRecord>  rechargeRecordList = rechargeRecordService.queryRechargeRechargeList(rr);
+//		rr.setPhoneNumber(param.getPhoneNumber());
+		rr.setPayStatus(2); // 已支付
+		List<RechargeRecord> rechargeRecordList = rechargeRecordService.queryRechargeRechargeList(rr);
 		List<RechargeRecordVo> voList = new ArrayList<RechargeRecordVo>();
-		for(int i=0; i<rechargeRecordList.size(); i++){
-			if(rechargeRecordList.get(i).getPayStatus() != 2 ) continue;
+		for (int i = 0; i < rechargeRecordList.size(); i++) {
+			if (rechargeRecordList.get(i).getPayStatus() != 2)
+				continue;
 			RechargeRecordVo rrv = new RechargeRecordVo();
 			rrv.setRechargeAmount(rechargeRecordList.get(i).getRechargeAmount().toString());
 			rrv.setRechargeDuration(rechargeRecordList.get(i).getRechargeDuration());
-			rrv.setRechargeTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(rechargeRecordList.get(i).getCreateTime()));
+			rrv.setRechargeTime(
+					new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(rechargeRecordList.get(i).getCreateTime()));
 			voList.add(rrv);
 		}
 		RechargeRecordVo res = new RechargeRecordVo();
@@ -89,24 +125,26 @@ public class UsersController {
 		return new ResponseResult(res);
 	}
 	
+	
+	
 	/**
 	 * 查看用户消费明细
-	 * @param userID 用户ID
-	 * @param phoneNumber 用户手机号
+	 * @param param
 	 * @return
 	 */
+	
 	@ResponseBody
-	@RequestMapping(value="queryConsumedDetails",method=RequestMethod.POST)
-	private ResponseResult queryConsumedDetails(@RequestBody ReqParam param){
-		logger.info("------【查询消费明细】---参数>>>"+param);
-		ConsumedDetails cd=new ConsumedDetails();
+	@RequestMapping(value = "queryConsumedDetails", method = RequestMethod.POST)
+	private ResponseResult queryConsumedDetails(@RequestBody ReqParam param) {
+		logger.info("------【查询消费明细】---参数>>>" + param);
+		ConsumedDetails cd = new ConsumedDetails();
 		cd.setOpenId(param.getOpenID());
-		cd.setPhoneNumber(param.getPhoneNumber());
-		List<ConsumedDetails> rs=consumedDetailsService.queryList(cd);
-		ConsumedDetailsVo vo=new ConsumedDetailsVo();
-		List<ConsumedDetailsVo> vos=new ArrayList<ConsumedDetailsVo>();
-		for(ConsumedDetails consumed:rs){
-			ConsumedDetailsVo c=new ConsumedDetailsVo();
+//		cd.setPhoneNumber(param.getPhoneNumber());
+		List<ConsumedDetails> rs = consumedDetailsService.queryList(cd);
+		ConsumedDetailsVo vo = new ConsumedDetailsVo();
+		List<ConsumedDetailsVo> vos = new ArrayList<ConsumedDetailsVo>();
+		for (ConsumedDetails consumed : rs) {
+			ConsumedDetailsVo c = new ConsumedDetailsVo();
 			c.setConsumedDuration(consumed.getConsumedDuration());
 			c.setConsumedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(consumed.getCreateTime()));
 			vos.add(c);
@@ -116,23 +154,22 @@ public class UsersController {
 		vo.setConsumedList(vos);
 		return new ResponseResult(vo);
 	}
+
 	
 	/**
 	 * 查询充值套餐列表
-	 * @param userID 用户ID
-	 * @param phoneNumber 用户手机号
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="queryPackageList",method=RequestMethod.POST)
-	private ResponseResult queryPackageList(@RequestBody ReqParam param){
-		logger.info("------【查询充值套餐列表】---参数>>>"+param);
+	@RequestMapping(value = "queryPackageList", method = RequestMethod.POST)
+	private ResponseResult queryPackageList() {
+		logger.info("------【查询充值套餐列表】------");
 		List<RechargePackage> rechargePackages = rechargePackageService.queryRechargeListByLimit(new RechargePackage());
 		List<RechargePackageVo> vos = new ArrayList<RechargePackageVo>();
 		RechargePackageVo vors = new RechargePackageVo();
-		for(int i=0;i<rechargePackages.size();i++){
+		for (int i = 0; i < rechargePackages.size(); i++) {
 			RechargePackage rechargePackage = rechargePackages.get(i);
-			RechargePackageVo vo = new  RechargePackageVo();
+			RechargePackageVo vo = new RechargePackageVo();
 			vo.setPackageID(rechargePackage.getId());
 			vo.setPackageName(rechargePackage.getPackageName());
 			vo.setPackageName(rechargePackage.getPackageName());
@@ -143,76 +180,29 @@ public class UsersController {
 		vors.setPackageList(vos);
 		return new ResponseResult(vors);
 	}
-	
+
+
+
 	/**
-	 * 查看用户注册状态
-	 * @param userID 用户ID
-	 * @param phoneNumber 用户手机号
+	 * 扫描二维码QRCode查询设备信息
+	 * @param param
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="queryUserRegStatus",method=RequestMethod.POST)
-	private ResponseResult queryUserStatus(@RequestBody ReqParam param){
-		logger.info("------【查询用户状态】---参数>>>"+param);
-		return new ResponseResult(usersService.queryUserRegStatus(param.getOpenID())); 
+	@RequestMapping(value = "queryDevice", method = RequestMethod.POST)
+	private ResponseResult queryDevice(@RequestBody ReqParam param) {
+		logger.info("------【查询设备信息】---参数>>>" + param);
+		return new ResponseResult(usersService.queryDeviceByDeviceNO(param.getDeviceNO()));
 	}
 	
-
-	/**
-	 * 用户登录
-	 * @param userID 用户ID
-	 * @param phoneNumber 用户手机号
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value="login",method=RequestMethod.POST)
-	private ResponseResult userLogin(@RequestBody ReqParam param){
-		logger.info("------【登陆】---参数>>>"+param);
-		return new ResponseResult(usersService.login(param.getOpenID(), param.getPhoneNumber(), param.getIdentCode())); 
-	}
-	
-
-	/**
-	 * 发送用户验证码
-	 * @param userID 用户ID
-	 * @param phoneNumber 用户手机号
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value="sendCode",method=RequestMethod.POST)
-	private ResponseResult sendCode(@RequestBody ReqParam param){
-		logger.info("------【发送验证码】---参数>>>"+param);
-		usersService.sendCode(param.getPhoneNumber());
-		return new ResponseResult(null); 
-	}
-	
-
-	/**
-	 * 查询设备信息
-	 * @param userID 用户ID
-	 * @param phoneNumber 用户手机号
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value="queryDevice",method=RequestMethod.POST)
-	private ResponseResult queryDevice(@RequestBody ReqParam param){
-		logger.info("------【查询设备信息】---参数>>>"+param);
-		return new ResponseResult(usersService.queryDeviceByDeviceNO(param.getDeviceNO())); 
-	}
-	
-	
-	
-
 	/**
 	 * 查询消费套餐列表
-	 * @param userID 用户ID
-	 * @param phoneNumber 用户手机号
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="queryConsumerPackageList",method=RequestMethod.POST)
-	private ResponseResult queryConsumerPackageList(@RequestBody ReqParam param){
-		logger.info("------【查询消费套餐列表】---参数>>>"+param);
+	@RequestMapping(value = "queryConsumerPackageList", method = RequestMethod.POST)
+	private ResponseResult queryConsumerPackageList() {
+		logger.info("------【查询消费套餐列表】------");
 		List<ConsumePackage> consumePackages = consumePackageService.queryListByLimit(new ConsumePackage());
 		ConsumePackageVo rsvo = new ConsumePackageVo();
 		List<ConsumePackageVo> vos = new ArrayList<ConsumePackageVo>();
@@ -225,41 +215,34 @@ public class UsersController {
 			vos.add(vo);
 		}
 		rsvo.setPackageList(vos);
-		return new ResponseResult(rsvo); 
+		return new ResponseResult(rsvo);
 	}
-	
-	
-	/**
-	 * 查询账户信息
-	 * @param userID 用户ID
-	 * @param phoneNumber 用户手机号
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value="queryAccountInfo",method=RequestMethod.POST)
-	private ResponseResult queryAccountInfo(@RequestBody ReqParam param){
-		logger.info("------【查询账户信息】---参数>>>"+param);
-		return new ResponseResult(userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber())); 
-	}
-	
-	
 
 	/**
-	 * 测试Redis集群
-	 * @param phoneNumber 用户手机号
+	 * 查询账户信息
+	 * @param param
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value="testRedis",method=RequestMethod.POST)
-	private ResponseResult TestRedis(@RequestBody ReqParam param){
-		System.out.println("----"+param);
+	@RequestMapping(value = "queryAccountInfo", method = RequestMethod.POST)
+	private ResponseResult queryAccountInfo(@RequestBody ReqParam param) {
+		logger.info("------【查询账户信息】---参数>>>" + param);
+		return new ResponseResult(userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber()));
+	}
+
+	
+	
+	//TEST
+	@ResponseBody
+	@RequestMapping(value = "testRedis", method = RequestMethod.POST)
+	private ResponseResult TestRedis(@RequestBody ReqParam param) {
+		System.out.println("----" + param);
 		String rs1 = jedisCluster.setex("bbb", 30, "12345555");
 		String rs2 = jedisCluster.get("bbb");
-//		String rs2 = redisService.set("13", "4321", 10);
-		System.err.println("---rs1---"+rs1);
-		System.err.println("---rs2---"+rs2);
-		return new ResponseResult(null); 
+		// String rs2 = redisService.set("13", "4321", 10);
+		System.err.println("---rs1---" + rs1);
+		System.err.println("---rs2---" + rs2);
+		return new ResponseResult(null);
 	}
-	
-	
+
 }

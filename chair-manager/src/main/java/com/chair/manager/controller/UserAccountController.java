@@ -25,6 +25,7 @@ import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.DeviceService;
 import com.chair.manager.service.UserAccountService;
+import com.chair.manager.service.UsersService;
 
 import redis.clients.jedis.JedisCluster;
 
@@ -43,6 +44,8 @@ public class UserAccountController {
 	private ConsumedDetailsService consumedDetailsService;
 	@Autowired
 	private JedisCluster jedisCluster;
+	@Autowired
+	private UsersService userService;
 
 	/**
 	 * 充值
@@ -82,14 +85,9 @@ public class UserAccountController {
 	private ResponseResult choosePackage(@RequestBody ReqParam param) {
 		logger.info("---【用户启用设备，选择对应的消费套餐】，入参为--->>>" + param);
 		// 根据设备ID查询设备信息
-		Device d = new Device();
-		d.setDeviceNo(param.getDeviceNO());
-		Device device = deviceService.queryByDeviceNO(d);
+		Device device = userService.queryDeviceByDeviceNO(param.getDeviceNO());
 		logger.info("---根据设备NO：【" + param.getDeviceNO() + "】查询设备信息--->>>" + device);
 		deviceService.isUsed(jedisCluster, device);
-//		if (!useAble)
-//			throw new ChairException("2001", "设备" + param.getDeviceNO() + "找不到设备");
-		// 查询套餐信息
 		ConsumePackage consumePackage = consumePackageService.findById(param.getConsumedPackageID());
 		logger.info("---根据用户选择的消费套餐ID：【" + param.getConsumedPackageID() + "】查询消费套餐信息--->>>" + consumePackage);
 		if (device == null || consumePackage == null) {
@@ -121,6 +119,7 @@ public class UserAccountController {
 		}
 		// 新增消费明细
 		ConsumedDetails consumedDetails = new ConsumedDetails();
+		consumedDetails.setOpenId(param.getOpenID());
 		consumedDetails.setPhoneNumber(param.getPhoneNumber());
 		consumedDetails.setConsumedPackageId(consumePackage.getId());
 		consumedDetails.setConsumedDuration(consumePackage.getConsumedDuration());

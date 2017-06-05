@@ -145,8 +145,8 @@ public class UserAccountService extends BaseService<UserAccount> {
 	 */
 	public UserAccount queryAccountInfo(String openID, String phoneNumber) {
 		UserAccount ua = new UserAccount();
-		// ua.setOpenId(openID);
-		ua.setPhoneNumber(phoneNumber);
+		ua.setOpenId(openID);
+//		ua.setPhoneNumber(phoneNumber);
 		UserAccount userAcount = userAccountMapper.queryAccountInfoByUnique(ua);
 		if (userAcount == null)
 			throw new ChairException("1010", "根据手机号【"+phoneNumber+"】查询不到对应的账户。");
