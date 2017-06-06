@@ -28,7 +28,7 @@ public class RechargeRecordService extends BaseService<RechargeRecord> {
 		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
 	}
 	
-	public List<RechargeRecord> queryRechargeRechargeList(RechargeRecord record){
-		return recordMapper.queryRechargeRechargeList(record);
+	public List<RechargeRecord> queryRechargeRecordList(RechargeRecord record){
+		return recordMapper.queryRechargeRecordList(record);
 	}
 }

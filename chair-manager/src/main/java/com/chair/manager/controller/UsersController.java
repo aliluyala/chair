@@ -106,7 +106,7 @@ public class UsersController {
 		rr.setOpenId(param.getOpenID());
 //		rr.setPhoneNumber(param.getPhoneNumber());
 		rr.setPayStatus(2); // 已支付
-		List<RechargeRecord> rechargeRecordList = rechargeRecordService.queryRechargeRechargeList(rr);
+		List<RechargeRecord> rechargeRecordList = rechargeRecordService.queryRechargeRecordList(rr);
 		List<RechargeRecordVo> voList = new ArrayList<RechargeRecordVo>();
 		for (int i = 0; i < rechargeRecordList.size(); i++) {
 			if (rechargeRecordList.get(i).getPayStatus() != 2)
@@ -140,7 +140,7 @@ public class UsersController {
 		ConsumedDetails cd = new ConsumedDetails();
 		cd.setOpenId(param.getOpenID());
 //		cd.setPhoneNumber(param.getPhoneNumber());
-		List<ConsumedDetails> rs = consumedDetailsService.queryList(cd);
+		List<ConsumedDetails> rs = consumedDetailsService.queryConsumedDetailsList(cd);
 		ConsumedDetailsVo vo = new ConsumedDetailsVo();
 		List<ConsumedDetailsVo> vos = new ArrayList<ConsumedDetailsVo>();
 		for (ConsumedDetails consumed : rs) {

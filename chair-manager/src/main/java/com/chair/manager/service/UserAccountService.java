@@ -147,10 +147,15 @@ public class UserAccountService extends BaseService<UserAccount> {
 		UserAccount ua = new UserAccount();
 		ua.setOpenId(openID);
 //		ua.setPhoneNumber(phoneNumber);
-		UserAccount userAcount = userAccountMapper.queryAccountInfoByUnique(ua);
-		if (userAcount == null)
-			throw new ChairException("1010", "根据手机号【"+phoneNumber+"】查询不到对应的账户。");
-		return userAcount;
+		List<UserAccount> userAccounts = userAccountMapper.select(ua);
+		if(userAccounts == null || userAccounts.size() < 0){
+			throw new ChairException("1010", "根据openID:【"+openID+"】查询不到对应的账户。");
+		}
+		return userAccounts.get(0);
+//		UserAccount userAcount = userAccountMapper.queryAccountInfoByUnique(ua);
+//		if (userAcount == null)
+//			throw new ChairException("1010", "根据手机号【"+phoneNumber+"】查询不到对应的账户。");
+//		return userAcount;
 	}
 
 }
