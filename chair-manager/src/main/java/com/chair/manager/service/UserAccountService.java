@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import com.chair.manager.pojo.UserAccount;
 
 @Service
 public class UserAccountService extends BaseService<UserAccount> {
+	private static Logger logger = Logger.getLogger(UserAccountService.class);
 	@Autowired
 	private RechargePackageMapper rechargePackageMapper;
 	@Autowired
@@ -91,18 +93,18 @@ public class UserAccountService extends BaseService<UserAccount> {
 
 		// 更新账户余额
 		UserAccount uaParam = new UserAccount();
-		uaParam.setPhoneNumber(record.getPhoneNumber());
+		uaParam.setOpenId(record.getOpenId());
 		UserAccount account = super.queryList(uaParam).get(0);
+		logger.info("------【支付回调】更新前账户信息------" + account);
 		UserAccount ua = new UserAccount();
 		ua.setId(account.getId());
-		ua.setAmount((account.getAmount() != null ? account.getAmount() : new BigDecimal(0))
-				.add(record.getRechargeAmount()));
+		ua.setAmount((account.getAmount() != null ? account.getAmount() : new BigDecimal(0)).add(record.getRechargeAmount()));
 		ua.setTotalDuration(
 				(account.getTotalDuration() != null ? account.getTotalDuration() : 0) + record.getRechargeDuration());
 		ua.setRestDuration(
 				(account.getRestDuration() != null ? account.getRestDuration() : 0) + record.getRechargeDuration());
 		ua.setLastUpdate(new Date());
-		System.err.println("------【支付回调】更新账户信息------" + ua);
+		logger.info("------【支付回调】更新后账户信息------" + ua);
 		// 更新账户余额
 		// UserAccount userAccount = new UserAccount();
 		// userAccount.setLastUpdate(new Date());
