@@ -82,6 +82,11 @@ public class UserAccountService extends BaseService<UserAccount> {
 		if (recordResult == null || recordResult.size() == 0) {
 			throw new ChairException("1012", "支付批次号【"+batchNO+"】有误");
 		}
+		//如果已经支付成功的，不做处理
+		if(recordResult.get(0).getPayStatus() == PayStatus.PAY_SUCCESS.getValue()){	
+			return 0;
+		}
+		
 		RechargeRecord record = recordResult.get(0);
 		RechargeRecord r = new RechargeRecord();
 		r.setId(record.getId());
