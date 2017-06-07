@@ -194,8 +194,11 @@ public class ManagerController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "queryProxyList", method = RequestMethod.POST)
-	private List<Manager> queryProxyList() {
+	private List<Manager> queryProxyList(@RequestParam("factoryID") Integer factoryID) {
+		System.err.println("---factoryID---"+factoryID);
 		Manager manager = new Manager();
+		if(factoryID == null || factoryID != 0)
+			manager.setFactoryId(factoryID);
 		manager.setType(2); // 代理
 		List<Manager> proxys = managerService.queryList(manager);
 		return proxys;
@@ -209,11 +212,25 @@ public class ManagerController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "queryShopList", method = RequestMethod.POST)
-	private List<Manager> queryShopList() {
+	private List<Manager> queryShopList(@RequestParam("proxyID") Integer proxyID) {
 		Manager manager = new Manager();
+		if(proxyID == null || proxyID != 0)
+			manager.setProxyId(proxyID);
 		manager.setType(3); // 商家
 		List<Manager> shops = managerService.queryList(manager);
 		return shops;
-	}	
+	}
+	
+	/**
+	 * 根据paramID查询厂家、代理或商家对象
+	 * @param paramID
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "queryManager", method = RequestMethod.GET)
+	private Manager queryManager(@RequestParam("paramID") Integer paramID){
+		System.err.println("------paramID---------"+paramID);
+		return managerService.findById(paramID);
+	}
 
 }

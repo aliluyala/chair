@@ -1,6 +1,7 @@
 package com.chair.manager.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,12 @@ import com.chair.manager.exception.ChairException;
 import com.chair.manager.pojo.Device;
 import com.chair.manager.pojo.Factory;
 import com.chair.manager.pojo.FactoryProxy;
+import com.chair.manager.pojo.Manager;
 import com.chair.manager.pojo.Shop;
 import com.chair.manager.service.DeviceService;
 import com.chair.manager.service.FactoryProxyService;
 import com.chair.manager.service.FactoryService;
+import com.chair.manager.service.ManagerService;
 import com.chair.manager.service.ShopService;
 
 @RequestMapping("/device")
@@ -38,6 +41,9 @@ public class DeviceController {
 	
 	@Autowired
 	private ShopService shopService;
+	
+	@Autowired
+	private ManagerService managerService;
 	
 	
 	/**
@@ -64,14 +70,15 @@ public class DeviceController {
 	@RequestMapping(value="save",method=RequestMethod.POST)
 	private EasyUIResult addDevice(Device deivce){
 		logger.info("------【新增设备】参数------"+deivce);
-		Factory factory = factoryService.findById(deivce.getFacrotyId());
-		FactoryProxy factoryProxy = factoryProxyService.findById(deivce.getProxyId());
-		Shop shop = shopService.findById(deivce.getShopId());
+		Manager factory = (deivce.getFacrotyId() != null || deivce.getFacrotyId() != 0 ) ? managerService.findById(deivce.getFacrotyId()) : null;
+		Manager proxy = (deivce.getProxyId() != null || deivce.getProxyId() != 0 ) ? managerService.findById(deivce.getProxyId()) : null;
+		Manager shop = (deivce.getShopId() != null || deivce.getShopId() != 0 ) ? managerService.findById(deivce.getShopId()) : null;
+		
 		logger.debug("------厂家详情：--->>>"+factory);
-		logger.debug("------代理详情：--->>>"+factoryProxy);
+		logger.debug("------代理详情：--->>>"+proxy);
 		logger.debug("------商家详情：--->>>"+shop);
 		deivce.setFactoryName(factory.getFactoryName());
-		deivce.setProxyName(factoryProxy.getProxyName());
+		deivce.setProxyName(proxy.getProxyName());
 		deivce.setShopName(shop.getShopName());
 		deivce.setShopLocation(shop.getShopLocation());
 		deivce.setStatus(1);
@@ -106,11 +113,15 @@ public class DeviceController {
 	@RequestMapping(value="edit",method=RequestMethod.POST)
 	private EasyUIResult updateDevice(Device deivce){
 		logger.info("------【编辑设备】参数------"+deivce);
-		Factory factory = factoryService.findById(deivce.getFacrotyId());
-		FactoryProxy factoryProxy = factoryProxyService.findById(deivce.getProxyId());
-		Shop shop = shopService.findById(deivce.getShopId());
+//		Factory factory = factoryService.findById(deivce.getFacrotyId());
+//		FactoryProxy factoryProxy = factoryProxyService.findById(deivce.getProxyId());
+//		Shop shop = shopService.findById(deivce.getShopId());
+		Manager factory = (deivce.getFacrotyId() != null || deivce.getFacrotyId() != 0 ) ? managerService.findById(deivce.getFacrotyId()) : null;
+		Manager proxy = (deivce.getProxyId() != null || deivce.getProxyId() != 0 ) ? managerService.findById(deivce.getProxyId()) : null;
+		Manager shop = (deivce.getShopId() != null || deivce.getShopId() != 0 ) ? managerService.findById(deivce.getShopId()) : null;
+		
 		deivce.setFactoryName(factory.getFactoryName());
-		deivce.setProxyName(factoryProxy.getProxyName());
+		deivce.setProxyName(proxy.getProxyName());
 		deivce.setShopName(shop.getShopName());
 		deivce.setShopLocation(shop.getShopLocation());
 		deivce.setStatus(1);

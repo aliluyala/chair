@@ -14,30 +14,37 @@
 	        </tr>
 	        <tr>
 	            <td>厂家名称:</td>
-	             <td><input class="easyui-combobox" name="facrotyId" data-options="valueField:'id',textField:'factoryName',url:'/<%=chair%>/factory/list',prompt:'请选择'" style="width: 280px;"></input></td> 
-	           <!-- <td><input class="easyui-combobox" name="id" data-options="valueField:'id',textField:'factoryName',data:[{id:1,factoryName:'A'},{id:2,factoryName:'B'}]" style="width: 280px;"></input></td>-->
+	             <td><input id="factoryEdit" class="easyui-combobox" name="facrotyId" data-options="valueField:'id',textField:'factoryName',url:'/<%=chair%>/manager/queryFactoryList', prompt:'请选择',onSelect:selectFactoryEdit" style="width: 280px;"></input></td> 
 	        </tr>
 	        <tr>
 	            <td>代理名称:</td>
-	            <td><input class="easyui-combobox" name="proxyId" data-options="valueField:'id',textField:'proxyName',url:'/<%=chair%>/proxy/list',prompt:'请选择'" style="width: 280px;"></input></td>
+	            <td><input id="proxyEdit" class="easyui-combobox" name="proxyId" data-options="valueField:'id',textField:'proxyName',url:'',prompt:'请选择',onSelect:selectProxyEdit" style="width: 280px;"></input></td>
 	        </tr>
     	    <tr>
 	            <td>店铺名称:</td>
-	            <td><input class="easyui-combobox" name="shopId" data-options="valueField:'id',textField:'shopName',url:'/<%=chair%>/shop/list',prompt:'请选择'" style="width: 280px;"></input></td>
+	            <td><input id="shopEdit" class="easyui-combobox" name="shopId" data-options="valueField:'id',textField:'shopName',url:'',prompt:'请选择'" style="width: 280px;"></input></td>
 	        </tr>
-	       <!--  <tr>
-	            <td>店铺位置:</td>
-	            <td><input class="easyui-textbox" type="text" name="shopLocation"  data-options="required:true" style="width: 280px;"></input></td>
-	        </tr> --> 
 	    </table>
 	</form>
 	<div style="padding:5px">
-	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
-	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">重置</a>
+	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitFormByDeviceEdit()">提交</a>
+	    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearFormByDeviceEdit()">重置</a>
 	</div>
 </div>
 <script type="text/javascript">
-	function submitForm(){
+
+function selectFactoryEdit(){
+	 var fid = $('#factoryEdit').combobox('getValue');
+    $('#proxyEdit').combobox('reload', '/<%=chair%>/manager/queryProxyList?factoryID='+fid);
+}
+
+
+function selectProxyEdit(){
+	 var pid = $('#proxyEdit').combobox('getValue');
+    $('#shopEdit').combobox('reload', '/<%=chair%>/manager/queryShopList?proxyID='+pid);
+}
+
+	function submitFormByDeviceEdit(){
 		if(!$('#deviceContent').form('validate')){
 			$.messager.alert('提示','表单还未填写完成!');
 			return ;
@@ -47,13 +54,13 @@
 				$.messager.alert('提示','编辑设备成功!');
 				$('#deivceEdit').window('close');
 				$("#deviceList").datagrid("reload");
-				clearForm();
+				clearFormByDeviceEdit();
 			}else{
 				$.messager.alert('提示','编辑设备失败!');
 			}
 		});
 	}
-	function clearForm(){
+	function clearFormByDeviceEdit(){
 		$('#deviceContent').form('reset');
 	}
 	

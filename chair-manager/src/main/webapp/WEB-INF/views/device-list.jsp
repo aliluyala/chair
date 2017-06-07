@@ -82,7 +82,45 @@ var toolbar = [{
     		onLoad :function(){
     			//回显数据
     			var data = $("#deviceList").datagrid("getSelections")[0];
-    			$("#deivceEdit").form("load",data);
+    			$("#deivceEdit").form("load", data);
+    			//{"id":5462,"deviceNo":"12",
+    				//"deviceModel":"12","shopId":15,"shopLocation":"333","shopName":"22222",
+    				//"proxyId":2,"proxyName":"我是代理1","facrotyId":1,"factoryName":"我是厂家","status":1
+    				
+    			//回显代理数据
+    		 	$.ajax({
+    				type:'post',
+    				url:'/<%=chair%>/manager/queryManager?paramID='+data.facrotyId,
+    				success:function(data){
+    					//alert(JSON.stringify(data));
+    					//$('#factoryEdit').combobox('setValue', data.factoryName);
+    					$('#factoryEdit').combobox('valueField', data.factoryId);
+    					$('#factoryEdit').combobox('textField', data.factoryName);
+    				}
+    			}) 
+    			
+    			//回显代理数据
+			 	 $.ajax({
+    				type:'post',
+    				url:'/<%=chair%>/manager/queryManager?paramID='+data.proxyId,
+    				success:function(data){
+    					//$('#proxyEdit').combobox('setValue', data.proxyName);
+    					$('#proxyEdit').combobox('valueField', data.proxyId);
+    					$('#proxyEdit').combobox('textField', data.proxyName);
+    				}
+    			}) 
+    			
+    			//回显商家数据
+			 	$.ajax({
+    				type:'post',
+    				url:'/<%=chair%>/manager/queryManager?paramID='+data.shopId,
+    				success:function(data){
+    					//$('#shopEdit').combobox('setValue', data.shopName);
+    					$('#proxyEdit').combobox('valueField', data.proxyId);
+    					$('#proxyEdit').combobox('textField', data.proxyName);
+    				}
+    			}) <%-- --%>
+    			
     		}
     	}).window("open");
     }

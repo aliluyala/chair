@@ -14,15 +14,15 @@
 	        </tr>
 	        <tr>
 	            <td>厂家名称:</td>
-	             <td><input id="factory" class="easyui-combobox" name="facrotyId" data-options="valueField:'id',textField:'factoryName',url:'/<%=chair%>/manager/queryFactoryList',prompt:'请选择',onSelect:select" style="width: 280px;"></input></td> 
+	             <td><input id="factory" class="easyui-combobox" name="facrotyId" data-options="valueField:'id',textField:'factoryName',url:'/<%=chair%>/manager/queryFactoryList',prompt:'请选择',onSelect:selectFactory" style="width: 280px;"></input></td> 
 	        </tr>
 	        <tr>
 	            <td>代理名称:</td>
-	            <td><input id="proxy" class="easyui-combobox" name="proxyId" data-options="valueField:'id',textField:'proxyName',url:'',prompt:'请选择'" style="width: 280px;"></input></td>
+	            <td><input id="proxy" class="easyui-combobox" name="proxyId" data-options="valueField:'id',textField:'proxyName',url:'',prompt:'请选择',onSelect:selectProxy" style="width: 280px;"></input></td>
 	        </tr>
     	    <tr>
 	            <td>店铺名称:</td>
-	            <!--  <td><input class="easyui-combobox" name="shopId" data-options="valueField:'id',textField:'shopName',url:'/<%=chair%>/manager/queryShopList',prompt:'请选择'" style="width: 280px;"></input></td>-->
+	            <td><input id="shop" class="easyui-combobox" name="shopId" data-options="valueField:'id',textField:'shopName',url:'',prompt:'请选择'" style="width: 280px;"></input></td>
 	        </tr>
 	       <!--  <tr>
 	            <td>店铺位置:</td>
@@ -37,24 +37,16 @@
 </div>
 <script type="text/javascript">
 
-function select(){
+function selectFactory(){
 	 var fid = $('#factory').combobox('getValue');
-     alert("---fid--"+fid);
-    
-     $('#proxy').combobox('setValue', '213');
-     $('#proxy').combobox('reload', '/<%=chair%>/manager/queryProxyList');
+     $('#proxy').combobox('reload', '/<%=chair%>/manager/queryProxyList?factoryID='+fid);
 }
 
 
-//$('#factory').combobox({
-//    onSelect:function(){
-//            var fid = $('#factory').combobox('getValue');
-//            alert("---fid--"+fid);
-//            $('#sel_2').combobox('setValue' , '');
-//            $('#sel_2').combobox('reload' , 'ProvinceServlet?method=getCity&pid='+pid);
-//    }
-//});
-
+function selectProxy(){
+	 var pid = $('#proxy').combobox('getValue');
+     $('#shop').combobox('reload', '/<%=chair%>/manager/queryShopList?proxyID='+pid);
+}
 
 	function submitFormByDevice(){
 		if(!$('#deviceContent').form('validate')){
