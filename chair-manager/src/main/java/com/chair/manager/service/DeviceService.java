@@ -1,6 +1,9 @@
 package com.chair.manager.service;
 
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.chair.manager.bean.EasyUIResult;
+import com.chair.manager.controller.DateUtils;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.DeviceMapper;
 import com.chair.manager.pojo.Device;
@@ -122,5 +126,42 @@ public class DeviceService extends BaseService<Device> {
 		PageInfo<Device> pageInfo= super.queryListPage(device, page, rows);
 		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
 	}
+	
+	/**
+	 * 判断设备是否正在使用
+	 * 1.在线，2.不在线，3.正在使用
+	 * @param d
+	 * @return
+	 */
+	public Device judgeDeviceIsUsed(Device d){
+		List<Device> deivces = this.queryList(d);
+		Device device = null;
+		String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
+		if(deivces.size() == 0 ){
+			throw new ChairException("2001", "查询不到设备信息或者正在使用");
+		}
+		device = deivces.get(0);
+		if(device == null){
+			throw new ChairException("2001", "查询不到设备信息或者正在使用");
+		}
+		String str2 = device.getExpTime();	//获取过期时间
+		if(!StringUtils.isEmpty(str1) && !StringUtils.isEmpty(str2)){
+			//当前时间大于过期时间,更新状态为1
+			if(DateUtils.compareDate(str1, str2) || device.getStatus() != 3){
+				//更新状态为1
+				Device updateDevice = new Device();
+				updateDevice.setId(device.getId());
+				updateDevice.setDeviceNo(device.getDeviceNo());
+				updateDevice.setStatus(1);
+				updateDevice.setLastUpdate(new Date());
+				this.updateSelective(updateDevice);
+				return updateDevice;
+			}else{
+				throw new ChairException("2001", "查询不到设备信息或者正在使用");
+			}
+		}
+		return device;
+	}
+	
 
 }

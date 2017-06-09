@@ -16,10 +16,12 @@ import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.ConsumedDetails;
+import com.chair.manager.pojo.Device;
 import com.chair.manager.pojo.RechargePackage;
 import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
+import com.chair.manager.service.DeviceService;
 import com.chair.manager.service.RechargePackageService;
 import com.chair.manager.service.RechargeRecordService;
 import com.chair.manager.service.UserAccountService;
@@ -54,6 +56,8 @@ public class UsersController {
 
 	@Autowired
 	private UserAccountService userAccountService;
+	@Autowired
+	private DeviceService deviceService;
 
 	/**
 	 * 查看用户注册状态
@@ -192,7 +196,10 @@ public class UsersController {
 	@RequestMapping(value = "queryDevice", method = RequestMethod.POST)
 	private ResponseResult queryDevice(@RequestBody ReqParam param) {
 		logger.info("------【查询设备信息】---参数>>>" + param);
-		return new ResponseResult(usersService.queryDeviceByDeviceNO(param.getDeviceNO()));
+		Device d = new Device();
+		d.setDeviceNo(param.getDeviceNO());
+		Device device = deviceService.judgeDeviceIsUsed(d);
+		return new ResponseResult(device);
 	}
 	
 	/**

@@ -36,8 +36,19 @@ public class Device {
     private Date createTime;
 
     private Date lastUpdate;
+    
+    private String expTime;
+    
 
-    public Integer getId() {
+    public String getExpTime() {
+		return expTime;
+	}
+
+	public void setExpTime(String expTime) {
+		this.expTime = expTime;
+	}
+
+	public Integer getId() {
         return id;
     }
 

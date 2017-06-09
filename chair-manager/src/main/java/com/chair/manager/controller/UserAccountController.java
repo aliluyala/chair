@@ -1,5 +1,6 @@
 package com.chair.manager.controller;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -84,16 +85,13 @@ public class UserAccountController {
 	@RequestMapping(value = "choosePackage", method = RequestMethod.POST)
 	private ResponseResult choosePackage(@RequestBody ReqParam param) {
 		logger.info("---【用户启用设备，选择对应的消费套餐】，入参为--->>>" + param);
-		// 根据设备ID查询设备信息
-		Device device = userService.queryDeviceByDeviceNO(param.getDeviceNO());
-		logger.info("---根据设备NO：【" + param.getDeviceNO() + "】查询设备信息--->>>" + device);
-		deviceService.isUsed(jedisCluster, device);
+		Device d = new Device();
+		d.setDeviceNo(param.getDeviceNO());
+		Device device = deviceService.judgeDeviceIsUsed(d);
 		ConsumePackage consumePackage = consumePackageService.findById(param.getConsumedPackageID());
-		logger.info("---根据用户选择的消费套餐ID：【" + param.getConsumedPackageID() + "】查询消费套餐信息--->>>" + consumePackage);
-		if (device == null || consumePackage == null) {
+		if (consumePackage == null) {
 			throw new ChairException("1000", "找不到设备或者消费套餐");
 		}
-		
 		// 查询账户信息
 		UserAccount userAccount = userAccountService.queryAccountInfo(param.getOpenID(), param.getPhoneNumber());
 		int rest = userAccount.getRestDuration().intValue() - consumePackage.getConsumedDuration().intValue();
@@ -117,6 +115,23 @@ public class UserAccountController {
 		if(!sendSuccess && !"00000000000000000001".equals(device.getDeviceNo())){
 			throw new ChairException("2003", "消息发送不成功");
 		}
+		
+		Date date = DateUtils.addMinute(new Date(), consumePackage.getConsumedDuration());
+		String expTime = "";
+		try {
+			expTime = DateUtils.parseToFormatString(date,"yyyy-MM-dd HH:mm:ss");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//TODO 将过期时间写入设备表
+		Device updateDevice = new Device();
+		updateDevice.setId(device.getId());
+		updateDevice.setExpTime(expTime);
+		updateDevice.setStatus(3);	//设置为正在使用
+		updateDevice.setLastUpdate(new Date());
+		deviceService.updateSelective(updateDevice);
+		
 		// 新增消费明细
 		ConsumedDetails consumedDetails = new ConsumedDetails();
 		consumedDetails.setOpenId(param.getOpenID());
