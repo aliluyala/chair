@@ -37,6 +37,7 @@ public class Server {
 	private long receiveTimeDelay = Constant.RECEIVE_TIME_DELAY;
 	private ConcurrentHashMap<Class, ServerObjectAction> actionMapping = new ConcurrentHashMap<Class, ServerObjectAction>();
 	private static ConcurrentHashMap<String, Socket> ipSocket;
+	private static ConcurrentHashMap<String, Socket> ccidSocket;
 	private ConcurrentHashMap<String, String> ipToken = new ConcurrentHashMap<String, String>();
 	private Thread connWatchDog;
 	@Autowired
@@ -66,6 +67,8 @@ public class Server {
 		this.start();
 		if(ipSocket == null)
 			ipSocket = new ConcurrentHashMap<String, Socket>();
+		if(ccidSocket == null)
+			ccidSocket = new ConcurrentHashMap<String, Socket>();
 	}
 
 	public void start() {
@@ -176,10 +179,11 @@ public class Server {
 		 *            消息内容
 		 * @throws IOException
 		 */
-		public boolean send(String toClientIP, int toClientPort, String toMessage) {
+		public boolean send(String ccid, String toMessage) {
 			try {
-				Socket clientSocket = ipSocket.get(toClientIP+":"+toClientPort);
-				logger.info("------【向"+toClientIP+":"+toClientPort+" 发送消息，获取socket对象】--->>>"+clientSocket+" ---消息为：>>>"+toMessage);
+//				Socket clientSocket = ipSocket.get(toClientIP+":"+toClientPort);
+				Socket clientSocket = ccidSocket.get(ccid);
+				logger.info("------【向"+ccid+" 发送消息，获取socket对象】--->>>"+clientSocket+" ---消息为：>>>"+toMessage);
 				OutputStream os = clientSocket.getOutputStream();
 				byte[] b = toMessage.getBytes();
 				os.write(b);
@@ -212,7 +216,7 @@ public class Server {
 				while (-1 != (length = is.read(buffer, 0, 1024))) {
 					String reciverMsg = "";
 					reciverMsg += new String(buffer, 0, length);
-					logger.info("--接收来自客户端消息--" + reciverMsg);
+//					logger.info("--接收来自客户端消息--" + reciverMsg);
 					// TODO 处理接收到的消息，解析报文
 					resolveMessage(clientIP, clientPort, reciverMsg.trim());
 //					responseByOutputStream("from server"); //响应客户端
@@ -228,7 +232,7 @@ public class Server {
 			Pattern p = Pattern.compile(regEx);
 			Matcher m = p.matcher(reciverMsg);
 			boolean b = m.find();
-			logger.info("---【解析报文，匹配以*开头，以#结尾，结果为】---" + b + "\n ip:port = " + ip+":"+clientPort);
+			logger.info("---【解析报文["+reciverMsg+"]，匹配以*开头，以#结尾，结果为】---" + b + "\n ip:port = " + ip+":"+clientPort);
 			if (b) {
 				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1)
 						.split(",");
@@ -256,6 +260,7 @@ public class Server {
 						set(token, requestBodys[3]);
 						set(requestBodys[3], ip+":"+clientPort);
 						ipSocket.put(ip+":"+clientPort, s);
+						ccidSocket.put(requestBodys[3], s);
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 						logger.info("------ 响应客户端R1消息内容------" + send2ClientMsg);
