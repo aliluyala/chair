@@ -60,31 +60,6 @@ public class DeviceService extends BaseService<Device> {
 	
 	
 	/**
-	 * 判断设备是否可用
-	 * @param device
-	 * @return true：可用， false：不可用
-	 */
-	public boolean isUsed(JedisCluster jedisCluster, Device device) {
-		if("00000000000000000001".equals(device.getDeviceNo()) || "00000000000000000002".equals(device.getDeviceNo())  ){
-			System.out.println("---测试数据---");
-			return true;
-		}
-		//1.判断设备是否存在
-		if(device == null) {
-			logger.error("------查询不到设备信息------");
-			throw new ChairException("2001", "查询不到设备信息");
-		}
-		String ipAndPort = jedisCluster.get(device.getDeviceNo());
-		//2.判断设备是否开启，发消息给硬件
-		if(StringUtils.isEmpty(ipAndPort)){
-			logger.error("------通过【"+device.getDeviceNo()+"】在redis中找不到对应的设备IP地址------");
-			throw new ChairException("2001", "查询不到设备信息");
-		}
-		return true;
-	}
-	
-	
-	/**
 	 * 查询设备列表
 	 */
 	public DeviceVo queryDeviceList() {

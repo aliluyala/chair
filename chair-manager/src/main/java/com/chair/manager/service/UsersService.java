@@ -141,27 +141,4 @@ public class UsersService extends BaseService<Users> {
 		return usersMapper.selectByOpenID(openID);
 	}
 
-	/**
-	 * 根据设备NO查询设备信息
-	 * 
-	 * @param deviceNO
-	 */
-	public Device queryDeviceByDeviceNO(String deviceNO) {
-		Device d = new Device();
-		d.setDeviceNo(deviceNO);
-		Device device = deviceService.queryByDeviceNO(d);
-		if (device == null)
-			throw new ChairException("2001", "根据设备编号" + deviceNO + "查询不到设备信息");
-		return device;
-	}
-
-	
-	//test
-	public static void main(String[] args) {
-		Date d1 = new Date();
-		Date d2 = new Date();
-		System.out.println(d1.getTime());
-		System.out.println(d2.getTime());
-		System.out.println(d1.getTime() == d2.getTime());
-	}
 }
