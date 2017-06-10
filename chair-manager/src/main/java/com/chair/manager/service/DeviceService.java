@@ -137,12 +137,12 @@ public class DeviceService extends BaseService<Device> {
 		List<Device> deivces = this.queryList(d);
 		Device device = null;
 		String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
-		if(deivces.size() == 0 ){
-			throw new ChairException("2001", "查询不到设备信息或者正在使用");
+		if(deivces != null && deivces.size() == 0 ){
+			throw new ChairException("2001", "查询不到设备信息");
 		}
 		device = deivces.get(0);
 		if(device == null){
-			throw new ChairException("2001", "查询不到设备信息或者正在使用");
+			throw new ChairException("2001", "查询不到设备信息");
 		}
 		String str2 = device.getExpTime();	//获取过期时间
 		if(!StringUtils.isEmpty(str1) && !StringUtils.isEmpty(str2)){
@@ -157,7 +157,7 @@ public class DeviceService extends BaseService<Device> {
 				this.updateSelective(updateDevice);
 				return updateDevice;
 			}else{
-				throw new ChairException("2001", "查询不到设备信息或者正在使用");
+				throw new ChairException("2002", "正在使用");
 			}
 		}
 		return device;

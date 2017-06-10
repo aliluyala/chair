@@ -102,18 +102,18 @@ public class UserAccountController {
 		// 测试数据00000000000000000001和00000000000000000002，不需要推送消息
 		boolean sendSuccess = false;
 		if (!"00000000000000000001".equals(device.getDeviceNo())
-				&& !"00000000000000000002".equals(device.getDeviceNo())) {
+				&& !"123".equals(device.getDeviceNo())) {
 			// 发送消息给硬件启动设备， 同步任务
 			Server server = new Server();
 			SocketAction socketAction = server.new SocketAction();
 			String toMessage = "*T0,001," + consumePackage.getConsumedDuration() + "#";
-			String ipAndPort = jedisCluster.get(device.getDeviceNo());
-			System.out.println("------【根据设备编号"+device.getDeviceNo()+"从redis.get()中获取ip】-----向客户端【" + ipAndPort+"】发送消息------" + toMessage);
-			String[] ips = ipAndPort.split(":");
+//			String ipAndPort = jedisCluster.get(device.getDeviceNo());
+//			System.out.println("------【根据设备编号"+device.getDeviceNo()+"从redis.get()中获取ip】-----向客户端【" + ipAndPort+"】发送消息------" + toMessage);
+//			String[] ips = ipAndPort.split(":");
 //			sendSuccess = socketAction.send(ips[0], Integer.parseInt(ips[1]), device.getDeviceNo(), toMessage);
 			sendSuccess = socketAction.send(device.getDeviceNo(), toMessage);
 		}
-		if(!sendSuccess && !"00000000000000000001".equals(device.getDeviceNo())){
+		if(!sendSuccess && !"123".equals(device.getDeviceNo())){
 			throw new ChairException("2003", "消息发送不成功");
 		}
 		
@@ -125,7 +125,7 @@ public class UserAccountController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//TODO 将过期时间写入设备表
+		// 将过期时间写入设备表
 		Device updateDevice = new Device();
 		updateDevice.setId(device.getId());
 		updateDevice.setExpTime(expTime);
