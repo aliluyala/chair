@@ -12,6 +12,10 @@ public class Device {
 //	@Column(name="id")
 	@Id
 	private Integer id;
+	
+	private String deviceToken;
+	
+	private Date onlineTime;
 
     private String deviceNo;
 
@@ -39,8 +43,28 @@ public class Device {
     
     private String expTime;
     
+    
+    
+    
+    
 
-    public String getExpTime() {
+    public String getDeviceToken() {
+		return deviceToken;
+	}
+
+	public void setDeviceToken(String deviceToken) {
+		this.deviceToken = deviceToken;
+	}
+
+	public Date getOnlineTime() {
+		return onlineTime;
+	}
+
+	public void setOnlineTime(Date onlineTime) {
+		this.onlineTime = onlineTime;
+	}
+
+	public String getExpTime() {
 		return expTime;
 	}
 
@@ -154,10 +178,11 @@ public class Device {
 
 	@Override
 	public String toString() {
-		return "Device [id=" + id + ", deviceNo=" + deviceNo + ", deviceModel=" + deviceModel + ", shopId=" + shopId
-				+ ", shopLocation=" + shopLocation + ", shopName=" + shopName + ", proxyId=" + proxyId + ", proxyName="
-				+ proxyName + ", facrotyId=" + facrotyId + ", factoryName=" + factoryName + ", status=" + status
-				+ ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + ", expTime=" + expTime + "]";
+		return "Device [id=" + id + ", deviceToken=" + deviceToken + ", onlineTime=" + onlineTime + ", deviceNo="
+				+ deviceNo + ", deviceModel=" + deviceModel + ", shopId=" + shopId + ", shopLocation=" + shopLocation
+				+ ", shopName=" + shopName + ", proxyId=" + proxyId + ", proxyName=" + proxyName + ", facrotyId="
+				+ facrotyId + ", factoryName=" + factoryName + ", status=" + status + ", createTime=" + createTime
+				+ ", lastUpdate=" + lastUpdate + ", expTime=" + expTime + "]";
 	}
 
 	

@@ -102,6 +102,8 @@ public class DeviceService extends BaseService<Device> {
 		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
 	}
 	
+	
+	
 	/**
 	 * 判断设备是否正在使用
 	 * 1.在线，2.不在线，3.正在使用
@@ -119,6 +121,7 @@ public class DeviceService extends BaseService<Device> {
 		if(device == null || device.getStatus() == 2){
 			throw new ChairException("2001", "查询不到设备信息或设备不在线");
 		}
+
 		String str2 = device.getExpTime();	//获取过期时间
 		if(!StringUtils.isEmpty(str1) && !StringUtils.isEmpty(str2)){
 			//当前时间大于过期时间,更新状态为1
@@ -138,5 +141,15 @@ public class DeviceService extends BaseService<Device> {
 		return device;
 	}
 	
-
+	
+	/**
+	 * 根据设备Token查询设备信息
+	 * @param token
+	 * @return
+	 */
+	public Device queryDeviceByToken(String token){
+		Device device = new Device();
+		device.setDeviceToken(token);
+		return deviceMapper.queryDeviceByToken(device);
+	}
 }
