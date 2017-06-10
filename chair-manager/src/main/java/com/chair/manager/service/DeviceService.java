@@ -116,8 +116,8 @@ public class DeviceService extends BaseService<Device> {
 			throw new ChairException("2001", "查询不到设备信息");
 		}
 		device = deivces.get(0);
-		if(device == null){
-			throw new ChairException("2001", "查询不到设备信息");
+		if(device == null || device.getStatus() == 2){
+			throw new ChairException("2001", "查询不到设备信息或设备不在线");
 		}
 		String str2 = device.getExpTime();	//获取过期时间
 		if(!StringUtils.isEmpty(str1) && !StringUtils.isEmpty(str2)){

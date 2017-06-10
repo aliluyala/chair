@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,9 +16,14 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.chair.manager.controller.DateUtils;
 import com.chair.manager.exception.ChairException;
+import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.Device;
+import com.chair.manager.pojo.UserAccount;
+import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.DeviceService;
+import com.chair.manager.service.UserAccountService;
 
 import redis.clients.jedis.JedisCluster;
 
@@ -38,12 +44,17 @@ public class Server {
 	private ConcurrentHashMap<Class, ServerObjectAction> actionMapping = new ConcurrentHashMap<Class, ServerObjectAction>();
 	private static ConcurrentHashMap<String, Socket> ipSocket;
 	private static ConcurrentHashMap<String, Socket> ccidSocket;
+	private static ConcurrentHashMap<Socket, String> socketCCID;
 	private ConcurrentHashMap<String, String> ipToken = new ConcurrentHashMap<String, String>();
 	private Thread connWatchDog;
 	@Autowired
 	private JedisCluster jedisCluster;
 	@Autowired
 	private DeviceService deviceService;
+	@Autowired
+	private ConsumedDetailsService consumedDetailsService;
+	@Autowired
+	private UserAccountService userAccountService;
 
 	public DeviceService getDeviceService() {
 		return deviceService;
@@ -69,6 +80,8 @@ public class Server {
 			ipSocket = new ConcurrentHashMap<String, Socket>();
 		if(ccidSocket == null)
 			ccidSocket = new ConcurrentHashMap<String, Socket>();
+		if(socketCCID == null)
+			socketCCID = new ConcurrentHashMap<Socket, String>();
 	}
 
 	public void start() {
@@ -146,7 +159,9 @@ public class Server {
 
 		public void run() {
 			while (running && run) {
+				System.err.println("running="+running+"\trun ="+run+"\t"+(System.currentTimeMillis() - lastReceiveTime)+" \t receiveTimeDelay="+receiveTimeDelay+"\t结果："+(System.currentTimeMillis() - lastReceiveTime > receiveTimeDelay));
 				if (System.currentTimeMillis() - lastReceiveTime > receiveTimeDelay) {
+					logger.error("-------------设备超时断开---------------");
 					overThis();
 				} else {
 					try {
@@ -163,11 +178,13 @@ public class Server {
 						 * }
 						 */
 					} catch (Exception e) {
+						logger.error("-------------设备异常断开---------------"+e.getMessage());
 						e.printStackTrace();
 						overThis();
 					}
 				}
 			}
+			System.err.println("running="+running+"\trun ="+run);
 		}
 
 		/**
@@ -220,6 +237,7 @@ public class Server {
 					// TODO 处理接收到的消息，解析报文
 					resolveMessage(clientIP, clientPort, reciverMsg.trim());
 //					responseByOutputStream("from server"); //响应客户端
+					lastReceiveTime = System.currentTimeMillis();
 				}
 			} else {
 				Thread.sleep(10);
@@ -239,7 +257,7 @@ public class Server {
 				for (String key : requestBodys) {
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 注册命令
-						logger.info(jedisCluster + "---requestBodys的第三位数---" + requestBodys[2]);
+//						logger.info(jedisCluster + "---requestBodys的第三位数---" + requestBodys[2]);
 						String token = get(ip+":"+clientPort);
 						String snk = "001";
 						if ("".equals(token) || null == token) {
@@ -256,24 +274,59 @@ public class Server {
 						device.setLastUpdate(new Date());
 						device.setCreateTime(new Date());
 						deviceService.saveOrUpdate(device);
-						logger.debug("------新增或者更新设备信息；后------" + device);
+						//logger.debug("------新增或者更新设备信息；后------" + device);
 						set(token, requestBodys[3]);
 						set(requestBodys[3], ip+":"+clientPort);
 						ipSocket.put(ip+":"+clientPort, s);
 						ccidSocket.put(requestBodys[3], s);
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
-						logger.info("------ 响应客户端R1消息内容------" + send2ClientMsg);
+						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "------ 响应客户端R1消息内容------" + send2ClientMsg);
 						responseByOutputStream(send2ClientMsg);
 
-					} else if ("G0".equalsIgnoreCase(key)) { // 保持连接，H0
+					} else if ("T1".equalsIgnoreCase(key)) { // T1：发送T0消息是否成功标示
+						/*String deviceNO = "";	//设备号
+						String expTime = "";	//过期时间
+						int consumedTime = 0;	//消费时间
+						int consumeID = 0;	//消费明细ID
+						Date date = DateUtils.addMinute(new Date(), consumedTime);
+						try {
+							expTime = DateUtils.parseToFormatString(date,"yyyy-MM-dd HH:mm:ss");
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						// 将过期时间写入设备表
+						Device updateDevice = new Device();
+						updateDevice.setDeviceNo(deviceNO);
+						updateDevice.setExpTime(expTime);
+						updateDevice.setStatus(3);	//设置为正在使用
+						updateDevice.setLastUpdate(new Date());
+//						deviceService.updateSelective(updateDevice);
+						
+						//查询消费明细
+						ConsumedDetails cd = consumedDetailsService.findById(consumeID);
+						// 变更消费明细状态为已消费
+						cd.setStatus(2);	//已消费
+						cd.setLastUpdate(new Date());
+//						int rs = consumedDetailsService.updateSelective(cd);
+
+						// 查询账户信息
+//						UserAccount userAccount = userAccountService.queryAccountInfo(cd.getOpenId(), cd.getPhoneNumber());
+						
+						// 更新账户信息
+//						userAccount.setUsedDuration(userAccount.getUsedDuration() + cd.getConsumedDuration());
+//						userAccount.setRestDuration(userAccount.getRestDuration() - cd.getConsumedDuration());
+//						userAccountService.updateSelective(userAccount);
+						
+//						logger.info("---保存消费明细结果--->>>" + rs);
+*/					}else if ("G0".equalsIgnoreCase(key)) { // 保持连接，H0
 						String token = get(ip);
 						String snk = "001";
 						if ("".equals(token) || null == token) {
 							snk = "000";
 						}
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
-						responseByOutputStream(send2ClientMsg);
+//						responseByOutputStream(send2ClientMsg);
 					}
 				}
 			}
@@ -284,8 +337,6 @@ public class Server {
 		 */
 		private void responseByOutputStream(String sendMsg) throws IOException {
 			OutputStream os = s.getOutputStream();
-			System.out.println(
-					new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "---响应客户端消息---" + sendMsg);
 			byte[] b = sendMsg.getBytes();
 			os.write(b);
 			os.flush();
@@ -316,6 +367,13 @@ public class Server {
 			del(ccid);
 			//删除记录设备是否正在使用的记录
 //			del("T"+ccid);
+			// 更新设备为不在线
+			Device device = new Device();
+			device.setDeviceNo(ccid);
+			device.setStatus(2);
+			device.setLastUpdate(new Date());
+			deviceService.saveOrUpdate(device);
+			
 			logger.info("关闭：" + s.getRemoteSocketAddress());
 		}
 

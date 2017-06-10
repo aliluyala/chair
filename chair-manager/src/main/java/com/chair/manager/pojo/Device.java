@@ -157,6 +157,8 @@ public class Device {
 		return "Device [id=" + id + ", deviceNo=" + deviceNo + ", deviceModel=" + deviceModel + ", shopId=" + shopId
 				+ ", shopLocation=" + shopLocation + ", shopName=" + shopName + ", proxyId=" + proxyId + ", proxyName="
 				+ proxyName + ", facrotyId=" + facrotyId + ", factoryName=" + factoryName + ", status=" + status
-				+ ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + "]";
+				+ ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + ", expTime=" + expTime + "]";
 	}
+
+	
 }

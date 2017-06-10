@@ -143,6 +143,7 @@ public class UsersController {
 		logger.info("------【查询消费明细】---参数>>>" + param);
 		ConsumedDetails cd = new ConsumedDetails();
 		cd.setOpenId(param.getOpenID());
+//		cd.setStatus(2);	//已消费
 //		cd.setPhoneNumber(param.getPhoneNumber());
 		List<ConsumedDetails> rs = consumedDetailsService.queryConsumedDetailsList(cd);
 		ConsumedDetailsVo vo = new ConsumedDetailsVo();

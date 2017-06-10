@@ -133,7 +133,7 @@ public class UserAccountController {
 		updateDevice.setLastUpdate(new Date());
 		deviceService.updateSelective(updateDevice);
 		
-		// 新增消费明细
+		// 新增消费明细（未消费）
 		ConsumedDetails consumedDetails = new ConsumedDetails();
 		consumedDetails.setOpenId(param.getOpenID());
 		consumedDetails.setPhoneNumber(param.getPhoneNumber());
@@ -148,6 +148,7 @@ public class UserAccountController {
 		consumedDetails.setShopName(device.getShopName());
 		consumedDetails.setDeviceId(device.getId());
 		consumedDetails.setConsumedTime(new Date());
+		consumedDetails.setStatus(1);	//未消费
 		consumedDetails.setCreateTime(new Date());
 		consumedDetails.setLastUpdate(new Date());
 		// 保存消费明细信息
