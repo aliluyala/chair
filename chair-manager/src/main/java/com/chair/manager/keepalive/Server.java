@@ -244,7 +244,7 @@ public class Server {
 		public void run() {
 			while (running && run) {
 				if (System.currentTimeMillis() - lastReceiveTime > receiveTimeDelay) {
-					logger.error("-------------设备超时断开---------------");
+					logger.error(s+"-------------设备超时断开---------------");
 					overThis();
 				} else {
 					try {
@@ -261,7 +261,7 @@ public class Server {
 						 * }
 						 */
 					} catch (Exception e) {
-						logger.error("-------------设备异常断开---------------" + e.getMessage());
+						logger.error(s+"-------------设备异常断开---------------" + e.getMessage());
 						e.printStackTrace();
 						overThis();
 					}
@@ -285,6 +285,8 @@ public class Server {
 				// ipSocket.get(toClientIP+":"+toClientPort);
 				Socket clientSocket = ccidSocket.get(ccid);
 				logger.info("------【向" + ccid + " 发送消息，获取socket对象】--->>>" + clientSocket + " ---消息为：>>>" + toMessage);
+				if(clientSocket == null) 
+					return false;
 				OutputStream os = clientSocket.getOutputStream();
 				byte[] b = toMessage.getBytes();
 				os.write(b);
