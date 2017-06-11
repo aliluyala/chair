@@ -25,7 +25,7 @@
 		#{status}, #{createTime}, #{lastUpdate}) ON
 		DUPLICATE KEY
 		UPDATE
-		last_update=#{lastUpdate},status=#{status},device_token=#{deviceToken};
+		last_update=#{lastUpdate},status=#{status},device_token=#{deviceToken},online_time=#{onlineTime};
 	</insert>
 
 	<select id="queryDeviceByToken" resultType="Device">

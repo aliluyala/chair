@@ -95,18 +95,43 @@ public class Server {
                 // task to run goes here  
 				logger.info("--------定时任务执行时间-Hello !!!------->>>>"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 				//查询所有设备列表
-				List<Device> devices = deviceService.queryList(new Device());
+				Device device = new Device();
+				device.setStatus(1);	//在线
+				List<Device> devices = deviceService.queryList(device);
 					for(Device d : devices){
 						if(d.getOnlineTime() == null)
 							continue;
 						String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
-						String str2 = DateUtils.formatString(d.getOnlineTime(), "yyyy-MM-dd HH:mm:ss");
+						Date tempDate = DateUtils.addSecond(d.getOnlineTime(), 30);	
+						String str2 = DateUtils.formatString(tempDate, "yyyy-MM-dd HH:mm:ss");
 						logger.info("---设备信息---"+d+"\n 当前时刻="+str1+"\n 最后心跳时间="+str2);
-						if(DateUtils.compareDate(str1, str2) && d.getStatus() == 1){
-							logger.info("--设备下线---");
+						if(DateUtils.compareDate(str1, str2)){
+							logger.info("["+d.getDeviceNo()+"] 设备下线---");
 							d.setStatus(2);	//设备下线
 							d.setLastUpdate(new Date());
 							deviceService.updateSelective(d);
+
+							String ip = get(d.getDeviceNo());
+							if(ip !=null){
+								String token = get(ip);
+								if(token != null){
+									del(token);
+									del(ip);
+								}
+							}
+							del(d.getDeviceNo());
+							
+							Socket socket = ccidSocket.get(d.getDeviceNo());
+							if(socket !=null && !socket.isClosed()){
+								try {
+									logger.info("["+d.getDeviceNo()+"] 设备关闭socket");
+									socket.close();
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+							
 						}
 				}
             }  
@@ -114,7 +139,7 @@ public class Server {
         ScheduledExecutorService service = Executors  
                 .newSingleThreadScheduledExecutor();  
         // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
-        service.scheduleAtFixedRate(runnable, 5, receiveTimeDelay, TimeUnit.SECONDS);  
+        service.scheduleAtFixedRate(runnable, 5, 20, TimeUnit.SECONDS);  
 		
 		/*
 		TimerTask task = new TimerTask() {
@@ -293,6 +318,7 @@ public class Server {
 					String reciverMsg = "";
 					reciverMsg += new String(buffer, 0, length);
 					// TODO 处理接收到的消息，解析报文
+					System.err.println("---------------reciverMsg-------"+reciverMsg);
 					resolveMessage(clientIP, clientPort, reciverMsg.trim());
 				}
 			} else {

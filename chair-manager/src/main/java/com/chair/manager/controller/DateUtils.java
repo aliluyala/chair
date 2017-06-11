@@ -320,6 +320,29 @@ public class DateUtils {
 		return calendar.getTime();
     }
     
+    
+    /**
+	 * 
+	 * 功能描述:在startDate上加上second秒数，second可以是负数，如果是负数相当于减second分钟
+	 * 
+	 * @author xiaozhiqiang
+	 * @date 2015-4-29
+	 * @param startDate
+	 *            待操作的日期
+	 * @param minute
+	 *            加上的秒
+	 * @return
+	 */
+    public static Date addSecond(Date startDate,int second){
+		if (startDate == null) {
+			return null;
+		}
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(startDate);
+		calendar.add(Calendar.SECOND, second);
+		return calendar.getTime();
+    }
+    
 
 	/**
 	 * 将字符串转换成日期
@@ -958,11 +981,11 @@ public class DateUtils {
     public static void main(String[] args) throws Exception{
 //    	System.out.println(getDays());
 //    	System.out.println(getAfterDayWeek("3"));
-    	Date startDate = getStartDate();
-    	Date endDate = getEndDate(new Date());
-    	
-    	System.out.println("start=="+parseToFormatString(startDate, FULL_DATE_STR));
-    	System.out.println("end  =="+parseToFormatString(endDate, FULL_DATE_STR));
+//    	Date startDate = getStartDate();
+//    	Date endDate = getEndDate(new Date());
+//    	System.out.println("start=="+parseToFormatString(startDate, FULL_DATE_STR));
+//    	System.out.println("end  =="+parseToFormatString(endDate, FULL_DATE_STR));
+    	System.out.println(DateUtils.addSecond(parseToFormatDate("2017-09-09 9:45:55","yyyy-MM-dd HH:mm:ss"),30));
     }
 
 }
