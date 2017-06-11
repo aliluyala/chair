@@ -139,7 +139,7 @@ public class Server {
         ScheduledExecutorService service = Executors  
                 .newSingleThreadScheduledExecutor();  
         // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
-        service.scheduleAtFixedRate(runnable, 5, 20, TimeUnit.SECONDS);  
+        service.scheduleAtFixedRate(runnable, 5, 65, TimeUnit.SECONDS);  
 		
 		/*
 		TimerTask task = new TimerTask() {
@@ -307,23 +307,36 @@ public class Server {
 			String clientIP = s.getInetAddress().toString().replace("/", "");
 			int clientPort = s.getPort();
 			// s.setKeepAlive(true);// 设置长连接
+//			InputStream is = s.getInputStream();
+//			if (is.available() > 0) {
+//				// ipMapping.put(clientIP+":", s);// 以k-v保存ip对应的socket对象
+//				logger.debug("---开始接收消息---is.available()---" + is.available() + "---is.read()---" + is.read() + " --- "
+//						+ s.toString());
+//				int length = 0;
+//				byte[] buffer = new byte[1024];
+//				while (-1 != (length = is.read(buffer, 0, 1024))) {
+//					String reciverMsg = "";
+//					reciverMsg += new String(buffer, 0, length);
+//					// TODO 处理接收到的消息，解析报文
+//					System.err.println("---------------reciverMsg-------"+reciverMsg);
+//					resolveMessage(clientIP, clientPort, reciverMsg.trim());
+//				}
+//			} else {
+//				Thread.sleep(10);
+//			}
+			
 			InputStream is = s.getInputStream();
-			if (is.available() > 0) {
-				// ipMapping.put(clientIP+":", s);// 以k-v保存ip对应的socket对象
-				logger.debug("---开始接收消息---is.available()---" + is.available() + "---is.read()---" + is.read() + " --- "
-						+ s.toString());
-				int length = 0;
-				byte[] buffer = new byte[1024];
-				while (-1 != (length = is.read(buffer, 0, 1024))) {
-					String reciverMsg = "";
-					reciverMsg += new String(buffer, 0, length);
-					// TODO 处理接收到的消息，解析报文
-					System.err.println("---------------reciverMsg-------"+reciverMsg);
-					resolveMessage(clientIP, clientPort, reciverMsg.trim());
-				}
-			} else {
-				Thread.sleep(10);
-			}
+			while (true) {
+                byte[] b = new byte[1024];
+                int r = is.read(b);
+                if(r>-1){
+                    String reciverMsg = new String(b);
+                    System.err.println("---------------reciverMsg-------"+reciverMsg);
+                    resolveMessage(clientIP, clientPort, reciverMsg.trim());
+                }
+            }
+			
+			
 		}
 
 		// 解析报文
@@ -359,14 +372,13 @@ public class Server {
 						device.setCreateTime(new Date());
 						deviceService.saveOrUpdate(device);
 						// logger.debug("------新增或者更新设备信息；后------" + device);
-						// set(token, requestBodys[3]);
-						// set(requestBodys[3], ip+":"+clientPort);
+						 set(token, requestBodys[3]);
+						 set(requestBodys[3], ip+":"+clientPort);
 						ipSocket.put(ip + ":" + clientPort, s);
 						ccidSocket.put(requestBodys[3], s);
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
-						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
-								+ "------ 响应客户端R1消息内容------" + send2ClientMsg);
+						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 响应客户端R1消息内容------" + send2ClientMsg);
 						responseByOutputStream(send2ClientMsg);
 
 					} else if ("H0".equalsIgnoreCase(key)) { // H0，心跳消息
@@ -376,7 +388,7 @@ public class Server {
 						device.setOnlineTime(new Date());
 						device.setLastUpdate(new Date());
 						deviceService.updateSelective(device);
-						logger.info("---H0命令更新设备最后心跳时间----online_Time--->>>" + device.getOnlineTime());
+//						logger.info("---H0命令更新设备最后心跳时间----online_Time--->>>" + device.getOnlineTime());
 					} else if ("G0".equalsIgnoreCase(key)) { // 保持连接，H0
 						String token = get(ip);
 						String snk = "001";

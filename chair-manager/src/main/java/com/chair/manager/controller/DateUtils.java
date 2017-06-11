@@ -79,7 +79,7 @@ public class DateUtils {
 
 	/**
 	* @Title: compareDate
-	* @Description: TODO(日期比较，如果s>=e 返回true 否则返回false)
+	* @Description: TODO(日期比较，如果s> e 返回true 否则返回false)
 	* @param s
 	* @param e
 	* @return boolean  
@@ -90,7 +90,7 @@ public class DateUtils {
 		if(fomatDate(s)==null||fomatDate(e)==null){
 			return false;
 		}
-		return fomatDate(s).getTime() >=fomatDate(e).getTime();
+		return fomatDate(s).getTime() > fomatDate(e).getTime();
 	}
 
 	/**
