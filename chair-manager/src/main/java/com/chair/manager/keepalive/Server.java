@@ -373,7 +373,6 @@ public class Server {
 						device.setLastUpdate(new Date());
 						device.setCreateTime(new Date());
 						deviceService.saveOrUpdate(device);
-						// logger.debug("------新增或者更新设备信息；后------" + device);
 						 set(token, requestBodys[3]);
 						 set(requestBodys[3], ip+":"+clientPort);
 						ipSocket.put(ip + ":" + clientPort, s);
@@ -389,16 +388,9 @@ public class Server {
 						Device device = deviceService.queryDeviceByToken(token);
 						device.setOnlineTime(new Date());
 						device.setLastUpdate(new Date());
+						device.setStatus(1);
 						deviceService.updateSelective(device);
-//						logger.info("---H0命令更新设备最后心跳时间----online_Time--->>>" + device.getOnlineTime());
-					} else if ("G0".equalsIgnoreCase(key)) { // 保持连接，H0
-						String token = get(ip);
-						String snk = "001";
-						if ("".equals(token) || null == token) {
-							snk = "000";
-						}
-						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
-						// responseByOutputStream(send2ClientMsg);
+						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 					}
 				}
 			}
@@ -437,9 +429,7 @@ public class Server {
 			del(clientIP + ":" + clientPort);
 			del(token);
 			del(ccid);
-			// 删除记录设备是否正在使用的记录
-			// del("T"+ccid);
-			// 更新设备为不在线
+			// 更新设备状态为“不在线”
 			Device device = new Device();
 			device.setStatus(2); // 设备不在线
 			device.setLastUpdate(new Date());

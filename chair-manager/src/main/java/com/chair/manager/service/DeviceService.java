@@ -114,18 +114,14 @@ public class DeviceService extends BaseService<Device> {
 		List<Device> deivces = this.queryList(d);
 		Device device = null;
 		String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
-		if(deivces != null && deivces.size() == 0 ){
-			throw new ChairException("2001", "查询不到设备信息");
-		}
-		device = deivces.get(0);
-		if(device == null || device.getStatus() == 2){
+		if(deivces == null || deivces.size() == 0 || (device = deivces.get(0)) == null || deivces.get(0).getStatus() == 2){
 			throw new ChairException("2001", "查询不到设备信息或设备不在线");
 		}
 
 		String str2 = device.getExpTime();	//获取过期时间
 		if(!StringUtils.isEmpty(str1) && !StringUtils.isEmpty(str2)){
-			//当前时间大于过期时间,更新状态为1
-			if(DateUtils.compareDate(str1, str2) || device.getStatus() != 3){
+			//当前时间 > 设备运行结束时间 && 设备状态 != 2
+			if(DateUtils.compareDate(str1, str2) && device.getStatus() != 2){
 				//更新状态为1
 				Device updateDevice = new Device();
 				updateDevice.setId(device.getId());
