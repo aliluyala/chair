@@ -25,6 +25,7 @@
 	            <th data-options="field:'proxyName',width:100">代理名称</th>
 	            <th data-options="field:'shopName',width:100">店铺名称</th>
 	            <th data-options="field:'shopLocation',width:100">店铺位置</th>
+	            <th data-options="field:'status',width:100,formatter:formatDeviceStatus">状态</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
 	            <th data-options="field:'lastUpdate',width:130,align:'center',formatter:formatDate">更新日期</th>
 	        </tr>
@@ -40,6 +41,21 @@
 </div>
 
 <script type="text/javascript">
+
+function formatDeviceStatus(val, row){
+	switch(val){
+		case 1:
+			return "在线";
+			break;
+		case 2:
+			return "下线";
+			break;
+		case 3:
+			return "正在使用";
+			break;
+	}
+}
+
 
 function formatDate(val,row){
 	var now = new Date(val);
