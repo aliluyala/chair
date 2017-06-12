@@ -29,7 +29,7 @@ public class ConsumedDetailsService extends BaseService<ConsumedDetails> {
 	}
 
 	
-	public List<ConsumedDetails> queryRechargeRechargeList(ConsumedDetails details){
+	public List<ConsumedDetails> queryConsumedDetailsList(ConsumedDetails details){
 		return detailsMapper.queryConsumedDetailsList(details);
 	}
 	

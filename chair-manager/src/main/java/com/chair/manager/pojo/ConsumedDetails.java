@@ -35,6 +35,8 @@ public class ConsumedDetails {
     private Integer deviceId;
     
     private Date consumedTime;
+    
+    private Integer status;
 
     private Date createTime;
 
@@ -153,6 +155,14 @@ public class ConsumedDetails {
 
 	public void setConsumedTime(Date consumedTime) {
 		this.consumedTime = consumedTime;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 
 	public Date getCreateTime() {

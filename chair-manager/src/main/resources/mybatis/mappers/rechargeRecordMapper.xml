@@ -6,7 +6,7 @@
 <mapper namespace="com.chair.manager.mapper.RechargeRecordMapper">
 
 	
-	<select id="queryRechargeRechargeList" resultType="RechargeRecord">
+	<select id="queryRechargeRecordList" resultType="RechargeRecord">
 		<!-- SELECT * FROM recharge_record where open_id=#{openId} and phone_number=#{phoneNumber} and pay_status=#{payStatus} ORDER BY last_update DESC; -->
 		SELECT * FROM recharge_record where open_id=#{openId} and pay_status=#{payStatus} ORDER BY last_update DESC;
 	</select>

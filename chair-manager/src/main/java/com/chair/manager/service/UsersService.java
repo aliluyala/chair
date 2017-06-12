@@ -103,9 +103,6 @@ public class UsersService extends BaseService<Users> {
 			}
 		}
 
-		// 判断用户是否是新用户
-		boolean newUsers = isNewUser(openID);
-
 		// 2.查询存在则更新，不存在则新增
 		Users user = new Users();
 		user.setOpenId(openID);
@@ -126,39 +123,12 @@ public class UsersService extends BaseService<Users> {
 		userAccountService.saveOrUpdate(userAccount);
 		logger.debug("---添加或者更新用户账户表【后】--：" + userAccount);
 		
-		// 4.查询优惠券
-		
-		
-		
-		// 3.查询消费套餐列表
-//		List<ConsumePackageVo> packageList = new ArrayList<ConsumePackageVo>();
-		/*List<ConsumePackage> consumePackages = consumePackageService.queryListByLimit(new ConsumePackage());
-		for (ConsumePackage consumePackage : consumePackages) {
-			System.err.println(consumePackage);
-			ConsumePackageVo cpvo = new ConsumePackageVo();
-			cpvo.setConsumedPackageID(consumePackage.getId());
-			cpvo.setConsumedPackageName(consumePackage.getPackageName());
-			cpvo.setConsumedPackageDuration(consumePackage.getConsumedDuration());
-			packageList.add(cpvo);
-		}*/
 
 		UserVo uvo = new UserVo();
 		uvo.setPhoneNumber(phoneNumber);
 		uvo.setUserID(user.getId());
-//		uvo.setPackageList(packageList);
 		return uvo;
 
-	}
-
-	/**
-	 * 判断用户是否是新用户
-	 * 
-	 * @param openID
-	 * @return
-	 */
-	private boolean isNewUser(String openID) {
-		Users u = this.queryUserRegStatus(openID);
-		return (u == null) ? true : false;
 	}
 
 	/**
@@ -171,25 +141,4 @@ public class UsersService extends BaseService<Users> {
 		return usersMapper.selectByOpenID(openID);
 	}
 
-	/**
-	 * 根据设备NO查询设备信息
-	 * 
-	 * @param deviceNO
-	 */
-	public Device queryDeviceByDeviceNO(String deviceNO) {
-		Device d = new Device();
-		d.setDeviceNo(deviceNO);
-		Device device = deviceService.queryByDeviceNO(d);
-		if (device == null)
-			throw new ChairException("2001", "根据设备编号" + deviceNO + "查询不到设备信息");
-		return device;
-	}
-
-	public static void main(String[] args) {
-		Date d1 = new Date();
-		Date d2 = new Date();
-		System.out.println(d1.getTime());
-		System.out.println(d2.getTime());
-		System.out.println(d1.getTime() == d2.getTime());
-	}
 }

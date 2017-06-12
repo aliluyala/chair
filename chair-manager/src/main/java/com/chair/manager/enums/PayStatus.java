@@ -2,9 +2,9 @@ package com.chair.manager.enums;
 
 
 public enum PayStatus {
-	//1已支付 2未支付
-    PAY_SUCCESS(1,"付款成功"),
-    PAY_FAIL(2,"付款失败");
+	//1未支付 2已支付
+    PAY_FAIL(1,"付款失败"),
+    PAY_SUCCESS(2,"付款成功");
 
     private int value;
     private String desc;

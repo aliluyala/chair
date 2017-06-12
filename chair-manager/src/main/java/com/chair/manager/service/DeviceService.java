@@ -1,6 +1,9 @@
 package com.chair.manager.service;
 
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.chair.manager.bean.EasyUIResult;
+import com.chair.manager.controller.DateUtils;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.DeviceMapper;
 import com.chair.manager.pojo.Device;
@@ -56,31 +60,6 @@ public class DeviceService extends BaseService<Device> {
 	
 	
 	/**
-	 * 判断设备是否可用
-	 * @param device
-	 * @return true：可用， false：不可用
-	 */
-	public boolean isUsed(JedisCluster jedisCluster, Device device) {
-		if("00000000000000000001".equals(device.getDeviceNo()) || "00000000000000000002".equals(device.getDeviceNo())  ){
-			System.out.println("---测试数据---");
-			return true;
-		}
-		//1.判断设备是否存在
-		if(device == null) {
-			logger.error("------设备不存在数据库------");
-			throw new ChairException("2001", "查询不到设备信息");
-		}
-		String ipAndPort = jedisCluster.get(device.getDeviceNo());
-		//2.判断设备是否开启，发消息给硬件
-		if(StringUtils.isEmpty(ipAndPort)){
-			logger.error("------通过【"+device.getDeviceNo()+"】在redis中找不到对应的设备IP地址------");
-			throw new ChairException("2001", "查询不到设备信息");
-		}
-		return true;
-	}
-	
-	
-	/**
 	 * 查询设备列表
 	 */
 	public DeviceVo queryDeviceList() {
@@ -122,5 +101,55 @@ public class DeviceService extends BaseService<Device> {
 		PageInfo<Device> pageInfo= super.queryListPage(device, page, rows);
 		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
 	}
+	
+	
+	
+	/**
+	 * 判断设备是否正在使用
+	 * 1.在线，2.不在线，3.正在使用
+	 * @param d
+	 * @return
+	 */
+	public Device judgeDeviceIsUsed(Device d){
+		List<Device> deivces = this.queryList(d);
+		Device device = null;
+		String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
+		if(deivces != null && deivces.size() == 0 ){
+			throw new ChairException("2001", "查询不到设备信息");
+		}
+		device = deivces.get(0);
+		if(device == null || device.getStatus() == 2){
+			throw new ChairException("2001", "查询不到设备信息或设备不在线");
+		}
 
+		String str2 = device.getExpTime();	//获取过期时间
+		if(!StringUtils.isEmpty(str1) && !StringUtils.isEmpty(str2)){
+			//当前时间大于过期时间,更新状态为1
+			if(DateUtils.compareDate(str1, str2) || device.getStatus() != 3){
+				//更新状态为1
+				Device updateDevice = new Device();
+				updateDevice.setId(device.getId());
+				updateDevice.setDeviceNo(device.getDeviceNo());
+				updateDevice.setStatus(1);
+				updateDevice.setLastUpdate(new Date());
+				this.updateSelective(updateDevice);
+				return updateDevice;
+			}else{
+				throw new ChairException("2002", "正在使用");
+			}
+		}
+		return device;
+	}
+	
+	
+	/**
+	 * 根据设备Token查询设备信息
+	 * @param token
+	 * @return
+	 */
+	public Device queryDeviceByToken(String token){
+		Device device = new Device();
+		device.setDeviceToken(token);
+		return deviceMapper.queryDeviceByToken(device);
+	}
 }

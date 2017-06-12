@@ -7,6 +7,6 @@ import com.chair.manager.pojo.RechargeRecord;
 
 public interface RechargeRecordMapper extends ChairMapper<RechargeRecord> {
 
-	List<RechargeRecord> queryRechargeRechargeList(RechargeRecord record);
+	List<RechargeRecord> queryRechargeRecordList(RechargeRecord record);
 
 }

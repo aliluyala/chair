@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import com.chair.manager.pojo.UserAccount;
 
 @Service
 public class UserAccountService extends BaseService<UserAccount> {
+	private static Logger logger = Logger.getLogger(UserAccountService.class);
 	@Autowired
 	private RechargePackageMapper rechargePackageMapper;
 	@Autowired
@@ -80,6 +82,11 @@ public class UserAccountService extends BaseService<UserAccount> {
 		if (recordResult == null || recordResult.size() == 0) {
 			throw new ChairException("1012", "支付批次号【"+batchNO+"】有误");
 		}
+		//如果已经支付成功的，不做处理
+		if(recordResult.get(0).getPayStatus() == PayStatus.PAY_SUCCESS.getValue()){	
+			return 0;
+		}
+		
 		RechargeRecord record = recordResult.get(0);
 		RechargeRecord r = new RechargeRecord();
 		r.setId(record.getId());
@@ -91,18 +98,18 @@ public class UserAccountService extends BaseService<UserAccount> {
 
 		// 更新账户余额
 		UserAccount uaParam = new UserAccount();
-		uaParam.setPhoneNumber(record.getPhoneNumber());
+		uaParam.setOpenId(record.getOpenId());
 		UserAccount account = super.queryList(uaParam).get(0);
+		logger.info("------【支付回调】更新前账户信息------" + account);
 		UserAccount ua = new UserAccount();
 		ua.setId(account.getId());
-		ua.setAmount((account.getAmount() != null ? account.getAmount() : new BigDecimal(0))
-				.add(record.getRechargeAmount()));
+		ua.setAmount((account.getAmount() != null ? account.getAmount() : new BigDecimal(0)).add(record.getRechargeAmount()));
 		ua.setTotalDuration(
 				(account.getTotalDuration() != null ? account.getTotalDuration() : 0) + record.getRechargeDuration());
 		ua.setRestDuration(
 				(account.getRestDuration() != null ? account.getRestDuration() : 0) + record.getRechargeDuration());
 		ua.setLastUpdate(new Date());
-		System.err.println("------【支付回调】更新账户信息------" + ua);
+		logger.info("------【支付回调】更新后账户信息------" + ua);
 		// 更新账户余额
 		// UserAccount userAccount = new UserAccount();
 		// userAccount.setLastUpdate(new Date());
@@ -145,12 +152,17 @@ public class UserAccountService extends BaseService<UserAccount> {
 	 */
 	public UserAccount queryAccountInfo(String openID, String phoneNumber) {
 		UserAccount ua = new UserAccount();
-		// ua.setOpenId(openID);
-		ua.setPhoneNumber(phoneNumber);
-		UserAccount userAcount = userAccountMapper.queryAccountInfoByUnique(ua);
-		if (userAcount == null)
-			throw new ChairException("1010", "根据手机号【"+phoneNumber+"】查询不到对应的账户。");
-		return userAcount;
+		ua.setOpenId(openID);
+//		ua.setPhoneNumber(phoneNumber);
+		List<UserAccount> userAccounts = userAccountMapper.select(ua);
+		if(userAccounts == null || userAccounts.size() < 0){
+			throw new ChairException("1010", "根据openID:【"+openID+"】查询不到对应的账户。");
+		}
+		return userAccounts.get(0);
+//		UserAccount userAcount = userAccountMapper.queryAccountInfoByUnique(ua);
+//		if (userAcount == null)
+//			throw new ChairException("1010", "根据手机号【"+phoneNumber+"】查询不到对应的账户。");
+//		return userAcount;
 	}
 
 }
