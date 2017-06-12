@@ -9,14 +9,32 @@ public class EasyUIResult {
     private List<?> rows;
     
     private Long status=200L;
+    
+    private int type;
+    
 
-    public EasyUIResult() {
+    public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public EasyUIResult() {
 
     }
-
+	
     public EasyUIResult(Long total, List<?> rows) {
         this.total = total;
         this.rows = rows;
+    }
+	
+	
+    public EasyUIResult(Long total, List<?> rows, int type) {
+        this.total = total;
+        this.rows = rows;
+        this.type = type;
     }
 
     public Long getTotal() {

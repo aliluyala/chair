@@ -109,21 +109,11 @@ public class Server {
 						if(DateUtils.compareDate(str1, str2)){
 							//设备下线
 							offlineDevice(d.getDeviceNo());
-//							String ip = get(d.getDeviceNo());
-//							if(ip !=null){
-//								String token = get(ip);
-//								if(token != null){
-//									del(token);
-//									del(ip);
-//								}
-//							}
-//							del(d.getDeviceNo());
 							
 							Socket socket = ccidSocket.get(d.getDeviceNo());
 							
 							//清除redis数据
 							flushRedis(socket);
-							
 							
 							if(socket !=null && !socket.isClosed()){
 								try {
@@ -133,7 +123,7 @@ public class Server {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
-							}
+							}/**/
 							
 						}
 				}
@@ -413,6 +403,7 @@ public class Server {
 	 * 清除redis数据
 	 */
 	private String flushRedis(Socket s){
+		if(s == null) return "";
 		String clientIP = s.getInetAddress().toString().replace("/", "");
 		int clientPort = s.getPort();
 		String token = get(clientIP + ":" + clientPort);

@@ -28,11 +28,17 @@
     
     <script type="text/javascript">
     	$("#login").click(function(){
-    		var username = $("[name=username]").val();
+    		var user = $("[name=username]").val();
     		var password = $("[name=password]").val();
-    		$.post('/<%=chair%>/manager/login',{username:username,password:password}, function(data){
+    		$.post('/<%=chair%>/manager/login',{user:user,password:password}, function(data){
     			if(data.status == 200){
-    				window.location.href="/<%=chair%>/page/index";
+    				if(data.type == 1){
+        				window.location.href="/<%=chair%>/page/index";
+    				}else if(data.type == 2){
+    					window.location.href="/<%=chair%>/page/index2";
+    				}else if(data.type == 3){
+    					window.location.href="/<%=chair%>/page/index3";
+    				}
     			}else{
     				$.messager.alert('错误',"用户名密码不正确！");
         			return ;

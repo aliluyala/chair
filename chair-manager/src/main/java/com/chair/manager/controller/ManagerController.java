@@ -44,8 +44,9 @@ public class ManagerController {
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	@ResponseBody
 	public EasyUIResult login(Manager manager, HttpSession session) {
-		EasyUIResult rs = new EasyUIResult();
+		System.err.println("------manager-----"+manager);
 		Manager user = managerService.login(manager);
+		EasyUIResult rs = new EasyUIResult(null,null,user.getType());
 		if (user != null) {
 			session.setAttribute("user", user);
 		} else {
