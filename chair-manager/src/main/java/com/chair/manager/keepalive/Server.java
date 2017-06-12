@@ -8,8 +8,7 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,6 +19,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.chair.manager.controller.DateUtils;
 import com.chair.manager.exception.ChairException;
@@ -94,6 +94,7 @@ public class Server {
             public void run() {  
                 // task to run goes here  
 				logger.info("--------定时任务执行时间-Hello !!!------->>>>"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				printSokcet();	//打印socket列表
 				//查询所有设备列表
 				Device device = new Device();
 				device.setStatus(1);	//在线
@@ -106,25 +107,27 @@ public class Server {
 						String str2 = DateUtils.formatString(tempDate, "yyyy-MM-dd HH:mm:ss");
 						logger.info("---设备信息---"+d+"\n 当前时刻="+str1+"\n 最后心跳时间="+str2);
 						if(DateUtils.compareDate(str1, str2)){
-							logger.info("["+d.getDeviceNo()+"] 设备下线---");
-							d.setStatus(2);	//设备下线
-							d.setLastUpdate(new Date());
-							deviceService.updateSelective(d);
-
-							String ip = get(d.getDeviceNo());
-							if(ip !=null){
-								String token = get(ip);
-								if(token != null){
-									del(token);
-									del(ip);
-								}
-							}
-							del(d.getDeviceNo());
+							//设备下线
+							offlineDevice(d.getDeviceNo());
+//							String ip = get(d.getDeviceNo());
+//							if(ip !=null){
+//								String token = get(ip);
+//								if(token != null){
+//									del(token);
+//									del(ip);
+//								}
+//							}
+//							del(d.getDeviceNo());
 							
 							Socket socket = ccidSocket.get(d.getDeviceNo());
+							
+							//清除redis数据
+							flushRedis(socket);
+							
+							
 							if(socket !=null && !socket.isClosed()){
 								try {
-									logger.info("["+d.getDeviceNo()+"] 设备关闭socket");
+									logger.info("["+d.getDeviceNo()+"] 设备关闭socket---"+socket.getRemoteSocketAddress());
 									socket.close();
 								} catch (IOException e) {
 									// TODO Auto-generated catch block
@@ -136,36 +139,9 @@ public class Server {
 				}
             }  
         };  
-        ScheduledExecutorService service = Executors  
-                .newSingleThreadScheduledExecutor();  
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();  
         // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
         service.scheduleAtFixedRate(runnable, 5, 65, TimeUnit.SECONDS);  
-		
-		/*
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-				// task to run goes here
-				System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"\tHello !!!"+deviceService);
-				//查询所有设备列表
-				List<Device> devices = deviceService.queryList(new Device());
-				System.out.println(devices.size());
-//				for(Device d : devices){
-//					System.err.println("---device---"+d);
-//					String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
-//					String str2 = DateUtils.formatString(d.getOnlineTime(), "yyyy-MM-dd HH:mm:ss");
-//					if(DateUtils.compareDate(str1, str2)){
-//						d.setStatus(2);	//设备下线
-//						d.setLastUpdate(new Date());
-//						deviceService.updateSelective(d);
-//					}
-//				}
-			}
-		};
-		Timer timer = new Timer();
-		long delay = 0;
-		// schedules the task to be run in an interval
-		timer.scheduleAtFixedRate(task, delay, 10*1000);*/
 	}
 
 	public void start() {
@@ -388,7 +364,9 @@ public class Server {
 						Device device = deviceService.queryDeviceByToken(token);
 						device.setOnlineTime(new Date());
 						device.setLastUpdate(new Date());
-						device.setStatus(1);
+						if(device.getStatus() != 3){
+							device.setStatus(1);
+						}
 						deviceService.updateSelective(device);
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 					}
@@ -420,26 +398,46 @@ public class Server {
 					throw new ChairException("-1", "系统错误");
 				}
 			}
-
-			String clientIP = s.getInetAddress().toString().replace("/", "");
-			int clientPort = s.getPort();
-			logger.info("---客户端断开连接----" + clientIP + ":" + clientPort);
-			String token = get(clientIP + ":" + clientPort);
-			String ccid = get(token);
-			del(clientIP + ":" + clientPort);
-			del(token);
-			del(ccid);
-			// 更新设备状态为“不在线”
-			Device device = new Device();
-			device.setStatus(2); // 设备不在线
-			device.setLastUpdate(new Date());
-			deviceService.updateSelective(device);
-
-			logger.info("关闭：" + s.getRemoteSocketAddress());
+			//清除redis
+			String deviceNO = flushRedis(s);
+			//下线设备
+			offlineDevice(deviceNO);
+			logger.info("-----关闭socket-----：" + s.getRemoteSocketAddress());
 		}
+		
 
 	}
-
+	
+	
+	/**
+	 * 清除redis数据
+	 */
+	private String flushRedis(Socket s){
+		String clientIP = s.getInetAddress().toString().replace("/", "");
+		int clientPort = s.getPort();
+		String token = get(clientIP + ":" + clientPort);
+		String ccid = get(token);
+		del(clientIP + ":" + clientPort);
+		del(token);
+		del(ccid);
+		return ccid;
+	}
+	
+	
+	
+	/**
+	 * 改变设备状态（下线设备）
+	 */
+	private void offlineDevice(String deviceNO){
+		logger.info("---["+deviceNO+"] 设备下线---");
+		Device device = new Device();
+		device.setDeviceNo(deviceNO);
+		device.setStatus(2); // 设备不在线
+		device.setLastUpdate(new Date());
+		deviceService.updateSelective(device);
+//		deviceService.updateByDeviceNO(device);
+	}
+	
 	private void set(String key, String value) {
 		logger.info("------【保存redis.set()】------key：" + key + " \t value：" + value);
 		jedisCluster.set(key, value);
@@ -453,7 +451,19 @@ public class Server {
 
 	private void del(String key) {
 		logger.info("------【删除redis.del()】------key：" + key);
-		jedisCluster.del(key);
+		if(!StringUtils.isEmpty(key))
+			jedisCluster.del(key);
 	}
+	
+	/**
+	 * 将socket和设备的关系打印出来
+	 */
+	private void printSokcet(){
+		logger.info("--------socket.map一共有几条数据?----------"+socketCCID.size());
+		for (Map.Entry<Socket,String> entry : socketCCID.entrySet()){
+			logger.info("---【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
+		}
+	}
+	
 
 }

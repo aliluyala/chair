@@ -32,6 +32,8 @@
 			SELECT * FROM device where device_token=#{deviceToken}
 	</select>
 
-
+	<update id="updateByDeviceNO">
+		update device set status=#{status}, last_update=#{lastUpdate} where device_no=#{deviceNo};
+	</update>
 
 </mapper>

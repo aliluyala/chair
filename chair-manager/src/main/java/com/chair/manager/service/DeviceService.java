@@ -148,4 +148,12 @@ public class DeviceService extends BaseService<Device> {
 		device.setDeviceToken(token);
 		return deviceMapper.queryDeviceByToken(device);
 	}
+
+	/**
+	 * 根据设备号更新设备
+	 * @param device
+	 */
+	public void updateByDeviceNO(Device device) {
+		deviceMapper.updateByDeviceNO(device);
+	}
 }
