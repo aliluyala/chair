@@ -434,8 +434,8 @@ public class Server {
 		device.setDeviceNo(deviceNO);
 		device.setStatus(2); // 设备不在线
 		device.setLastUpdate(new Date());
-		deviceService.updateSelective(device);
-//		deviceService.updateByDeviceNO(device);
+//		deviceService.updateSelective(device);
+		deviceService.updateByDeviceNO(device);
 	}
 	
 	private void set(String key, String value) {
