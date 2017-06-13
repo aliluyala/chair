@@ -5,16 +5,22 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.chair.manager.bean.EasyUIResult;
-import com.chair.manager.pojo.FactoryProxy;
+import com.chair.manager.mapper.ProxyStatiscticsMapper;
 import com.chair.manager.pojo.Manager;
+import com.chair.manager.pojo.ProxyStatisctics;
 import com.github.pagehelper.PageInfo;
 
 @Service
 public class ManagerService extends BaseService<Manager> {
 	private static Logger LOGGER = Logger.getLogger(ManagerService.class);
+	
+	@Autowired
+	private ProxyStatiscticsMapper proxyStatiscticsMapper;
+	
 	
 	/**
 	 * 用户登陆业务
@@ -73,6 +79,11 @@ public class ManagerService extends BaseService<Manager> {
 	public EasyUIResult queryListForPage(Manager manager, Integer page, Integer rows) {
 		PageInfo<Manager> pageInfo= super.queryListPage(manager, page, rows);
 		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
+	}
+
+
+	public List<ProxyStatisctics> queryProxyStatisctics(Manager m) {
+		return proxyStatiscticsMapper.queryProxyStatisctics(m);
 	}
 
 }

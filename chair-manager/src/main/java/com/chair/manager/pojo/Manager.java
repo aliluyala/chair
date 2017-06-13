@@ -1,12 +1,13 @@
 package com.chair.manager.pojo;
 
+
 import java.util.Date;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Table(name = "manager")
-public class Manager {
+public class Manager{
 	@Id
 	private Integer id;
 	private String user;
@@ -19,8 +20,25 @@ public class Manager {
 	private Integer shopId;
 	private String shopName;
 	private String shopLocation;
+	
 	private Date createTime;
 	private Date lastUpdate;
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
 
 	public Integer getId() {
 		return id;
@@ -110,28 +128,11 @@ public class Manager {
 		this.shopLocation = shopLocation;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
-
 	@Override
 	public String toString() {
 		return "Manager [id=" + id + ", user=" + user + ", password=" + password + ", type=" + type + ", factoryId="
 				+ factoryId + ", factoryName=" + factoryName + ", proxyId=" + proxyId + ", proxyName=" + proxyName
-				+ ", shopId=" + shopId + ", shopName=" + shopName + ", shopLocation=" + shopLocation + ", createTime="
-				+ createTime + ", lastUpdate=" + lastUpdate + "]";
+				+ ", shopId=" + shopId + ", shopName=" + shopName + ", shopLocation=" + shopLocation + "]";
 	}
 
 }

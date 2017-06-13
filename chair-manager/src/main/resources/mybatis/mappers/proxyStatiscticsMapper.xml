@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chair.manager.mapper.ProxyStatiscticsMapper">
+
+	<select id="queryProxyStatisctics" parameterType="com.chair.manager.pojo.ManagerDto"
+		resultType="com.chair.manager.pojo.ProxyStatisctics">
+		
+		select temp.id as id, temp.shop_name as shopName, temp.shop_location as shopLocation, temp.shop_contact as shopContact, temp.shop_contact_phone as shopContactPhone, 
+		count(*) as totalDevice, sum(temp.income) as income, sum(temp.totalDuration) as totalDuration from 
+		(select m.*, DATE_FORMAT(c.last_update,'%Y-%m-%d') as lastup, c.device_id, sum(c.consumed_duration) as totalDuration, ( sum(c.consumed_duration) * ( m.proxy_percent/100 ) ) as income  
+		from manager m left JOIN consumed_details c ON m.id=c.shop_id where m.proxy_id=#{proxyId} and m.type=#{type} 
+		and DATE_FORMAT(c.last_update,'%Y-%m-%d') BETWEEN #{from} and #{to} GROUP BY c.device_id) as temp
+		left JOIN device d ON temp.device_id = d.id
+	</select>
+
+</mapper>
