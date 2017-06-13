@@ -20,7 +20,7 @@
 	<!-- 统计-代理，查询代理自身收益统计 -->
 	<select id="queryBaseStatisctics" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
 		select ( sum(consumed_duration) * ((select proxy_percent from manager where id=#{proxyId} ) / 100) ) as totalIncome,
-		(select count(*) from (select * from consumed_details where proxy_id=#{proxyId} group BY device_id) as temp1) as totalDevice,
+		(select count(*) from device where proxy_id=#{proxyId}) as totalDevice ,
 		(select count(*) from manager where proxy_id=#{proxyId} and type=#{type}) as totalShop,
 		(select sum(consumed_duration) * ((select proxy_percent from manager where id=#{proxyId}) / 100) from consumed_details where DATE_FORMAT(now(), '%Y-%m-%d') = DATE_FORMAT(last_update, '%Y-%m-%d')) as dayIncome
 		from consumed_details where proxy_id=#{proxyId};
