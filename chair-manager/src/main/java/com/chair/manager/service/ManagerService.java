@@ -22,7 +22,8 @@ public class ManagerService extends BaseService<Manager> {
 	 * @return
 	 */
 	public Manager login(Manager manager){
-		manager.setPassword(getMd5(manager.getPassword()));
+		//manager.setPassword(getMd5(manager.getPassword()));
+		manager.setPassword(manager.getPassword());
 		List<Manager> result= super.queryList(manager);
 		if(result!=null&&result.size()>0){
 			LOGGER.info("user="+manager.getUser()+"登录成功");

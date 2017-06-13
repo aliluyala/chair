@@ -35,9 +35,9 @@
     				if(data.type == 1){
         				window.location.href="/<%=chair%>/page/index";
     				}else if(data.type == 2){
-    					window.location.href="/<%=chair%>/page/index2";
+    					window.location.href="/<%=chair%>/page/statisctics-forproxy";
     				}else if(data.type == 3){
-    					window.location.href="/<%=chair%>/page/index3";
+    					window.location.href="/<%=chair%>/page/statisctics-forshop";
     				}
     			}else{
     				$.messager.alert('错误',"用户名密码不正确！");

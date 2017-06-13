@@ -107,7 +107,8 @@ public class ManagerController {
 			}
 			manager.setProxyName(proxyManager.getProxyName());
 		}
-		manager.setPassword(managerService.getMd5(manager.getPassword()));
+		//manager.setPassword(managerService.getMd5(manager.getPassword()));
+		manager.setPassword(manager.getPassword());
 //		manager.setType(2);	//代理
 		manager.setCreateTime(new Date());
 		manager.setLastUpdate(new Date());

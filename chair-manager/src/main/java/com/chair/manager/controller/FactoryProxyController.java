@@ -77,7 +77,8 @@ public class FactoryProxyController {
 		//新增管理员
 		Manager manager = new Manager();
 		manager.setUser(user);
-		manager.setPassword(new ManagerService().getMd5(password));
+		//manager.setPassword(new ManagerService().getMd5(password));
+		manager.setPassword(password);
 		manager.setType(2);
 		manager.setCreateTime(new Date());
 		manager.setLastUpdate(new Date());
