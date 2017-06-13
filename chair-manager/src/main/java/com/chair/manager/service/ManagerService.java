@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.chair.manager.bean.EasyUIResult;
-import com.chair.manager.mapper.ProxyStatiscticsMapper;
+import com.chair.manager.mapper.StatiscticsMapper;
 import com.chair.manager.pojo.Manager;
-import com.chair.manager.pojo.ProxyStatisctics;
+import com.chair.manager.pojo.Statisctics;
 import com.github.pagehelper.PageInfo;
 
 @Service
@@ -19,7 +19,7 @@ public class ManagerService extends BaseService<Manager> {
 	private static Logger LOGGER = Logger.getLogger(ManagerService.class);
 	
 	@Autowired
-	private ProxyStatiscticsMapper proxyStatiscticsMapper;
+	private StatiscticsMapper statiscticsMapper;
 	
 	
 	/**
@@ -86,8 +86,8 @@ public class ManagerService extends BaseService<Manager> {
 	 * @param m
 	 * @return
 	 */
-	public List<ProxyStatisctics> queryProxyStatisctics(Manager m) {
-		return proxyStatiscticsMapper.queryProxyStatisctics(m);
+	public List<Statisctics> queryProxyStatisctics(Manager m) {
+		return statiscticsMapper.queryProxyStatisctics(m);
 	}
 	
 	/**
@@ -95,8 +95,27 @@ public class ManagerService extends BaseService<Manager> {
 	 * @param m
 	 * @return
 	 */
-	public ProxyStatisctics  queryBaseStatisctics(Manager m){
-		return proxyStatiscticsMapper.queryBaseStatisctics(m);
+	public Statisctics  queryBaseStatisctics(Manager m){
+		return statiscticsMapper.queryBaseStatisctics(m);
 	}
+	
+	/**
+	 * 查询商家下的统计数据
+	 * @param m
+	 * @return
+	 */
+	public List<Statisctics> queryShopStatisctics(Manager m) {
+		return statiscticsMapper.queryShopStatisctics(m);
+	}
+
+	/**
+	 * 查询商家基本数据统计
+	 * @param m
+	 * @return
+	 */
+	public Statisctics queryShopBaseStatisctics(Manager m) {
+		return statiscticsMapper.queryShopBaseStatisctics(m);
+	}
+	
 
 }

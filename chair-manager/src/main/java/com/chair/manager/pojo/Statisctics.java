@@ -2,7 +2,7 @@ package com.chair.manager.pojo;
 
 import java.util.Date;
 
-public class ProxyStatisctics {
+public class Statisctics {
 	/*
 	 * <th data-options="field:'ck',checkbox:true"></th> <th
 	 * data-options="field:'id',width:60">ID</th> <th
@@ -17,6 +17,8 @@ public class ProxyStatisctics {
 
 	private Integer id;
 
+	private String deviceNo;
+
 	private String shopName;
 
 	private String shopLocation;
@@ -28,59 +30,17 @@ public class ProxyStatisctics {
 	private Integer totalDevice;
 
 	private Integer totalDuration;
-	
+
 	private Float income;
 
 	private Date createTime;
 
 	private Date lastUpdate;
-	
+
 	private Float totalIncome;
 	private Integer totalShop;
-	
+
 	private Float dayIncome;
-	
-	
-
-	public Float getTotalIncome() {
-		return totalIncome;
-	}
-
-	public void setTotalIncome(Float totalIncome) {
-		this.totalIncome = totalIncome;
-	}
-
-	public Float getDayIncome() {
-		return dayIncome;
-	}
-
-	public void setDayIncome(Float dayIncome) {
-		this.dayIncome = dayIncome;
-	}
-
-	public Integer getTotalShop() {
-		return totalShop;
-	}
-
-	public void setTotalShop(Integer totalShop) {
-		this.totalShop = totalShop;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getLastUpdate() {
-		return lastUpdate;
-	}
-
-	public void setLastUpdate(Date lastUpdate) {
-		this.lastUpdate = lastUpdate;
-	}
 
 	public Integer getId() {
 		return id;
@@ -88,6 +48,14 @@ public class ProxyStatisctics {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public String getDeviceNo() {
+		return deviceNo;
+	}
+
+	public void setDeviceNo(String deviceNo) {
+		this.deviceNo = deviceNo;
 	}
 
 	public String getShopName() {
@@ -146,13 +114,53 @@ public class ProxyStatisctics {
 		this.income = income;
 	}
 
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
+	public Float getTotalIncome() {
+		return totalIncome;
+	}
+
+	public void setTotalIncome(Float totalIncome) {
+		this.totalIncome = totalIncome;
+	}
+
+	public Integer getTotalShop() {
+		return totalShop;
+	}
+
+	public void setTotalShop(Integer totalShop) {
+		this.totalShop = totalShop;
+	}
+
+	public Float getDayIncome() {
+		return dayIncome;
+	}
+
+	public void setDayIncome(Float dayIncome) {
+		this.dayIncome = dayIncome;
+	}
+
 	@Override
 	public String toString() {
-		return "ProxyStatisctics [id=" + id + ", shopName=" + shopName + ", shopLocation=" + shopLocation
-				+ ", shopContactPhone=" + shopContactPhone + ", shopContact=" + shopContact + ", totalDevice="
-				+ totalDevice + ", totalDuration=" + totalDuration + ", income=" + income + ", createTime=" + createTime
-				+ ", lastUpdate=" + lastUpdate + ", totalIncome=" + totalIncome + ", totalShop=" + totalShop
-				+ ", dayIncome=" + dayIncome + "]";
+		return "ProxyStatisctics [id=" + id + ", deviceNo=" + deviceNo + ", shopName=" + shopName + ", shopLocation="
+				+ shopLocation + ", shopContactPhone=" + shopContactPhone + ", shopContact=" + shopContact
+				+ ", totalDevice=" + totalDevice + ", totalDuration=" + totalDuration + ", income=" + income
+				+ ", createTime=" + createTime + ", lastUpdate=" + lastUpdate + ", totalIncome=" + totalIncome
+				+ ", totalShop=" + totalShop + ", dayIncome=" + dayIncome + "]";
 	}
 
 }
