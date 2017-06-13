@@ -114,13 +114,16 @@ public class StatiscticsController {
 			logger.error("---listProxyIncomeForPage()---manager type is not match---");
 			return null;
 		}
+		Manager proxyManager = new Manager();
+		proxyManager.setProxyId(manager.getId());
+		proxyManager.setType(3);
 		//总收益
 		//商铺数
-		
-		
 		//设备数
 		//今日收益
+		ProxyStatisctics proxyStatisctics = managerService.queryBaseStatisctics(proxyManager);
+		System.err.println("-----ProxyStatisctics------"+proxyStatisctics);
 		
-		return new ResponseResult();
+		return new ResponseResult(proxyStatisctics);
 	}
 }

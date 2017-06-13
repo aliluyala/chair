@@ -28,12 +28,43 @@ public class ProxyStatisctics {
 	private Integer totalDevice;
 
 	private Integer totalDuration;
-
+	
 	private Float income;
 
 	private Date createTime;
 
 	private Date lastUpdate;
+	
+	private Float totalIncome;
+	private Integer totalShop;
+	
+	private Float dayIncome;
+	
+	
+
+	public Float getTotalIncome() {
+		return totalIncome;
+	}
+
+	public void setTotalIncome(Float totalIncome) {
+		this.totalIncome = totalIncome;
+	}
+
+	public Float getDayIncome() {
+		return dayIncome;
+	}
+
+	public void setDayIncome(Float dayIncome) {
+		this.dayIncome = dayIncome;
+	}
+
+	public Integer getTotalShop() {
+		return totalShop;
+	}
+
+	public void setTotalShop(Integer totalShop) {
+		this.totalShop = totalShop;
+	}
 
 	public Date getCreateTime() {
 		return createTime;
@@ -120,7 +151,8 @@ public class ProxyStatisctics {
 		return "ProxyStatisctics [id=" + id + ", shopName=" + shopName + ", shopLocation=" + shopLocation
 				+ ", shopContactPhone=" + shopContactPhone + ", shopContact=" + shopContact + ", totalDevice="
 				+ totalDevice + ", totalDuration=" + totalDuration + ", income=" + income + ", createTime=" + createTime
-				+ ", lastUpdate=" + lastUpdate + "]";
+				+ ", lastUpdate=" + lastUpdate + ", totalIncome=" + totalIncome + ", totalShop=" + totalShop
+				+ ", dayIncome=" + dayIncome + "]";
 	}
 
 }

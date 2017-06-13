@@ -12,4 +12,7 @@ public interface ProxyStatiscticsMapper extends ChairMapper<ProxyStatisctics> {
 	
 	List<ProxyStatisctics> queryProxyStatisctics(Manager m);
 	
+	ProxyStatisctics queryBaseStatisctics(Manager m);
+	
+	
 }

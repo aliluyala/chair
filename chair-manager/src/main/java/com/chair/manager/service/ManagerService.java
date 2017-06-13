@@ -81,9 +81,22 @@ public class ManagerService extends BaseService<Manager> {
 		return new EasyUIResult(pageInfo.getTotal(), pageInfo.getList());
 	}
 
-
+	/**
+	 * 查询代理下的统计数据
+	 * @param m
+	 * @return
+	 */
 	public List<ProxyStatisctics> queryProxyStatisctics(Manager m) {
 		return proxyStatiscticsMapper.queryProxyStatisctics(m);
+	}
+	
+	/**
+	 * 查询代理基本数据统计
+	 * @param m
+	 * @return
+	 */
+	public ProxyStatisctics  queryBaseStatisctics(Manager m){
+		return proxyStatiscticsMapper.queryBaseStatisctics(m);
 	}
 
 }

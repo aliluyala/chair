@@ -86,7 +86,7 @@ public class Server {
 			socketCCID = new ConcurrentHashMap<Socket, String>();
 
 		// 开始设备定时任务
-		quartzJob();
+//		quartzJob();
 	}
 
 	private void quartzJob() {
