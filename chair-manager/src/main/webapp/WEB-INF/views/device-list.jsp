@@ -14,7 +14,7 @@
        &nbsp;&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search'"  onclick="doSearchDevice()">查询</a>  
     </div>
     <table class="easyui-datagrid" id="deviceList" title="设备列表" 
-	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/device/listForPage',method:'post',pageSize:5,toolbar:toolbar,pageList:[2,5,10],queryParams:{deviceNo:''}">
+	       data-options="singleSelect:false,collapsible:true,pagination:true,url:'/<%=chair%>/device/listForPage',method:'post',pageSize:100,toolbar:toolbar,pageList:[30,100,200],queryParams:{deviceNo:''}">
 	    <thead>
 	        <tr>
 	        	<th data-options="field:'ck',checkbox:true"></th>
