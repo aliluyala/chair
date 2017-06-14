@@ -25,6 +25,7 @@ import com.chair.manager.pojo.DeviceLog;
 import com.chair.manager.pojo.UserAccount;
 import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
+import com.chair.manager.service.DeviceCommandLogService;
 import com.chair.manager.service.DeviceLogService;
 import com.chair.manager.service.DeviceService;
 import com.chair.manager.service.UserAccountService;
@@ -52,6 +53,9 @@ public class UserAccountController {
 
 	@Autowired
 	private DeviceLogService deviceLogService;
+	
+	@Autowired
+	private DeviceCommandLogService deviceCommandLogService;
 
 	/**
 	 * 充值
