@@ -81,6 +81,37 @@ CREATE TABLE `device` (
   UNIQUE KEY `unique_deviceNO` (`device_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='按摩椅设备表';
 
+
+-- ----------------------------
+-- Table structure for device_log
+-- ----------------------------
+DROP TABLE IF EXISTS `device_log`;
+CREATE TABLE `device_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '设备日志自增ID',
+  `device_no` varchar(64) DEFAULT NULL COMMENT '设备编号',
+  `device_status` int(11) DEFAULT NULL COMMENT '设备状态 1：在线（默认） 2：不在线 3：正在使用',
+  `device_status_desc` varchar(64) DEFAULT NULL COMMENT '设备状态描述',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设备日志表';
+
+-- ----------------------------
+-- Table structure for device_command_log
+-- ----------------------------
+DROP TABLE IF EXISTS `device_command_log`;
+CREATE TABLE `device_command_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '设备命令自增ID',
+  `device_no` varchar(64) DEFAULT NULL COMMENT '设备编号',
+  `command_type` int(11) DEFAULT NULL COMMENT '命令类型：1.上报 2.下发',
+  `command_desc` varchar(255) DEFAULT NULL COMMENT '命令描述',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设备命令表';
+
+
+
 -- ----------------------------
 -- Table structure for factory
 -- ----------------------------

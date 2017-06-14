@@ -16,6 +16,7 @@ import com.chair.manager.controller.DateUtils;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.mapper.DeviceMapper;
 import com.chair.manager.pojo.Device;
+import com.chair.manager.pojo.DeviceLog;
 import com.chair.manager.vo.DeviceVo;
 import com.github.pagehelper.PageInfo;
 
@@ -26,6 +27,9 @@ public class DeviceService extends BaseService<Device> {
 	private static Logger logger = Logger.getLogger(DeviceService.class);
 	@Autowired
 	private DeviceMapper deviceMapper;
+
+	@Autowired
+	private DeviceLogService deviceLogService;
 	
 	/**
 	 * 根据唯一约束查询设备
@@ -129,6 +133,16 @@ public class DeviceService extends BaseService<Device> {
 				updateDevice.setStatus(1);
 				updateDevice.setLastUpdate(new Date());
 				this.updateSelective(updateDevice);
+				
+				//设备日志跟踪
+				DeviceLog deviceLog = new DeviceLog();
+				deviceLog.setDeviceNo(device.getDeviceNo());
+				deviceLog.setDeviceStatus(1);	//在线
+				deviceLog.setDeviceStatusDesc("在线");
+				deviceLog.setCreateTime(new Date());
+				deviceLog.setLastUpdate(new Date());
+				deviceLogService.save(deviceLog);
+				
 				return updateDevice;
 			}else{
 				throw new ChairException("2002", "正在使用");

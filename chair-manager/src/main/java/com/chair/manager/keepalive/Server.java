@@ -24,7 +24,11 @@ import org.springframework.util.StringUtils;
 import com.chair.manager.controller.DateUtils;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.pojo.Device;
+import com.chair.manager.pojo.DeviceCommandLog;
+import com.chair.manager.pojo.DeviceLog;
 import com.chair.manager.service.ConsumedDetailsService;
+import com.chair.manager.service.DeviceCommandLogService;
+import com.chair.manager.service.DeviceLogService;
 import com.chair.manager.service.DeviceService;
 import com.chair.manager.service.UserAccountService;
 
@@ -54,6 +58,13 @@ public class Server {
 	private JedisCluster jedisCluster;
 	@Autowired
 	private DeviceService deviceService;
+
+	@Autowired
+	private DeviceLogService deviceLogService;
+	@Autowired
+	private DeviceCommandLogService deviceCommandLogService;
+	
+	
 	@Autowired
 	private ConsumedDetailsService consumedDetailsService;
 	@Autowired
@@ -215,17 +226,6 @@ public class Server {
 				} else {
 					try {
 						receiveByInputStream(); // 接收消息
-						/*
-						 * InputStream is = s.getInputStream();
-						 * if(is.available()>0){ lastReceiveTime =
-						 * System.currentTimeMillis();
-						 * ipMapping.put(s.getInetAddress().toString().replace(
-						 * "/", ""), s);// 以k-v保存ip对应的socket对象 // receive(); //
-						 * 接收消息 // response(); // 响应消息 lastReceiveTime =
-						 * System.currentTimeMillis(); receiveByInputStream();
-						 * responseByOutputStream(); }else { Thread.sleep(100);
-						 * }
-						 */
 					} catch (Exception e) {
 						logger.error(s+"-------------设备异常断开---------------" + e.getMessage());
 						e.printStackTrace();
@@ -253,10 +253,14 @@ public class Server {
 				logger.info("------【向" + ccid + " 发送消息，获取socket对象】--->>>" + clientSocket + " ---消息为：>>>" + toMessage);
 				if(clientSocket == null) 
 					return false;
+				
+				//跟踪设备命令详情
+				recordCommand(ccid, 2, toMessage);
 				OutputStream os = clientSocket.getOutputStream();
 				byte[] b = toMessage.getBytes();
 				os.write(b);
 				os.flush();
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -274,25 +278,6 @@ public class Server {
 		private void receiveByInputStream() throws IOException, ClassNotFoundException, InterruptedException {
 			String clientIP = s.getInetAddress().toString().replace("/", "");
 			int clientPort = s.getPort();
-			// s.setKeepAlive(true);// 设置长连接
-//			InputStream is = s.getInputStream();
-//			if (is.available() > 0) {
-//				// ipMapping.put(clientIP+":", s);// 以k-v保存ip对应的socket对象
-//				logger.debug("---开始接收消息---is.available()---" + is.available() + "---is.read()---" + is.read() + " --- "
-//						+ s.toString());
-//				int length = 0;
-//				byte[] buffer = new byte[1024];
-//				while (-1 != (length = is.read(buffer, 0, 1024))) {
-//					String reciverMsg = "";
-//					reciverMsg += new String(buffer, 0, length);
-//					// TODO 处理接收到的消息，解析报文
-//					System.err.println("---------------reciverMsg-------"+reciverMsg);
-//					resolveMessage(clientIP, clientPort, reciverMsg.trim());
-//				}
-//			} else {
-//				Thread.sleep(10);
-//			}
-			
 			InputStream is = s.getInputStream();
 			while (true) {
                 byte[] b = new byte[1024];
@@ -315,8 +300,8 @@ public class Server {
 			boolean b = m.find();
 			logger.info("---【解析报文[" + reciverMsg + "]，匹配以*开头，以#结尾，结果为】---" + b + "\n ip:port = " + ip + ":" + clientPort);
 			if (b) {
-				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1)
-						.split(",");
+				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1).split(",");
+				//设备上报/下发
 				for (String key : requestBodys) {
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 注册命令
@@ -328,7 +313,11 @@ public class Server {
 							logger.info("---token为空，创建token--->>>" + token);
 							set(ip + ":" + clientPort, token); // ip-token
 						}
-
+						//设备日志跟踪
+						recordDeviceLog(requestBodys[3], 1, "在线");
+						//跟踪设备命令详情
+						recordCommand(requestBodys[3], 1, reciverMsg);
+						
 						// 新增或者更新设备
 						Device device = new Device();
 						device.setDeviceToken(token);
@@ -346,7 +335,7 @@ public class Server {
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 响应客户端R1消息内容------" + send2ClientMsg);
 						responseByOutputStream(send2ClientMsg);
-
+						
 					} else if ("H0".equalsIgnoreCase(key)) { // H0，心跳消息
 						// 【解析报文[*H0,001,R1497108915104,031,0,0#]，匹配以*开头，以#结尾，结果为】---true
 						String token = requestBodys[2];
@@ -424,9 +413,38 @@ public class Server {
 		device.setDeviceNo(deviceNO);
 		device.setStatus(2); // 设备不在线
 		device.setLastUpdate(new Date());
-//		deviceService.updateSelective(device);
 		deviceService.updateByDeviceNO(device);
+		
+		//设备日志跟踪
+		recordDeviceLog(deviceNO, 2, "下线");
 	}
+	
+	
+	private void recordDeviceLog(String deviceNO, int status, String statusDesc){
+		logger.info("-------设备日志跟踪------deviceNO："+deviceNO+"\nstatus："+status+"\nstatusDesc："+statusDesc);
+		DeviceLog deviceLog = new DeviceLog();
+		deviceLog.setDeviceNo(deviceNO);
+		deviceLog.setDeviceStatus(status);	//1、2、3
+		deviceLog.setDeviceStatusDesc(statusDesc);//在线、下线、正在使用
+		deviceLog.setCreateTime(new Date());
+		deviceLog.setLastUpdate(new Date());
+		deviceLogService.save(deviceLog);
+	}
+	
+	
+	private void recordCommand(String deviceNO, int type, String commad){
+		logger.info("-------设备命令跟踪------deviceNO："+deviceNO+"\ntype："+type+"\ncommad："+commad);
+		DeviceCommandLog deviceCommandLog = new DeviceCommandLog();
+		deviceCommandLog.setDeviceNo(deviceNO);
+		deviceCommandLog.setCommandType(type);	//1.设备上报命令 2.设备下发命令
+		deviceCommandLog.setCommandDesc(commad);
+		deviceCommandLog.setCreateTime(new Date());
+		deviceCommandLog.setLastUpdate(new Date());
+		
+		deviceCommandLogService.save(deviceCommandLog);
+	}
+	
+	
 	
 	private void set(String key, String value) {
 		logger.info("------【保存redis.set()】------key：" + key + " \t value：" + value);

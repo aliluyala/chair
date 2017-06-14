@@ -21,9 +21,11 @@ import com.chair.manager.keepalive.Server.SocketAction;
 import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.Device;
+import com.chair.manager.pojo.DeviceLog;
 import com.chair.manager.pojo.UserAccount;
 import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
+import com.chair.manager.service.DeviceLogService;
 import com.chair.manager.service.DeviceService;
 import com.chair.manager.service.UserAccountService;
 import com.chair.manager.service.UsersService;
@@ -47,6 +49,9 @@ public class UserAccountController {
 	private JedisCluster jedisCluster;
 	@Autowired
 	private UsersService userService;
+
+	@Autowired
+	private DeviceLogService deviceLogService;
 
 	/**
 	 * 充值
@@ -116,6 +121,16 @@ public class UserAccountController {
 		if(!sendSuccess && !"123".equals(device.getDeviceNo())){
 			throw new ChairException("2003", "消息发送不成功");
 		}
+		
+		//设备日志跟踪
+		DeviceLog deviceLog = new DeviceLog();
+		deviceLog.setDeviceNo(device.getDeviceNo());
+		deviceLog.setDeviceStatus(3);	//正在使用
+		deviceLog.setDeviceStatusDesc("正在使用");
+		deviceLog.setCreateTime(new Date());
+		deviceLog.setLastUpdate(new Date());
+		deviceLogService.save(deviceLog);
+		
 		
 		Date date = DateUtils.addMinute(new Date(), consumePackage.getConsumedDuration());
 		String expTime = "";
