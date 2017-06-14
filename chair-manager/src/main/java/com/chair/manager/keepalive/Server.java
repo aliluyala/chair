@@ -247,20 +247,18 @@ public class Server {
 		 */
 		public boolean send(String ccid, String toMessage) {
 			try {
-				// Socket clientSocket =
-				// ipSocket.get(toClientIP+":"+toClientPort);
 				Socket clientSocket = ccidSocket.get(ccid);
 				logger.info("------【向" + ccid + " 发送消息，获取socket对象】--->>>" + clientSocket + " ---消息为：>>>" + toMessage);
 				if(clientSocket == null) 
 					return false;
 				
-				//跟踪设备命令详情
-				recordCommand(ccid, 2, toMessage);
 				OutputStream os = clientSocket.getOutputStream();
 				byte[] b = toMessage.getBytes();
 				os.write(b);
 				os.flush();
-				
+
+				//跟踪设备命令详情
+				recordCommand(ccid, 2, toMessage);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
