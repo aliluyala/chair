@@ -250,7 +250,6 @@ public class Server {
 				// Socket clientSocket =
 				// ipSocket.get(toClientIP+":"+toClientPort);
 				Socket clientSocket = ccidSocket.get(ccid);
-				clientSocket.setSoTimeout();
 				logger.info("------【向" + ccid + " 发送消息，获取socket对象】--->>>" + clientSocket + " ---消息为：>>>" + toMessage);
 				if(clientSocket == null) 
 					return false;
