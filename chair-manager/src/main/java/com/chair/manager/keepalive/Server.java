@@ -78,14 +78,6 @@ public class Server {
 		this.deviceService = deviceService;
 	}
 	
-	
-	public DeviceCommandLogService getDeviceCommandLogService() {
-		return deviceCommandLogService;
-	}
-
-	public void setDeviceCommandLogService(DeviceCommandLogService deviceCommandLogService) {
-		this.deviceCommandLogService = deviceCommandLogService;
-	}
 
 	public Server() {
 	}
@@ -425,6 +417,7 @@ public class Server {
 		
 		//设备日志跟踪
 		recordDeviceLog(deviceNO, 2, "下线");
+		recordCommand("123456",1,"test");
 	}
 	
 	
