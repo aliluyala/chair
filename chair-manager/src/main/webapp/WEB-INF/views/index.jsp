@@ -41,6 +41,13 @@
 	         		<li data-options="attributes:{'url':'/<%=chair%>/page/statistics-consume-list'}">消费统计</li>
 	         	</ul>
          	</li>
+         	<li>
+         		<span>设备日志</span>
+         		<ul>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/device-status-log'}">设备状态日志</li>
+	         		<li data-options="attributes:{'url':'/<%=chair%>/page/device-command-log'}">设备消息日志</li>
+	         	</ul>
+         	</li>
          </ul>
     </div>
     <div data-options="region:'center',title:''">

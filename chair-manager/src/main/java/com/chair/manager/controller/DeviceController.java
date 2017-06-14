@@ -15,10 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.chair.manager.bean.EasyUIResult;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.pojo.Device;
+import com.chair.manager.pojo.DeviceCommandLog;
+import com.chair.manager.pojo.DeviceLog;
 import com.chair.manager.pojo.Factory;
 import com.chair.manager.pojo.FactoryProxy;
 import com.chair.manager.pojo.Manager;
 import com.chair.manager.pojo.Shop;
+import com.chair.manager.service.DeviceCommandLogService;
+import com.chair.manager.service.DeviceLogService;
 import com.chair.manager.service.DeviceService;
 import com.chair.manager.service.FactoryProxyService;
 import com.chair.manager.service.FactoryService;
@@ -44,6 +48,13 @@ public class DeviceController {
 	
 	@Autowired
 	private ManagerService managerService;
+	
+
+	@Autowired
+	private DeviceLogService deviceLogService;
+	
+	@Autowired
+	private DeviceCommandLogService deviceCommandLogService;
 	
 	
 	/**
@@ -113,9 +124,6 @@ public class DeviceController {
 	@RequestMapping(value="edit",method=RequestMethod.POST)
 	private EasyUIResult updateDevice(Device deivce){
 		logger.info("------【编辑设备】参数------"+deivce);
-//		Factory factory = factoryService.findById(deivce.getFacrotyId());
-//		FactoryProxy factoryProxy = factoryProxyService.findById(deivce.getProxyId());
-//		Shop shop = shopService.findById(deivce.getShopId());
 		Manager factory = (deivce.getFacrotyId() != null || deivce.getFacrotyId() != 0 ) ? managerService.findById(deivce.getFacrotyId()) : null;
 		Manager proxy = (deivce.getProxyId() != null || deivce.getProxyId() != 0 ) ? managerService.findById(deivce.getProxyId()) : null;
 		Manager shop = (deivce.getShopId() != null || deivce.getShopId() != 0 ) ? managerService.findById(deivce.getShopId()) : null;
@@ -130,6 +138,36 @@ public class DeviceController {
 		int saveRs = deviceService.updateSelective(deivce);
 		if(saveRs <= 0) throw new ChairException("-2", getClass()+",SQL操作失败。"); 
 		return new EasyUIResult();
+	}
+	
+	
+	/**
+	 * 查询设备状态日志列表，分页（管理台前端）
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="listDeviceLogForPage",method=RequestMethod.POST)
+	private EasyUIResult queryDeviceLogListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows , @RequestParam("deviceNo") String deviceNO){
+		DeviceLog deviceLog = new DeviceLog();
+		if(!StringUtils.isEmpty(deviceNO))
+			deviceLog.setDeviceNo(deviceNO);
+		return deviceLogService.queryDeviceLogListForPage(deviceLog, page, rows);
+	}
+	
+	
+	/**
+	 * 查询设备命令日志列表，分页（管理台前端）
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="listDeviceCommandForPage",method=RequestMethod.POST)
+	private EasyUIResult queryDeviceCommandListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows , @RequestParam("deviceNo") String deviceNO){
+		DeviceCommandLog deviceCommand = new DeviceCommandLog();
+		if(!StringUtils.isEmpty(deviceNO))
+			deviceCommand.setDeviceNo(deviceNO);
+		return deviceCommandLogService.queryDeviceCommandListForPage(deviceCommand, page, rows);
 	}
 	
 }
