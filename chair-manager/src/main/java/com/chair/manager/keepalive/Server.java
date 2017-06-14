@@ -250,6 +250,7 @@ public class Server {
 				// Socket clientSocket =
 				// ipSocket.get(toClientIP+":"+toClientPort);
 				Socket clientSocket = ccidSocket.get(ccid);
+				clientSocket.setSoTimeout();
 				logger.info("------【向" + ccid + " 发送消息，获取socket对象】--->>>" + clientSocket + " ---消息为：>>>" + toMessage);
 				if(clientSocket == null) 
 					return false;
@@ -313,8 +314,7 @@ public class Server {
 			Pattern p = Pattern.compile(regEx);
 			Matcher m = p.matcher(reciverMsg);
 			boolean b = m.find();
-			logger.info(
-					"---【解析报文[" + reciverMsg + "]，匹配以*开头，以#结尾，结果为】---" + b + "\n ip:port = " + ip + ":" + clientPort);
+			logger.info("---【解析报文[" + reciverMsg + "]，匹配以*开头，以#结尾，结果为】---" + b + "\n ip:port = " + ip + ":" + clientPort);
 			if (b) {
 				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1)
 						.split(",");
