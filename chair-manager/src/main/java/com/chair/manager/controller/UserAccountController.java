@@ -121,7 +121,7 @@ public class UserAccountController {
 //			String[] ips = ipAndPort.split(":");
 //			sendSuccess = socketAction.send(ips[0], Integer.parseInt(ips[1]), device.getDeviceNo(), toMessage);
 			logger.info("------------------------deviceCommandLogService-------------------------------------------------------"+deviceCommandLogService);
-			sendSuccess = socketAction.send(device.getDeviceNo(), toMessage);
+			sendSuccess = socketAction.send(deviceCommandLogService, device.getDeviceNo(), toMessage);
 		}
 		if(!sendSuccess && !"123".equals(device.getDeviceNo())){
 			throw new ChairException("2003", "消息发送不成功");

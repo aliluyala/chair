@@ -246,7 +246,7 @@ public class Server {
 		 *            消息内容
 		 * @throws IOException
 		 */
-		public boolean send(String ccid, String toMessage) {
+		public boolean send(DeviceCommandLogService deviceCommandLogService, String ccid, String toMessage) {
 			try {
 				Socket clientSocket = ccidSocket.get(ccid);
 				logger.info("------【向" + ccid + " 发送消息，获取socket对象】--->>>" + clientSocket + " ---消息为：>>>" + toMessage);
@@ -259,7 +259,16 @@ public class Server {
 				os.flush();
 
 				//跟踪设备命令详情
-				recordCommand(ccid, 2, toMessage);
+				if(deviceCommandLogService != null){
+					DeviceCommandLog deviceCommandLog = new DeviceCommandLog();
+					deviceCommandLog.setDeviceNo(ccid);
+					deviceCommandLog.setCommandType(2);	//1.设备上报命令 2.设备下发命令
+					deviceCommandLog.setCommandDesc(toMessage);
+					deviceCommandLog.setCreateTime(new Date());
+					deviceCommandLog.setLastUpdate(new Date());
+					
+					deviceCommandLogService.save(deviceCommandLog);	
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -441,9 +450,7 @@ public class Server {
 		deviceCommandLog.setCommandDesc(commad);
 		deviceCommandLog.setCreateTime(new Date());
 		deviceCommandLog.setLastUpdate(new Date());
-		if(deviceCommandLogService == null){
-			deviceCommandLogService = new DeviceCommandLogService();
-		}
+		
 		deviceCommandLogService.save(deviceCommandLog);
 	}
 	
