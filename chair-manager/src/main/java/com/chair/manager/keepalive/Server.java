@@ -61,9 +61,9 @@ public class Server {
 
 	@Autowired
 	private DeviceLogService deviceLogService;
+	
 	@Autowired
 	private DeviceCommandLogService deviceCommandLogService;
-	
 	
 	@Autowired
 	private ConsumedDetailsService consumedDetailsService;
@@ -76,6 +76,15 @@ public class Server {
 
 	public void setDeviceService(DeviceService deviceService) {
 		this.deviceService = deviceService;
+	}
+	
+	
+	public DeviceCommandLogService getDeviceCommandLogService() {
+		return deviceCommandLogService;
+	}
+
+	public void setDeviceCommandLogService(DeviceCommandLogService deviceCommandLogService) {
+		this.deviceCommandLogService = deviceCommandLogService;
 	}
 
 	public Server() {
