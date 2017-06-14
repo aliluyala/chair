@@ -124,8 +124,8 @@ public class DeviceService extends BaseService<Device> {
 
 		String str2 = device.getExpTime();	//获取过期时间
 		if(!StringUtils.isEmpty(str1) && !StringUtils.isEmpty(str2)){
-			//当前时间 > 设备运行结束时间 && 设备状态 != 2
-			if(DateUtils.compareDate(str1, str2) && device.getStatus() != 2){
+			//当前时间 > 设备运行结束时间 && 设备状态 == 3
+			if(DateUtils.compareDate(str1, str2) && device.getStatus() == 3){
 				//更新状态为1
 				Device updateDevice = new Device();
 				updateDevice.setId(device.getId());
