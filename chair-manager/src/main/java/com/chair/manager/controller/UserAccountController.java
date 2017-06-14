@@ -120,6 +120,7 @@ public class UserAccountController {
 //			System.out.println("------【根据设备编号"+device.getDeviceNo()+"从redis.get()中获取ip】-----向客户端【" + ipAndPort+"】发送消息------" + toMessage);
 //			String[] ips = ipAndPort.split(":");
 //			sendSuccess = socketAction.send(ips[0], Integer.parseInt(ips[1]), device.getDeviceNo(), toMessage);
+			logger.info("------------------------deviceCommandLogService-------------------------------------------------------"+deviceCommandLogService);
 			sendSuccess = socketAction.send(device.getDeviceNo(), toMessage);
 		}
 		if(!sendSuccess && !"123".equals(device.getDeviceNo())){
