@@ -335,7 +335,8 @@ public class Server {
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 响应客户端R1消息内容------" + send2ClientMsg);
 						responseByOutputStream(send2ClientMsg);
-						
+						//跟踪设备命令详情
+						recordCommand(requestBodys[3], 2, send2ClientMsg);
 					} else if ("H0".equalsIgnoreCase(key)) { // H0，心跳消息
 						// 【解析报文[*H0,001,R1497108915104,031,0,0#]，匹配以*开头，以#结尾，结果为】---true
 						String token = requestBodys[2];
