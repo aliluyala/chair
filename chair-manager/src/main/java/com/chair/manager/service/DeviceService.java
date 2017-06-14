@@ -145,6 +145,9 @@ public class DeviceService extends BaseService<Device> {
 				
 				return updateDevice;
 			}else{
+				if(device.getStatus() != 3){
+					return device;
+				}
 				throw new ChairException("2002", "正在使用");
 			}
 		}
