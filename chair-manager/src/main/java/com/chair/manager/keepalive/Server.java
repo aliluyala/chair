@@ -434,14 +434,16 @@ public class Server {
 	
 	
 	private void recordCommand(String deviceNO, int type, String commad){
-		logger.info("-------设备命令跟踪------deviceNO："+deviceNO+"\ntype："+type+"\ncommad："+commad);
+		logger.info("-------------["+deviceCommandLogService+"]-------设备命令跟踪------deviceNO："+deviceNO+"\ntype："+type+"\ncommad："+commad);
 		DeviceCommandLog deviceCommandLog = new DeviceCommandLog();
 		deviceCommandLog.setDeviceNo(deviceNO);
 		deviceCommandLog.setCommandType(type);	//1.设备上报命令 2.设备下发命令
 		deviceCommandLog.setCommandDesc(commad);
 		deviceCommandLog.setCreateTime(new Date());
 		deviceCommandLog.setLastUpdate(new Date());
-		
+		if(deviceCommandLogService == null){
+			deviceCommandLogService = new DeviceCommandLogService();
+		}
 		deviceCommandLogService.save(deviceCommandLog);
 	}
 	
