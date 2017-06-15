@@ -341,7 +341,7 @@ public class Server {
 						recordCommand(requestBodys[3], 1, reciverMsg);
 						//根据设备NO查询设备详情
 						Device d = new Device();
-						d.setDeviceToken(requestBodys[3]);
+						d.setDeviceNo(requestBodys[3]);
 						Device device = deviceService.queryByDeviceNO(d);
 						//判断设备是否存在
 						if(device == null){
@@ -355,6 +355,12 @@ public class Server {
 							deviceService.save(device);
 						}else if(device != null && device.getStatus() ==3){
 							logger.info("---设备状态为“正在使用”，不处理--");
+						}else{
+							device = new Device();
+							device.setDeviceToken(token);
+							device.setOnlineTime(new Date());
+							device.setLastUpdate(new Date());
+							deviceService.updateSelective(device);
 						}
 						
 //						deviceService.saveOrUpdate(device);
