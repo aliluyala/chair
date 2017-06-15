@@ -341,7 +341,7 @@ public class Server {
 						recordCommand(requestBodys[3], 1, reciverMsg);
 						//根据设备NO查询设备详情
 						Device d = new Device();
-						d.setDeviceToken(token);
+						d.setDeviceToken(requestBodys[3]);
 						Device device = deviceService.queryByDeviceNO(d);
 						//判断设备是否存在
 						if(device == null){
