@@ -12,4 +12,6 @@ public interface DeviceMapper extends ChairMapper<Device> {
 	Device queryDeviceByToken(Device device);
 
 	void updateByDeviceNO(Device device);
+
+	void updateUsingDeviceStatus();
 }

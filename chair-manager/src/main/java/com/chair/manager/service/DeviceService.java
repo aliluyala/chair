@@ -173,4 +173,15 @@ public class DeviceService extends BaseService<Device> {
 	public void updateByDeviceNO(Device device) {
 		deviceMapper.updateByDeviceNO(device);
 	}
+
+	
+	
+	/**
+	 *  定时任务2：更新“正在使用”并且 “当前时间>消费结束时间”的设备状态
+	 *	@since 2017年6月15日
+	 *	@author yaoym
+	 */
+	public void updateUsingDeviceStatus() {
+		deviceMapper.updateUsingDeviceStatus();
+	}
 }

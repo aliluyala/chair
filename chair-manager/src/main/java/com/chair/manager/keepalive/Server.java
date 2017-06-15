@@ -92,8 +92,11 @@ public class Server {
 		if (socketCCID == null)
 			socketCCID = new ConcurrentHashMap<Socket, String>();
 
-		// 开始设备定时任务
+		// 定时任务1：更新“在线”并且“当前时间>最后心跳时间”的设备状态
 		quartzJob();
+		
+		//定时任务2：更新“正在使用”并且 “当前时间>消费结束时间”的设备状态
+		updateDeviceStatusJob();
 	}
 
 	private void quartzJob() {
@@ -110,7 +113,7 @@ public class Server {
 						if(d.getOnlineTime() == null)
 							continue;
 						String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
-						Date tempDate = DateUtils.addSecond(d.getOnlineTime(), 30);	
+						Date tempDate = DateUtils.addSecond(d.getOnlineTime(), 50);	
 						String str2 = DateUtils.formatString(tempDate, "yyyy-MM-dd HH:mm:ss");
 						logger.info("---设备信息---"+d+"\n 当前时刻="+str1+"\n 最后心跳时间="+str2);
 						if(DateUtils.compareDate(str1, str2)){
@@ -140,6 +143,23 @@ public class Server {
         // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
         service.scheduleAtFixedRate(runnable, 5, 65, TimeUnit.SECONDS);  
 	}
+	
+	//更新正在使用并且当前时间>消费结束时间的设备状态
+	private void updateDeviceStatusJob(){
+		Runnable runnable = new Runnable() {  
+            public void run() {  
+				logger.info("--------检视设备状态定时任务----------->>>>"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				deviceService.updateUsingDeviceStatus();
+            }  
+        };  
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();  
+        // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
+        service.scheduleAtFixedRate(runnable, 30, 10, TimeUnit.SECONDS); 
+	}
+	
+	
+	
+	
 
 	public void start() {
 		if (running)
@@ -224,12 +244,11 @@ public class Server {
 						receiveByInputStream(); // 接收消息
 					} catch (Exception e) {
 						logger.error(s+"-------------设备异常断开---------------" + e.getMessage());
-						e.printStackTrace();
 						overThis();
+						e.printStackTrace();
 					}
 				}
 			}
-			System.err.println("running=" + running + "\trun =" + run);
 		}
 
 		/**
@@ -320,16 +339,25 @@ public class Server {
 						recordDeviceLog(requestBodys[3], 1, "在线");
 						//跟踪设备命令详情
 						recordCommand(requestBodys[3], 1, reciverMsg);
+						//根据设备NO查询设备详情
+						Device d = new Device();
+						d.setDeviceToken(token);
+						Device device = deviceService.queryByDeviceNO(d);
+						//判断设备是否存在
+						if(device == null){
+							device = new Device();
+							device.setDeviceToken(token);
+							device.setOnlineTime(new Date());
+							device.setDeviceNo(requestBodys[3]);
+							device.setStatus(1);
+							device.setLastUpdate(new Date());
+							device.setCreateTime(new Date());
+							deviceService.save(device);
+						}else if(device != null && device.getStatus() ==3){
+							logger.info("---设备状态为“正在使用”，不处理--");
+						}
 						
-						// 新增或者更新设备
-						Device device = new Device();
-						device.setDeviceToken(token);
-						device.setOnlineTime(new Date());
-						device.setDeviceNo(requestBodys[3]);
-						device.setStatus(1);
-						device.setLastUpdate(new Date());
-						device.setCreateTime(new Date());
-						deviceService.saveOrUpdate(device);
+//						deviceService.saveOrUpdate(device);
 						 set(token, requestBodys[3]);
 						 set(requestBodys[3], ip+":"+clientPort);
 						ipSocket.put(ip + ":" + clientPort, s);

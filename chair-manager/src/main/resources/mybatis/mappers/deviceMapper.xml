@@ -6,14 +6,12 @@
 <mapper namespace="com.chair.manager.mapper.DeviceMapper">
 
 	<select id="queryAll" resultType="Device">
-		SELECT * FROM device ORDER BY
-		updated DESC
+		SELECT * FROM device ORDER BY updated DESC
 	</select>
 
 
 	<select id="queryByDeviceNO" resultType="Device">
-		SELECT * FROM device
-		where device_no=#{deviceNo}
+		SELECT * FROM device where device_no=#{deviceNo}
 	</select>
 
 	<insert id="saveOrUpdate" useGeneratedKeys="true" keyProperty="id">
@@ -35,5 +33,11 @@
 	<update id="updateByDeviceNO">
 		update device set status=#{status}, last_update=#{lastUpdate} where device_no=#{deviceNo};
 	</update>
+
+
+	<update id="updateUsingDeviceStatus">
+		update device set statua = 1, last_update=now() where now() > exp_time and status = 3
+	</update>
+
 
 </mapper>
