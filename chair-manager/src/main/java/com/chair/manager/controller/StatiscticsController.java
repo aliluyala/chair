@@ -19,9 +19,10 @@ import com.chair.manager.bean.EasyUIResult;
 import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.pojo.Manager;
 import com.chair.manager.pojo.ManagerDto;
-import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.pojo.Statisctics;
+import com.chair.manager.pojo.dto.ConsumedDetailsDto;
 import com.chair.manager.pojo.dto.RechargeRecordDto;
+import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.ManagerService;
 import com.chair.manager.service.RechargeRecordService;
 import com.github.pagehelper.PageHelper;
@@ -37,13 +38,45 @@ import com.github.pagehelper.PageInfo;
 @RequestMapping("/statisctics")
 public class StatiscticsController {
 	private Logger logger = Logger.getLogger(StatiscticsController.class);
-
 	@Autowired
 	private ManagerService managerService;
-	
 	@Autowired
 	private RechargeRecordService rechargeRecordService;
-
+	@Autowired
+	private ConsumedDetailsService consumedDetailsService;
+	
+	/**
+	 *  查询消费统计的基本信息
+	 *	@since 2017年6月15日
+	 *	@author yaoym
+	 *	@return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "queryConsumeBaseInfo", method = RequestMethod.POST)
+	private ResponseResult queryConsumeBaseInfo() {
+		//总消费时长 、今日消费时长
+		return new ResponseResult(consumedDetailsService.queryConsumedDetailsBaseInfo());
+	}
+	
+	/**
+	 * 查询消费记录列表，分页（管理台前端）
+	 *	@since 2017年6月15日
+	 *	@author yaoym
+	 *	@param page
+	 *	@param rows
+	 *	@param from
+	 *	@param to
+	 *	@return
+	 */
+	@RequestMapping(value = "listConsumeForPage", method = RequestMethod.POST)
+	@ResponseBody
+	public EasyUIResult queryConsumeList(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows, @RequestParam("from") String from, @RequestParam("to") String to) {
+		ConsumedDetailsDto consumeDto = new ConsumedDetailsDto();
+		//设置查询条件，开始日期
+		consumeDto.setFrom(getStrDate(from));
+		consumeDto.setTo(getStrDate(to));
+		return consumedDetailsService.queryPage(consumeDto, page, rows);
+	}
 
 	/**
 	 * 查询充值记录列表，分页（管理台前端）
@@ -84,38 +117,13 @@ public class StatiscticsController {
 		shopManager.setProxyId(manager.getId());
 		shopManager.setType(3);	//商家类型
 		//设置查询条件，开始日期
-		if(StringUtils.isEmpty(from)){
-			try {
-				shopManager.setFrom(DateUtils.parseToFormatString(new Date(), DateUtils.SIMPLE_DATE_STR));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}else{
-			shopManager.setFrom(from);
-		}
-		//设置查询条件，结束日期
-		if(StringUtils.isEmpty(to)){
-			try {
-				shopManager.setTo(DateUtils.parseToFormatString(new Date(), DateUtils.SIMPLE_DATE_STR));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}else{
-			shopManager.setTo(to);
-		}
-		
+		shopManager.setFrom(getStrDate(from));
+		shopManager.setTo(getStrDate(to));
 		
 		// 设置分页参数
         PageHelper.startPage(page, rows);
         //分页查询
         List<Statisctics> proxyStatiscticsList = managerService.queryProxyStatisctics(shopManager);
-		System.out.println(proxyStatiscticsList.size());
-		for (int i = 0; i < proxyStatiscticsList.size(); i++) {
-			System.out.println(proxyStatiscticsList.get(i));
-		}
-		
         
 		PageInfo<Statisctics> pageInfo = new PageInfo<Statisctics>(proxyStatiscticsList);
 		
@@ -171,37 +179,13 @@ public class StatiscticsController {
 		shopManager.setShopId(manager.getId());
 		shopManager.setType(3);	//商家类型
 		//设置查询条件，开始日期
-		if(StringUtils.isEmpty(from)){
-			try {
-				shopManager.setFrom(DateUtils.parseToFormatString(new Date(), DateUtils.SIMPLE_DATE_STR));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}else{
-			shopManager.setFrom(from);
-		}
-		//设置查询条件，结束日期
-		if(StringUtils.isEmpty(to)){
-			try {
-				shopManager.setTo(DateUtils.parseToFormatString(new Date(), DateUtils.SIMPLE_DATE_STR));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}else{
-			shopManager.setTo(to);
-		}
+		shopManager.setFrom(getStrDate(from));
+		shopManager.setTo(getStrDate(to));
 		
 		// 设置分页参数
         PageHelper.startPage(page, rows);
         //分页查询
         List<Statisctics> shopStatiscticsList = managerService.queryShopStatisctics(shopManager);
-		System.out.println(shopStatiscticsList.size());
-		for (int i = 0; i < shopStatiscticsList.size(); i++) {
-			System.out.println(shopStatiscticsList.get(i));
-		}
-		
         
 		PageInfo<Statisctics> pageInfo = new PageInfo<Statisctics>(shopStatiscticsList);
 		

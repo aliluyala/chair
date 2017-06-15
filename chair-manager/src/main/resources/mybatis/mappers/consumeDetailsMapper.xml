@@ -6,8 +6,19 @@
 <mapper namespace="com.chair.manager.mapper.ConsumedDetailsMapper">
 
 	<select id="queryConsumedDetailsList" resultType="ConsumedDetails">
-		<!-- SELECT * FROM consumed_details where open_id=#{openId} and phone_number=#{phoneNumber} ORDER BY last_update DESC; -->
 		SELECT * FROM consumed_details where open_id=#{openId} ORDER BY last_update DESC;
 	</select>
+	
+	<select id="queryConsumedDetailsPage" parameterType="com.chair.manager.pojo.dto.ConsumedDetailsDto" resultType="com.chair.manager.pojo.ConsumedDetails">
+		SELECT * FROM consumed_details where DATE_FORMAT(last_update,'%Y-%m-%d') BETWEEN #{from} and #{to} order by last_update desc
+	</select>
+	
+	<select id="queryConsumedDetailsBaseInfo" parameterType="com.chair.manager.pojo.dto.ConsumedDetailsDto" resultType="com.chair.manager.pojo.dto.ConsumedDetailsDto">
+		select count(id),
+		(SELECT sum(consumed_duration) FROM consumed_details) as totalDuration,
+		(SELECT sum(consumed_duration) FROM consumed_details where DATE_FORMAT(create_time, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')) as dayDuration
+		from consumed_details;
+	</select>
+	
 	
 </mapper>

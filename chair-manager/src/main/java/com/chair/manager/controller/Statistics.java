@@ -33,10 +33,16 @@ public class Statistics {
 	private ConsumedDetailsService consumedDetailsService;
 
 	/**
-	 * 查询消费记录列表，分页（管理台前端）
-	 * 
-	 * @param param
-	 * @return
+	 * （暂且保留）查询消费记录列表，分页（管理台前端）
+	 *	@since 2017年6月15日
+	 *	@author yaoym
+	 *	@param session
+	 *	@param page
+	 *	@param rows
+	 *	@param factoryID
+	 *	@param proxyID
+	 *	@param shopID
+	 *	@return
 	 */
 	@RequestMapping(value = "listConsumeForPage", method = RequestMethod.POST)
 	@ResponseBody
@@ -67,6 +73,7 @@ public class Statistics {
 			if (shopID != 0)
 				consume.setShopId(shopID);
 		}
-		return consumedDetailsService.queryPage(consume, page, rows);
+//		return consumedDetailsService.queryPage(consume, page, rows);
+		return null;
 	}
 }

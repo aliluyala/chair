@@ -19,13 +19,13 @@ public class RechargeRecordService extends BaseService<RechargeRecord> {
 	private RechargeRecordMapper recordMapper;
 
 	/**
-	 * 分页查询充值记录
-	 * 
-	 * @param page
-	 *            页面
-	 * @param rows
-	 *            页面大小
-	 * @return
+	 *  分页查询充值记录
+	 *	@since 2017年6月15日
+	 *	@author yaoym
+	 *	@param record
+	 *	@param page
+	 *	@param rows
+	 *	@return
 	 */
 	public EasyUIResult queryPage(RechargeRecordDto record, Integer page, Integer rows) {
 		// 设置分页参数
