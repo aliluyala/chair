@@ -60,19 +60,34 @@
     
 <script type="text/javascript">
 $(function(){
+	
 	$('#menu').tree({
 		onClick: function(node){
 			if($('#menu').tree("isLeaf",node.target)){
 				var tabs = $("#tabs");
 				var tab = tabs.tabs("getTab",node.text);
+				var tab1 = tabs.tabs('getSelected');
 				if(tab){
-					tabs.tabs("select",node.text);
+					tabs.tabs('update',{
+						tab:tab,
+						options:{
+							title:node.text,
+							href: node.attributes.url
+						}
+					});
 				}else{
+					//先关闭选项卡再添加
+					var index = $('#tabs').tabs('getTabIndex',tab1);
+					console.log("---index---"+index);
+					if(index >= 0 ){
+						tabs.tabs('close', index);	
+					}
 					tabs.tabs('add',{
 					    title:node.text,
 					    href: node.attributes.url,
 					    closable:true,
-					    bodyCls:"content"
+					    /*bodyCls:"content"*/
+					    iconCls:"icon-mini-add"
 					});
 				}
 			}
