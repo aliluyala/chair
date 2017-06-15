@@ -346,10 +346,16 @@ public class Server {
 						Device device = deviceService.queryDeviceByToken(token);
 						device.setOnlineTime(new Date());
 						device.setLastUpdate(new Date());
-						if(device.getStatus() != 3){
+						String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
+						String str2 = device.getExpTime();
+						//当前设备状态 != 3 或者  设备状态==3并且当前时间 > 消费结束时间
+						if(device.getStatus() != 3 || (device.getStatus() == 3 &&  DateUtils.compareDate(str1, str2))){
 							device.setStatus(1);
+							//设备日志跟踪
+							recordDeviceLog(device.getDeviceNo(), 1, "在线");
 						}
 						deviceService.updateSelective(device);
+						
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 					}
 				}
