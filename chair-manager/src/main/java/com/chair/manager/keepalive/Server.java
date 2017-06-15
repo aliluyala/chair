@@ -64,11 +64,6 @@ public class Server {
 	
 	@Autowired
 	private DeviceCommandLogService deviceCommandLogService;
-	
-	@Autowired
-	private ConsumedDetailsService consumedDetailsService;
-	@Autowired
-	private UserAccountService userAccountService;
 
 	public DeviceService getDeviceService() {
 		return deviceService;
