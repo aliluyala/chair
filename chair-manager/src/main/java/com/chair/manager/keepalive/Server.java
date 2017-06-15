@@ -355,6 +355,10 @@ public class Server {
 							deviceService.save(device);
 						}else if(device != null && device.getStatus() == 3){
 							logger.info("---设备状态为“正在使用”，不处理--");
+							device.setDeviceToken(token);
+							device.setOnlineTime(new Date());
+							device.setLastUpdate(new Date());
+							deviceService.updateSelective(device);
 						}else{
 							device.setDeviceToken(token);
 							device.setOnlineTime(new Date());
@@ -363,8 +367,8 @@ public class Server {
 						}
 						
 //						deviceService.saveOrUpdate(device);
-						 set(token, requestBodys[3]);
-						 set(requestBodys[3], ip+":"+clientPort);
+						set(token, requestBodys[3]);
+						set(requestBodys[3], ip+":"+clientPort);
 						ipSocket.put(ip + ":" + clientPort, s);
 						ccidSocket.put(requestBodys[3], s);
 						// 响应客户端消息
