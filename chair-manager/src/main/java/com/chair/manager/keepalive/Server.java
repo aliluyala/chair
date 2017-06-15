@@ -353,10 +353,9 @@ public class Server {
 							device.setLastUpdate(new Date());
 							device.setCreateTime(new Date());
 							deviceService.save(device);
-						}else if(device != null && device.getStatus() ==3){
+						}else if(device != null && device.getStatus() == 3){
 							logger.info("---设备状态为“正在使用”，不处理--");
 						}else{
-							device = new Device();
 							device.setDeviceToken(token);
 							device.setOnlineTime(new Date());
 							device.setLastUpdate(new Date());
