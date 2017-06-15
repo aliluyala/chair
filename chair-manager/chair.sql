@@ -165,7 +165,7 @@ CREATE TABLE `recharge_record` (
   `recharge_amount` decimal(16,2) DEFAULT NULL COMMENT '充值金额',
   `recharge_duration` int(11) DEFAULT NULL COMMENT '充值时长',
   `recharge_time` date DEFAULT NULL COMMENT '充值时间',
-  `pay_statu` int(2) DEFAULT '2' COMMENT '支付状态 1已支付 2未支付',
+  `pay_statu` int(2) DEFAULT '2' COMMENT '支付状态 1未支付 2已支付',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `last_update` datetime DEFAULT NULL COMMENT '最后更新时间',
   PRIMARY KEY (`id`)

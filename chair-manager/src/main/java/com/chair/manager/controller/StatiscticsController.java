@@ -19,8 +19,11 @@ import com.chair.manager.bean.EasyUIResult;
 import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.pojo.Manager;
 import com.chair.manager.pojo.ManagerDto;
+import com.chair.manager.pojo.RechargeRecord;
 import com.chair.manager.pojo.Statisctics;
+import com.chair.manager.pojo.dto.RechargeRecordDto;
 import com.chair.manager.service.ManagerService;
+import com.chair.manager.service.RechargeRecordService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -37,6 +40,27 @@ public class StatiscticsController {
 
 	@Autowired
 	private ManagerService managerService;
+	
+	@Autowired
+	private RechargeRecordService rechargeRecordService;
+
+
+	/**
+	 * 查询充值记录列表，分页（管理台前端）
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "listRechargeRecordForPage", method = RequestMethod.POST)
+	@ResponseBody
+	public EasyUIResult queryRechargeRecordList(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows, @RequestParam("from") String from, @RequestParam("to") String to) {
+		RechargeRecordDto recordDto = new RechargeRecordDto();
+		//设置查询条件，开始日期
+		recordDto.setFrom(getStrDate(from));
+		recordDto.setTo(getStrDate(to));
+		
+		return rechargeRecordService.queryPage(recordDto, page, rows);
+	}
 	
 	/**
 	 * 代理页面的统计，分页（管理台前端）
@@ -212,4 +236,26 @@ public class StatiscticsController {
 		
 		return new ResponseResult(shopStatisctics);
 	}
+	
+	/**
+	 *  获取开始日期/结束日期
+	 *	@since 2017年6月15日
+	 *	@author yaoym
+	 *	@param time
+	 *	@return
+	 */
+	private String getStrDate(String date){
+		String rs = null;
+		if(StringUtils.isEmpty(date)){
+			try {
+				rs = DateUtils.parseToFormatString(new Date(), DateUtils.SIMPLE_DATE_STR);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}else{
+			rs = date;
+		}
+		return rs;
+	}
+	
 }

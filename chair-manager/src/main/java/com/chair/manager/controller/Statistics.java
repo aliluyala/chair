@@ -30,27 +30,7 @@ public class Statistics {
 	private Logger logger = Logger.getLogger(Statistics.class);
 
 	@Autowired
-	private RechargeRecordService rechargeRecordService;
-
-	@Autowired
 	private ConsumedDetailsService consumedDetailsService;
-
-	/**
-	 * 查询充值记录列表，分页（管理台前端）
-	 * 
-	 * @param param
-	 * @return
-	 */
-	@RequestMapping(value = "listRecordForPage", method = RequestMethod.POST)
-	@ResponseBody
-	public EasyUIResult queryRechargeRecordList(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows,
-			@RequestParam("phoneNumber") String phoneNumber) {
-		System.err.println("---查询充值记录，分页---page：" + page + "\t rows：" + rows + "\t phoneNumber：" + phoneNumber);
-		RechargeRecord record = new RechargeRecord();
-		if (!StringUtils.isEmpty(phoneNumber))
-			record.setPhoneNumber(phoneNumber);
-		return rechargeRecordService.queryPage(record, page, rows);
-	}
 
 	/**
 	 * 查询消费记录列表，分页（管理台前端）

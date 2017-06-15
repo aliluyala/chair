@@ -11,4 +11,9 @@
 		SELECT * FROM recharge_record where open_id=#{openId} and pay_status=#{payStatus} ORDER BY last_update DESC;
 	</select>
 	
+	<select id="queryRechargeRecordPage" parameterType="com.chair.manager.pojo.dto.RechargeRecordDto" resultType="com.chair.manager.pojo.RechargeRecord">
+		SELECT * FROM recharge_record where DATE_FORMAT(last_update,'%Y-%m-%d') BETWEEN #{from} and #{to}
+	</select>
+	
+	
 </mapper>
