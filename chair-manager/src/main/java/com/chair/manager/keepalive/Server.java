@@ -426,7 +426,7 @@ public class Server {
 		
 		//设备日志跟踪
 		recordDeviceLog(deviceNO, 2, "下线");
-		recordCommand("123456",1,"test");
+//		recordCommand("123456",1,"test");
 	}
 	
 	
