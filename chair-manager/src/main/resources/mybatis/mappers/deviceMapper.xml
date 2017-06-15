@@ -36,7 +36,9 @@
 
 
 	<update id="updateUsingDeviceStatus">
-		update device set statua = 1, last_update=now() where now() > exp_time and status = 3
+		  update device set status = 1, last_update=now() where now() > exp_time and status = 3 
+		
+<!-- update device set statua = 1, last_update=now() where now() > exp_time and status = 3 and device_no='444444444' -->
 	</update>
 
 
