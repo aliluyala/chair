@@ -1,7 +1,9 @@
 package com.chair.manager.controller;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -145,6 +147,24 @@ public class UserAccountController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Vector obj = MyVector.getVector();
+		System.err.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞开始0----");
+		logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞开始0----");
+		//TODO 线程阻塞
+		synchronized (obj){
+			try {
+                if (obj.size() == 0) {
+                    obj.wait();
+                }
+                //obj.clear();
+                //obj.notify();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+		}
+		System.err.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞结束----");
+		logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞结束----");
+		
 		// 将过期时间写入设备表
 		Device updateDevice = new Device();
 		updateDevice.setId(device.getId());
@@ -153,7 +173,7 @@ public class UserAccountController {
 		updateDevice.setLastUpdate(new Date());
 		deviceService.updateSelective(updateDevice);
 		
-		// 新增消费明细（未消费）
+		// 新增消费明细（待消费）
 		ConsumedDetails consumedDetails = new ConsumedDetails();
 		consumedDetails.setOpenId(param.getOpenID());
 		consumedDetails.setPhoneNumber(param.getPhoneNumber());

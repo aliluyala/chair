@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -22,7 +23,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.chair.manager.controller.DateUtils;
+import com.chair.manager.controller.MyVector;
 import com.chair.manager.exception.ChairException;
+import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.Device;
 import com.chair.manager.pojo.DeviceCommandLog;
 import com.chair.manager.pojo.DeviceLog;
@@ -93,10 +96,10 @@ public class Server {
 			socketCCID = new ConcurrentHashMap<Socket, String>();
 
 		// 定时任务1：更新“在线”并且“当前时间>最后心跳时间”的设备状态
-		quartzJob();
+		//quartzJob();
 		
 		//定时任务2：更新“正在使用”并且 “当前时间>消费结束时间”的设备状态
-		updateDeviceStatusJob();
+//		updateDeviceStatusJob();
 	}
 
 	private void quartzJob() {
@@ -113,7 +116,7 @@ public class Server {
 						if(d.getOnlineTime() == null)
 							continue;
 						String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
-						Date tempDate = DateUtils.addSecond(d.getOnlineTime(), 50);	
+						Date tempDate = DateUtils.addSecond(d.getOnlineTime(), 65);	
 						String str2 = DateUtils.formatString(tempDate, "yyyy-MM-dd HH:mm:ss");
 						logger.info("---设备信息---"+d+"\n 当前时刻="+str1+"\n 最后心跳时间="+str2);
 						if(DateUtils.compareDate(str1, str2)){
@@ -141,7 +144,7 @@ public class Server {
         };  
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();  
         // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
-        service.scheduleAtFixedRate(runnable, 5, 65, TimeUnit.SECONDS);  
+        service.scheduleAtFixedRate(runnable, 5, 20, TimeUnit.SECONDS);  
 	}
 	
 	//更新正在使用并且当前时间>消费结束时间的设备状态
@@ -179,7 +182,7 @@ public class Server {
 
 	// 测试
 	public static void main(String[] args) throws IOException {
-		int port = Constant.PORT;
+		/*int port = Constant.PORT;
 		System.out.println("----服务器启动--端口---" + port);
 		Server server = new Server(port);
 		server.start();
@@ -189,7 +192,15 @@ public class Server {
 		Matcher m = p.matcher("*R1,001,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#\0");
 		boolean b = m.find();
 		// System.out.println("---b---"+b);
-		// System.out.println("*R1,001,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#\0");
+		// System.out.println("*R1,001,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#\0");*/
+		for(int i=0; i<10; i++){
+			MyVector myVector  = MyVector.getInstance();
+			Vector v = myVector.getVector();
+			System.out.println("myVector："+myVector.hashCode() + "\t Vector："+v.hashCode());
+		}
+		
+		
+		
 	}
 
 	/*------------------------------------------------------------------------------------------*/
@@ -250,7 +261,7 @@ public class Server {
 				}
 			}
 		}
-
+		
 		/**
 		 * 发送消息
 		 * 
@@ -260,8 +271,9 @@ public class Server {
 		 *            消息内容
 		 * @throws IOException
 		 */
-		public boolean send(DeviceCommandLogService deviceCommandLogService, String ccid, String toMessage) {
+		public boolean send( DeviceCommandLogService deviceCommandLogService, String ccid, String toMessage) {
 			try {
+				
 				Socket clientSocket = ccidSocket.get(ccid);
 				logger.info("------【向" + ccid + " 发送消息，获取socket对象】--->>>" + clientSocket + " ---消息为：>>>" + toMessage);
 				if(clientSocket == null) 
@@ -306,7 +318,7 @@ public class Server {
                 int r = is.read(b);
                 if(r>-1){
                     String reciverMsg = new String(b);
-                    System.err.println("---------------reciverMsg-------"+reciverMsg);
+                    System.out.println("---------------接收来自客户端消息：>>>----------"+reciverMsg);
                     resolveMessage(clientIP, clientPort, reciverMsg.trim());
                 }
             }
@@ -394,8 +406,21 @@ public class Server {
 						deviceService.updateSelective(device);
 						
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+					}else if("T1".equalsIgnoreCase(key)){
+						//*T1,001,R1497534027669,000003#
+						Vector obj = MyVector.getVector();
+						synchronized (obj) {
+			                try {
+			                	Thread.sleep(5*1000);
+			                    obj.notify();
+			                } catch (Exception e) {
+			                    e.printStackTrace();
+			                }
+						
+						}
 					}
 				}
+					
 			}
 		}
 
