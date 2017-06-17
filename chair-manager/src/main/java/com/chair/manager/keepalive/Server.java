@@ -292,6 +292,7 @@ public class Server {
 				byte[] b = toMessage.getBytes();
 				os.write(b);
 				os.flush();
+				os.close();
 
 				//跟踪设备命令详情
 				if(deviceCommandLogService != null){
