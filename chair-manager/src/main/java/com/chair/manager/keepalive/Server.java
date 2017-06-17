@@ -441,7 +441,7 @@ public class Server {
 						deviceService.updateSelective(device);
 						
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-					}else if("T1".equalsIgnoreCase(key)){	//设备启动成功
+					}else if("T1".equalsIgnoreCase(key) || "T2".equalsIgnoreCase(key)){	//设备启动成功
 						
 						//*T1,001,R1497534027669,000003#
 						
@@ -495,7 +495,7 @@ public class Server {
 						//删除map的对象
 						map.remove(device.getDeviceNo());
 						
-					}else if("T2".equalsIgnoreCase(key)){//设备启动失败
+					}/*else if("T2".equalsIgnoreCase(key)){//设备启动失败
 						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
 
 						//跟踪设备命令详情
@@ -507,12 +507,12 @@ public class Server {
 						dto.getConsumerID();
 						ConsumedDetails consumedDetails = new ConsumedDetails();
 						consumedDetails.setId(dto.getConsumerID());
-						consumedDetails.setStatus(2);	//消费成功
+						consumedDetails.setStatus(3);	//消费失败
 						consumedDetails.setLastUpdate(new Date());
 						consumedDetailsService.updateSelective(consumedDetails);
 						//删除map的对象
 						map.remove(device.getDeviceNo());
-					}
+					}*/
 				}
 					
 			}
