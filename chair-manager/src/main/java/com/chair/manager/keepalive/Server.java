@@ -439,12 +439,7 @@ public class Server {
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 					}else if("T1".equalsIgnoreCase(key)){	//设备启动成功
 						//*T1,001,R1497534027669,000003#
-						logger.info("--------------1---------------"+deviceService);
-						Device d = new Device();
-						d.setDeviceToken(requestBodys[2]);
-						logger.info("--------------2---------------"+deviceService);
 						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
-						logger.info("--------------3---------------");
 						Map<String, TempDto> map = MyVector.getMap();
 						logger.info(userAccountService+"--------------4---------------"+map);
 						logger.info("--------------4---------------"+map.size());
@@ -455,12 +450,16 @@ public class Server {
 							userAccountService = new UserAccountService();
 						}
 						logger.info("-T1cccccc-----userAccountService------"+userAccountService);
+						
+						
 						// 更新账户信息
 						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
 						userAccount.setUsedDuration(userAccount.getUsedDuration() + Integer.parseInt(requestBodys[2]));
 						userAccount.setRestDuration(userAccount.getRestDuration() - Integer.parseInt(requestBodys[2]));
 						userAccount.setLastUpdate(new Date());
 						userAccountService.updateSelective(userAccount);
+
+						logger.info("-AAAAA-----consumedDetailsService------"+consumedDetailsService);
 						//更新消费明细状态
 						dto.getConsumerID();
 						ConsumedDetails consumedDetails = new ConsumedDetails();
@@ -469,7 +468,8 @@ public class Server {
 						consumedDetails.setLastUpdate(new Date());
 						consumedDetailsService.updateSelective(consumedDetails);
 						
-						
+
+						logger.info("-bbbbbb-----consumedDetailsService------"+consumedDetailsService);
 						Date date = DateUtils.addMinute(new Date(), Integer.parseInt(requestBodys[2]));
 						String expTime = "";
 						try {
@@ -479,18 +479,20 @@ public class Server {
 							e.printStackTrace();
 						}
 						
-						// 将过期时间写入设备表
-						Device updateDevice = new Device();
-						updateDevice.setId(device.getId());
-						updateDevice.setExpTime(expTime);
-						updateDevice.setStatus(3);	//设置为正在使用
-						updateDevice.setLastUpdate(new Date());
-						deviceService.updateSelective(updateDevice);
-						
+
+						logger.info("-CCCCCCCCCCCCC-----consumedDetailsService------"+consumedDetailsService);
+						//更改设备状态 // 将过期时间写入设备表
+						device.setStatus(3);
+						device.setExpTime(expTime);	//设置为正在使用
+						device.setLastUpdate(new Date());
+						deviceService.updateSelective(device);
+
+						logger.info("-DDDDDDDDDDDDDDDD-----consumedDetailsService------");
 						//设备日志跟踪
 						recordDeviceLog(device.getDeviceNo(), 3, "正在使用");
 						//删除map的对象
 						map.remove(device.getDeviceNo());
+						logger.info("-eeeeeeeeeeeeeee-----consumedDetailsService------");
 						
 					}else if("T2".equalsIgnoreCase(key)){//设备启动失败
 						Device d = new Device();
