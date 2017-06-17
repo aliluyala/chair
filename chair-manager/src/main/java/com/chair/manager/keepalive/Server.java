@@ -71,11 +71,9 @@ public class Server {
 	private DeviceCommandLogService deviceCommandLogService;
 	
 
-	@Autowired
-	private UserAccountService userAccountService;
+	private UserAccountService userAccountService = new UserAccountService();
 
-	@Autowired
-	private ConsumedDetailsService consumedDetailsService;
+	private ConsumedDetailsService consumedDetailsService = new ConsumedDetailsService();
 	
 
 	public DeviceService getDeviceService() {
