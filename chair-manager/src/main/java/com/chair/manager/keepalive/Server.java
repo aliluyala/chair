@@ -446,6 +446,8 @@ public class Server {
 						Device device = deviceService.queryByDeviceNO(d);
 						logger.info("--------------3---------------");
 						Map<String, TempDto> map = MyVector.getMap();
+						logger.info("--------------4---------------"+map);
+						logger.info("--------------4---------------"+map.size());
 						TempDto dto = map.get(device.getDeviceNo());
 						logger.info("-T1aaaaa-----userAccountService------"+userAccountService);
 						if(userAccountService == null){
