@@ -229,7 +229,7 @@ public class Server {
 
 		public void run() {
 			try {
-				ServerSocket ss = new ServerSocket(port, 5);
+				ServerSocket ss = new ServerSocket(port);
 				while (running) {
 					Socket s = ss.accept();
 					new Thread(new SocketAction(s)).start();
