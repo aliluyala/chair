@@ -439,9 +439,12 @@ public class Server {
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 					}else if("T1".equalsIgnoreCase(key)){	//设备启动成功
 						//*T1,001,R1497534027669,000003#
+						logger.info("--------------1---------------"+deviceService);
 						Device d = new Device();
 						d.setDeviceToken(requestBodys[2]);
+						logger.info("--------------2---------------"+deviceService);
 						Device device = deviceService.queryByDeviceNO(d);
+						logger.info("--------------3---------------");
 						Map<String, TempDto> map = MyVector.getMap();
 						TempDto dto = map.get(device.getDeviceNo());
 						logger.info("-T1aaaaa-----userAccountService------"+userAccountService);
