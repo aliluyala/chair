@@ -105,10 +105,10 @@ public class Server {
 			socketCCID = new ConcurrentHashMap<Socket, String>();
 
 		// 定时任务1：更新“在线”并且“当前时间>最后心跳时间”的设备状态
-		quartzJob();
+		//quartzJob();
 		
 		//定时任务2：更新“正在使用”并且 “当前时间>消费结束时间”的设备状态
-		updateDeviceStatusJob();
+		//updateDeviceStatusJob();
 	}
 
 	private void quartzJob() {
