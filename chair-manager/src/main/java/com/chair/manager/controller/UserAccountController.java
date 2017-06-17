@@ -196,6 +196,7 @@ public class UserAccountController {
 		// 更新账户信息
 		userAccount.setUsedDuration(userAccount.getUsedDuration() + consumePackage.getConsumedDuration());
 		userAccount.setRestDuration(userAccount.getRestDuration() - consumePackage.getConsumedDuration());
+		userAccount.setLastUpdate(new Date());
 		userAccountService.updateSelective(userAccount);
 		logger.info("---保存消费明细结果--->>>" + rs);
 		return new ResponseResult(null);

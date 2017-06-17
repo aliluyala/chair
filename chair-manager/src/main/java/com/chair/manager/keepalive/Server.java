@@ -412,12 +412,18 @@ public class Server {
 						synchronized (obj) {
 			                try {
 			                	Thread.sleep(5*1000);
+			                	String token = requestBodys[2];
+								Device device = deviceService.queryDeviceByToken(token);
+								//跟踪设备命令详情
+								recordCommand(device.getDeviceNo(), 1, reciverMsg);
 			                    obj.notify();
 			                } catch (Exception e) {
 			                    e.printStackTrace();
 			                }
 						
 						}
+					}else if("R2".equalsIgnoreCase(key)){
+						//确认注册成功
 					}
 				}
 					
