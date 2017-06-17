@@ -432,7 +432,7 @@ public class Server {
 						Vector obj = MyVector.getVector();
 						synchronized (obj) {
 			                try {
-			                	Thread.sleep(5*1000);
+			                	//Thread.sleep(5*1000);
 			                	String token = requestBodys[2];
 								Device device = deviceService.queryDeviceByToken(token);
 								//跟踪设备命令详情
