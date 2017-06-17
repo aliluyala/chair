@@ -499,7 +499,7 @@ public class Server {
 						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
 
 						//跟踪设备命令详情
-						recordCommand(device.getDeviceNo(), 1, reciverMsg); 
+						recordCommand(device.getDeviceNo(), 1, reciverMsg);
 						
 						Map<String, TempDto> map = MyVector.getMap();
 						TempDto dto = map.get(device.getDeviceNo());

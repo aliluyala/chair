@@ -191,7 +191,7 @@ public class UserAccountController {
 		}else{
 			tempDto = new TempDto();
 			tempDto.setAccountID(userAccount.getId());
-			tempDto.setConsumerID(rs);
+			tempDto.setConsumerID(consumedDetails.getId());
 			tempDto.setDelayTime(new Date().getTime());
 		}
 		
