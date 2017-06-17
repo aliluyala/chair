@@ -542,8 +542,8 @@ public class Server {
 	 * 将socket和设备的关系打印出来
 	 */
 	private void printSokcet(){
-		logger.info("--------socket.map一共有几条数据?----------"+socketCCID.size());
-		for (Map.Entry<Socket,String> entry : socketCCID.entrySet()){
+		logger.info("--------socket.map一共有几条数据?----------"+ccidSocket.size());
+		for (Map.Entry<String,Socket> entry : ccidSocket.entrySet()){
 			logger.info("---【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
 	}
