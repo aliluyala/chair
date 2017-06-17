@@ -350,14 +350,12 @@ public class Server {
 							Device device = deviceService.queryByDeviceNO(d);
 							if(device == null){
 								device = new Device();
-								logger.debug("+++device为空----");
 								device.setDeviceToken(token);
 								device.setDeviceNo(requestBodys[3]);
 								device.setLastUpdate(new Date());
 								device.setCreateTime(new Date());
 								deviceService.save(device);
 							}else{
-								logger.debug("+++device不为空----");
 								device.setDeviceToken(token);
 								device.setDeviceNo(requestBodys[3]);
 								device.setLastUpdate(new Date());
@@ -371,7 +369,7 @@ public class Server {
 							//跟踪设备命令详情
 							recordCommand(requestBodys[3], 2, send2ClientMsg);
 						}else{	//注册成功
-							if ("".equals(token) || null == token) {
+							if (null == token || "".equals(token.trim())) {
 								logger.error("--------------第三次握手，得到的token为空--------------");
 								return;
 								//throw new ChairException("-10", "第三次握手，得到的token为空");
@@ -408,6 +406,8 @@ public class Server {
 							set(token, requestBodys[3]);
 							set(requestBodys[3], ip+":"+clientPort);
 							ccidSocket.put(requestBodys[3], s);
+
+							logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【注册成功】------------");
 						}
 							
 						/*
