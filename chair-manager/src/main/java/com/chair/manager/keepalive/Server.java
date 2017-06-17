@@ -471,6 +471,8 @@ public class Server {
 		del(clientIP + ":" + clientPort);
 		del(token);
 		del(ccid);
+
+		ccidSocket.remove(ccid);
 		return ccid;
 	}
 	
