@@ -455,9 +455,9 @@ public class Server {
 
 						//设备日志跟踪
 						recordDeviceLog(device.getDeviceNo(), 3, "正在使用");
-
 						//跟踪设备命令详情
-						recordCommand(requestBodys[3], 1, reciverMsg);
+						recordCommand(device.getDeviceNo(), 1, reciverMsg); 
+
 						
 						// 更新账户信息
 						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
