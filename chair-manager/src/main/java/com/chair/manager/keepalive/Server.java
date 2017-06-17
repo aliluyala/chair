@@ -340,7 +340,7 @@ public class Server {
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 正在注册
 						String token = requestBodys[2];
-						if (null == token || "".equals(token.trim())) {
+						if ("0000000000".equals(token)) {
 							// 生成token，并且保存到redis
 							token = "R" + new Date().getTime();
 							logger.info("---token为空，创建token--->>>" + token);
@@ -371,7 +371,7 @@ public class Server {
 						recordCommand(requestBodys[3], 2, send2ClientMsg);
 					} else if("R2".equalsIgnoreCase(key)){	//注册成功
 						String token = requestBodys[2];
-						if (null == token || "".equals(token.trim())) {
+						if ("0000000000".equals(token) || null == token || "".equals(token.trim())) {
 							logger.error("--------------第三次握手，得到的token为空--------------");
 							return;
 							//throw new ChairException("-10", "第三次握手，得到的token为空");
