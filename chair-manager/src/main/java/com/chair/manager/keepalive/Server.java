@@ -29,6 +29,8 @@ import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.Device;
 import com.chair.manager.pojo.DeviceCommandLog;
 import com.chair.manager.pojo.DeviceLog;
+import com.chair.manager.pojo.UserAccount;
+import com.chair.manager.pojo.dto.TempDto;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.DeviceCommandLogService;
 import com.chair.manager.service.DeviceLogService;
@@ -67,6 +69,14 @@ public class Server {
 	
 	@Autowired
 	private DeviceCommandLogService deviceCommandLogService;
+	
+
+	@Autowired
+	private UserAccountService userAccountService;
+
+	@Autowired
+	private ConsumedDetailsService consumedDetailsService;
+	
 
 	public DeviceService getDeviceService() {
 		return deviceService;
@@ -427,24 +437,45 @@ public class Server {
 						deviceService.updateSelective(device);
 						
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-					}else if("T1".equalsIgnoreCase(key)){
+					}else if("T1".equalsIgnoreCase(key)){	//设备启动成功
 						//*T1,001,R1497534027669,000003#
-						Vector obj = MyVector.getVector();
-						synchronized (obj) {
-			                try {
-			                	//Thread.sleep(5*1000);
-			                	String token = requestBodys[2];
-								Device device = deviceService.queryDeviceByToken(token);
-								//跟踪设备命令详情
-								recordCommand(device.getDeviceNo(), 1, reciverMsg);
-			                    obj.notify();
-			                } catch (Exception e) {
-			                    e.printStackTrace();
-			                }
+						Device d = new Device();
+						d.setDeviceToken(requestBodys[2]);
+						Device device = deviceService.queryByDeviceNO(d);
+						Map<String, TempDto> map = MyVector.getMap();
+						TempDto dto = map.get(device.getDeviceNo());
+						// 更新账户信息
+						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
+						userAccount.setUsedDuration(userAccount.getUsedDuration() + Integer.parseInt(requestBodys[2]));
+						userAccount.setRestDuration(userAccount.getRestDuration() - Integer.parseInt(requestBodys[2]));
+						userAccount.setLastUpdate(new Date());
+						userAccountService.updateSelective(userAccount);
+						//更新消费明细状态
+						dto.getConsumerID();
+						ConsumedDetails consumedDetails = new ConsumedDetails();
+						consumedDetails.setId(dto.getConsumerID());
+						consumedDetails.setStatus(2);	//消费成功
+						consumedDetails.setLastUpdate(new Date());
+						consumedDetailsService.updateSelective(consumedDetails);
+
+						//删除map的对象
+						map.remove(device.getDeviceNo());
 						
-						}
-					}else if("R2".equalsIgnoreCase(key)){
-						//确认注册成功
+					}else if("T2".equalsIgnoreCase(key)){//设备启动失败
+						Device d = new Device();
+						d.setDeviceToken(requestBodys[2]);
+						Device device = deviceService.queryByDeviceNO(d);
+						Map<String, TempDto> map = MyVector.getMap();
+						TempDto dto = map.get(device.getDeviceNo());
+						//更新消费明细状态
+						dto.getConsumerID();
+						ConsumedDetails consumedDetails = new ConsumedDetails();
+						consumedDetails.setId(dto.getConsumerID());
+						consumedDetails.setStatus(3);	//消费失败
+						consumedDetails.setLastUpdate(new Date());
+						consumedDetailsService.updateSelective(consumedDetails);
+						//删除map的对象
+						map.remove(device.getDeviceNo());
 					}
 				}
 					

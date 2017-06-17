@@ -1,6 +1,10 @@
 package com.chair.manager.controller;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
+
+import com.chair.manager.pojo.dto.TempDto;
 
 public class MyVector {
 
@@ -26,5 +30,15 @@ public class MyVector {
 		return vector;
 	}
 	
+	
+	
+	private static HashMap<String, TempDto> map;
+	
+	public static HashMap<String, TempDto> getMap(){
+		if(map == null){
+			map = new HashMap<String, TempDto>();
+		}
+		return map;
+	}
 	
 }

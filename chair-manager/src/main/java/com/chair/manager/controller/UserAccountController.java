@@ -1,14 +1,15 @@
 package com.chair.manager.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,13 +19,13 @@ import com.chair.manager.bean.ReqParam;
 import com.chair.manager.bean.ResponseResult;
 import com.chair.manager.exception.ChairException;
 import com.chair.manager.keepalive.Server;
-import com.chair.manager.keepalive.Server.ConnWatchDog;
 import com.chair.manager.keepalive.Server.SocketAction;
 import com.chair.manager.pojo.ConsumePackage;
 import com.chair.manager.pojo.ConsumedDetails;
 import com.chair.manager.pojo.Device;
 import com.chair.manager.pojo.DeviceLog;
 import com.chair.manager.pojo.UserAccount;
+import com.chair.manager.pojo.dto.TempDto;
 import com.chair.manager.service.ConsumePackageService;
 import com.chair.manager.service.ConsumedDetailsService;
 import com.chair.manager.service.DeviceCommandLogService;
@@ -118,10 +119,6 @@ public class UserAccountController {
 			Server server = new Server();
 			SocketAction socketAction = server.new SocketAction();
 			String toMessage = "*T0,001," + consumePackage.getConsumedDuration() + "#";
-//			String ipAndPort = jedisCluster.get(device.getDeviceNo());
-//			System.out.println("------【根据设备编号"+device.getDeviceNo()+"从redis.get()中获取ip】-----向客户端【" + ipAndPort+"】发送消息------" + toMessage);
-//			String[] ips = ipAndPort.split(":");
-//			sendSuccess = socketAction.send(ips[0], Integer.parseInt(ips[1]), device.getDeviceNo(), toMessage);
 			logger.info("------------------------deviceCommandLogService-------------------------------------------------------"+deviceCommandLogService);
 			sendSuccess = socketAction.send(deviceCommandLogService, device.getDeviceNo(), toMessage);
 		}
@@ -147,24 +144,32 @@ public class UserAccountController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+		/*
 		Vector obj = MyVector.getVector();
 		System.err.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞开始0----");
 		logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞开始0----");
+		
 		//TODO 线程阻塞
 		synchronized (obj){
 			try {
                 if (obj.size() == 0) {
                     obj.wait();
                 }
-                //obj.clear();
-                //obj.notify();
+                String respsStatus = (String) obj.get(0);
+                if("1".equals(respsStatus)){
+        			throw new ChairException("2004", "设备启动失败");
+                }
+                obj.remove(0);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 		}
+		
 		System.err.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞结束----");
 		logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞结束----");
-		
+		*/
 		// 将过期时间写入设备表
 		Device updateDevice = new Device();
 		updateDevice.setId(device.getId());
@@ -193,12 +198,27 @@ public class UserAccountController {
 		consumedDetails.setLastUpdate(new Date());
 		// 保存消费明细信息
 		int rs = consumedDetailsService.save(consumedDetails);
+		
+		//将数据保存到内存
+		Map<String, TempDto> map = MyVector.getMap();
+		TempDto tempDto = map.get(device.getDeviceNo());
+		
+		if(tempDto != null){
+			throw new ChairException("2005", "请稍后再试");
+		}else{
+			tempDto = new TempDto();
+			tempDto.setAccountID(userAccount.getId());
+			tempDto.setConsumerID(rs);
+		}
+		
+		map.put(device.getDeviceNo(), tempDto);
+		
 		// 更新账户信息
-		userAccount.setUsedDuration(userAccount.getUsedDuration() + consumePackage.getConsumedDuration());
+		/*userAccount.setUsedDuration(userAccount.getUsedDuration() + consumePackage.getConsumedDuration());
 		userAccount.setRestDuration(userAccount.getRestDuration() - consumePackage.getConsumedDuration());
 		userAccount.setLastUpdate(new Date());
 		userAccountService.updateSelective(userAccount);
-		logger.info("---保存消费明细结果--->>>" + rs);
+		logger.info("---保存消费明细结果--->>>" + rs);*/
 		return new ResponseResult(null);
 	}
 
