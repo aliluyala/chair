@@ -72,9 +72,9 @@ public class Server {
 	private DeviceCommandLogService deviceCommandLogService;
 	
 
-	private UserAccountService userAccountService = new UserAccountService();
+	private static UserAccountService userAccountService = new UserAccountService();
 
-	private ConsumedDetailsService consumedDetailsService = new ConsumedDetailsService();
+	private static ConsumedDetailsService consumedDetailsService = new ConsumedDetailsService();
 	
 
 	public DeviceService getDeviceService() {
