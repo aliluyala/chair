@@ -442,21 +442,22 @@ public class Server {
 						
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 					}else if("T1".equalsIgnoreCase(key)){	//设备启动成功
+						
 						//*T1,001,R1497534027669,000003#
 						
 						//[*T1,001,R1497708612657,000001#]
 						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
 						Map<String, TempDto> map = MyVector.getMap();
-						logger.info(userAccountService+"--------------4---------------"+map);
-						logger.info("--------------4---------------"+map.size());
 						TempDto dto = map.get(device.getDeviceNo());
-						logger.info("-T1aaaaa-----userAccountService------"+userAccountService);
 						if(userAccountService == null){
-							logger.info("-T1bbbbbb-----userAccountService------"+userAccountService);
 							userAccountService = new UserAccountService();
 						}
-						logger.info("-T1cccccc-----userAccountService------"+userAccountService);
-						
+
+						//设备日志跟踪
+						recordDeviceLog(device.getDeviceNo(), 3, "正在使用");
+
+						//跟踪设备命令详情
+						recordCommand(requestBodys[3], 1, reciverMsg);
 						
 						// 更新账户信息
 						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
@@ -465,7 +466,6 @@ public class Server {
 						userAccount.setLastUpdate(new Date());
 						userAccountService.updateSelective(userAccount);
 
-						logger.info("-AAAAA-----consumedDetailsService------"+consumedDetailsService);
 						//更新消费明细状态
 						dto.getConsumerID();
 						ConsumedDetails consumedDetails = new ConsumedDetails();
@@ -492,15 +492,15 @@ public class Server {
 						device.setLastUpdate(new Date());
 						deviceService.updateSelective(device);
 
-						//设备日志跟踪
-						recordDeviceLog(device.getDeviceNo(), 3, "正在使用");
 						//删除map的对象
 						map.remove(device.getDeviceNo());
 						
 					}else if("T2".equalsIgnoreCase(key)){//设备启动失败
-						Device d = new Device();
-						d.setDeviceToken(requestBodys[2]);
-						Device device = deviceService.queryByDeviceNO(d);
+						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
+
+						//跟踪设备命令详情
+						recordCommand(requestBodys[3], 1, reciverMsg);
+						
 						Map<String, TempDto> map = MyVector.getMap();
 						TempDto dto = map.get(device.getDeviceNo());
 						//更新消费明细状态
