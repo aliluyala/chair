@@ -126,14 +126,7 @@ public class UserAccountController {
 			throw new ChairException("2003", "消息发送不成功");
 		}
 		
-		//设备日志跟踪
-		DeviceLog deviceLog = new DeviceLog();
-		deviceLog.setDeviceNo(device.getDeviceNo());
-		deviceLog.setDeviceStatus(3);	//正在使用
-		deviceLog.setDeviceStatusDesc("正在使用");
-		deviceLog.setCreateTime(new Date());
-		deviceLog.setLastUpdate(new Date());
-		deviceLogService.save(deviceLog);
+		
 		
 		
 		/*

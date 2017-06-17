@@ -467,7 +467,6 @@ public class Server {
 							e.printStackTrace();
 						}
 						
-						
 						// 将过期时间写入设备表
 						Device updateDevice = new Device();
 						updateDevice.setId(device.getId());
@@ -476,7 +475,8 @@ public class Server {
 						updateDevice.setLastUpdate(new Date());
 						deviceService.updateSelective(updateDevice);
 						
-
+						//设备日志跟踪
+						recordDeviceLog(device.getDeviceNo(), 3, "正在使用");
 						//删除map的对象
 						map.remove(device.getDeviceNo());
 						
