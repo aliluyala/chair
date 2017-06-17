@@ -507,7 +507,7 @@ public class Server {
 						dto.getConsumerID();
 						ConsumedDetails consumedDetails = new ConsumedDetails();
 						consumedDetails.setId(dto.getConsumerID());
-						consumedDetails.setStatus(3);	//消费失败
+						consumedDetails.setStatus(2);	//消费成功
 						consumedDetails.setLastUpdate(new Date());
 						consumedDetailsService.updateSelective(consumedDetails);
 						//删除map的对象
