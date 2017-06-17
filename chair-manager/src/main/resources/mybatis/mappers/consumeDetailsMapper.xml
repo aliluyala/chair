@@ -21,7 +21,7 @@
 	</select>
 	
 	
-	<insert id="save2DB" useGeneratedKeys="true" keyProperty="id" resultType="ConsumedDetails">
+	<insert id="save2DB" useGeneratedKeys="true" keyProperty="id">
 		insert into consumed_details(open_id ,phone_number, consumed_package_id, consumed_duration, factory_id,
 		factory_name,proxy_id,proxy_name,shop_id,shop_name,shop_location,device_id,consumed_time,status, create_time, last_update)
 		values(#{openId},#{phoneNumber},#{consumedPackageId}, #{consumedDuration},#{factoryId}, #{factoryName},
