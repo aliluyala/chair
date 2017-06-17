@@ -340,7 +340,7 @@ public class Server {
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 正在注册
 						String token = requestBodys[2];
-						if ("0000000000".equals(token)) {
+						if ("0000000000".equals(token) || null == token || "".equals(token.trim())) {
 							// 生成token，并且保存到redis
 							token = "R" + new Date().getTime();
 							logger.info("---token为空，创建token--->>>" + token);
