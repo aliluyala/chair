@@ -17,6 +17,8 @@
 	        	<th data-options="field:'id',width:60">ID</th>
 	            <th data-options="field:'factoryName',width:200">所属厂家名称</th>
 	            <th data-options="field:'proxyName',width:200">代理名称</th>
+	            <th data-options="field:'user',width:200">管理员账号</th>
+	            <th data-options="field:'password',width:200">管理员密码</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
 	            <th data-options="field:'lastUpdate',width:130,align:'center',formatter:formatDate">更新日期</th>
 	        </tr>

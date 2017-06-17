@@ -18,6 +18,8 @@
 	            <th data-options="field:'proxyName',width:200">所属代理名称</th>
 	            <th data-options="field:'shopName',width:200">商家名称</th>
 	            <th data-options="field:'shopLocation',width:200">商家地址</th>
+	            <th data-options="field:'user',width:200">管理员账号</th>
+	            <th data-options="field:'password',width:200">管理员密码</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
 	            <th data-options="field:'lastUpdate',width:130,align:'center',formatter:formatDate">更新日期</th>
 	        </tr>
