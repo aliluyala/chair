@@ -58,6 +58,20 @@ public class UsersController {
 	private UserAccountService userAccountService;
 	@Autowired
 	private DeviceService deviceService;
+	
+	/**
+	 * 查询当前消费明细状态
+	 * @param param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "queryCurConsumeStatus", method = RequestMethod.POST)
+	private ResponseResult queryCurConsumeStatus(@RequestBody ReqParam param) {
+		logger.info("------【查询当前消费明细状态】---参数>>>" + param);
+		return new ResponseResult(consumedDetailsService.findById(param.getConsumerID()));
+	}
+	
+	
 
 	/**
 	 * 查看用户注册状态

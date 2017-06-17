@@ -8,6 +8,17 @@ public class ReqParam implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5030123507774610563L;
+	
+	private Integer consumerID;
+	
+	public Integer getConsumerID() {
+		return consumerID;
+	}
+
+	public void setConsumerID(Integer consumerID) {
+		this.consumerID = consumerID;
+	}
+
 	/**
 	 * //用户id
 	 */

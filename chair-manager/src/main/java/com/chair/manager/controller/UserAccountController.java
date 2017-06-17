@@ -185,7 +185,6 @@ public class UserAccountController {
 				tempDto.setAccountID(userAccount.getId());
 				tempDto.setConsumerID(rs);
 				tempDto.setDelayTime(new Date().getTime());
-				
 			}else{
 				throw new ChairException("2005", "请稍后再试");
 			}
@@ -204,7 +203,8 @@ public class UserAccountController {
 		userAccount.setLastUpdate(new Date());
 		userAccountService.updateSelective(userAccount);
 		logger.info("---保存消费明细结果--->>>" + rs);*/
-		return new ResponseResult(null);
+		
+		return new ResponseResult(tempDto);
 	}
 
 }
