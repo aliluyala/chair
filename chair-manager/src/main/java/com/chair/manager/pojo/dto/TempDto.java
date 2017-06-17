@@ -5,6 +5,9 @@ public class TempDto {
 	private Integer accountID;
 
 	private Integer consumerID;
+	
+	private Long delayTime;
+	
 
 	public Integer getAccountID() {
 		return accountID;
@@ -21,5 +24,15 @@ public class TempDto {
 	public void setConsumerID(Integer consumerID) {
 		this.consumerID = consumerID;
 	}
+
+	public Long getDelayTime() {
+		return delayTime;
+	}
+
+	public void setDelayTime(Long delayTime) {
+		this.delayTime = delayTime;
+	}
+	
+	
 
 }

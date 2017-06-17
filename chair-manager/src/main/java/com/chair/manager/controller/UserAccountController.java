@@ -204,11 +204,21 @@ public class UserAccountController {
 		TempDto tempDto = map.get(device.getDeviceNo());
 		
 		if(tempDto != null){
-			throw new ChairException("2005", "请稍后再试");
+			if(new Date().getTime() > ( tempDto.getDelayTime() + 60 * 1000)){
+				map.remove(device.getDeviceNo());
+				tempDto = new TempDto();
+				tempDto.setAccountID(userAccount.getId());
+				tempDto.setConsumerID(rs);
+				tempDto.setDelayTime(new Date().getTime());
+				
+			}else{
+				throw new ChairException("2005", "请稍后再试");
+			}
 		}else{
 			tempDto = new TempDto();
 			tempDto.setAccountID(userAccount.getId());
 			tempDto.setConsumerID(rs);
+			tempDto.setDelayTime(new Date().getTime());
 		}
 		
 		map.put(device.getDeviceNo(), tempDto);
