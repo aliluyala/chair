@@ -354,6 +354,10 @@ public class Server {
 							token = "R" + new Date().getTime();
 							logger.info("---token为空，创建token--->>>" + token);
 						}
+						
+						//跟踪设备命令详情
+						recordCommand(requestBodys[3], 1, reciverMsg);
+						
 						String snk= "001";
 						Device d = new Device();
 						d.setDeviceNo(requestBodys[3]);
