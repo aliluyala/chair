@@ -439,6 +439,8 @@ public class Server {
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 					}else if("T1".equalsIgnoreCase(key)){	//设备启动成功
 						//*T1,001,R1497534027669,000003#
+						
+						//[*T1,001,R1497708612657,000001#]
 						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
 						Map<String, TempDto> map = MyVector.getMap();
 						logger.info(userAccountService+"--------------4---------------"+map);
@@ -454,8 +456,8 @@ public class Server {
 						
 						// 更新账户信息
 						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
-						userAccount.setUsedDuration(userAccount.getUsedDuration() + Integer.parseInt(requestBodys[2]));
-						userAccount.setRestDuration(userAccount.getRestDuration() - Integer.parseInt(requestBodys[2]));
+						userAccount.setUsedDuration(userAccount.getUsedDuration() + Integer.parseInt(requestBodys[3]));
+						userAccount.setRestDuration(userAccount.getRestDuration() - Integer.parseInt(requestBodys[3]));
 						userAccount.setLastUpdate(new Date());
 						userAccountService.updateSelective(userAccount);
 
@@ -470,7 +472,7 @@ public class Server {
 						
 
 						logger.info("-bbbbbb-----consumedDetailsService------"+consumedDetailsService);
-						Date date = DateUtils.addMinute(new Date(), Integer.parseInt(requestBodys[2]));
+						Date date = DateUtils.addMinute(new Date(), Integer.parseInt(requestBodys[3]));
 						String expTime = "";
 						try {
 							expTime = DateUtils.parseToFormatString(date,"yyyy-MM-dd HH:mm:ss");
