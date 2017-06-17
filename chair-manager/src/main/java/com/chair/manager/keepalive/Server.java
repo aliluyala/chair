@@ -443,10 +443,10 @@ public class Server {
 						Device d = new Device();
 						d.setDeviceToken(requestBodys[2]);
 						logger.info("--------------2---------------"+deviceService);
-						Device device = deviceService.queryByDeviceNO(d);
+						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
 						logger.info("--------------3---------------");
 						Map<String, TempDto> map = MyVector.getMap();
-						logger.info("--------------4---------------"+map);
+						logger.info(userAccountService+"--------------4---------------"+map);
 						logger.info("--------------4---------------"+map.size());
 						TempDto dto = map.get(device.getDeviceNo());
 						logger.info("-T1aaaaa-----userAccountService------"+userAccountService);
