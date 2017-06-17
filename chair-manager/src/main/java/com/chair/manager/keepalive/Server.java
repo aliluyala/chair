@@ -71,10 +71,10 @@ public class Server {
 	@Autowired
 	private DeviceCommandLogService deviceCommandLogService;
 	
-
-	private static UserAccountService userAccountService = new UserAccountService();
-
-	private static ConsumedDetailsService consumedDetailsService = new ConsumedDetailsService();
+	@Autowired
+	private UserAccountService userAccountService;
+	@Autowired
+	private  ConsumedDetailsService consumedDetailsService;
 	
 
 	public DeviceService getDeviceService() {
@@ -357,6 +357,7 @@ public class Server {
 						String snk= "001";
 						Device d = new Device();
 						d.setDeviceNo(requestBodys[3]);
+						
 						Device device = deviceService.queryByDeviceNO(d);
 						if(device == null){
 							device = new Device();
@@ -443,6 +444,12 @@ public class Server {
 						Device device = deviceService.queryByDeviceNO(d);
 						Map<String, TempDto> map = MyVector.getMap();
 						TempDto dto = map.get(device.getDeviceNo());
+						logger.info("-T1aaaaa-----userAccountService------"+userAccountService);
+						if(userAccountService == null){
+							logger.info("-T1bbbbbb-----userAccountService------"+userAccountService);
+							userAccountService = new UserAccountService();
+						}
+						logger.info("-T1cccccc-----userAccountService------"+userAccountService);
 						// 更新账户信息
 						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
 						userAccount.setUsedDuration(userAccount.getUsedDuration() + Integer.parseInt(requestBodys[2]));
