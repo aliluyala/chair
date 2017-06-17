@@ -526,6 +526,7 @@ public class Server {
 			byte[] b = sendMsg.getBytes();
 			os.write(b);
 			os.flush();
+			os.close();
 		}
 
 		/**
