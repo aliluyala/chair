@@ -178,7 +178,7 @@ public class UserAccountController {
 		Map<String, TempDto> map = MyVector.getMap();
 		TempDto tempDto = map.get(device.getDeviceNo());
 		
-		logger.info("_---------------保存消费明细结果consumedDetails---------------->>>"+consumedDetails);
+		logger.info(rs+"_---------------保存消费明细结果consumedDetails---------------->>>"+consumedDetails);
 		
 		
 		if(tempDto != null){
@@ -186,7 +186,7 @@ public class UserAccountController {
 				map.remove(device.getDeviceNo());
 				tempDto = new TempDto();
 				tempDto.setAccountID(userAccount.getId());
-				tempDto.setConsumerID(rs);
+				tempDto.setConsumerID(consumedDetails.getId());
 				tempDto.setDelayTime(new Date().getTime());
 			}else{
 				throw new ChairException("2005", "请稍后再试");

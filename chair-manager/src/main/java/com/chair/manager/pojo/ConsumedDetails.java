@@ -7,6 +7,16 @@ import javax.persistence.Table;
 
 @Table(name="consumed_details")
 public class ConsumedDetails {
+	@Override
+	public String toString() {
+		return "ConsumedDetails [id=" + id + ", openId=" + openId + ", phoneNumber=" + phoneNumber
+				+ ", consumedPackageId=" + consumedPackageId + ", consumedDuration=" + consumedDuration + ", factoryId="
+				+ factoryId + ", factoryName=" + factoryName + ", proxyId=" + proxyId + ", proxyName=" + proxyName
+				+ ", shopId=" + shopId + ", shopName=" + shopName + ", shopLocation=" + shopLocation + ", deviceId="
+				+ deviceId + ", consumedTime=" + consumedTime + ", status=" + status + ", createTime=" + createTime
+				+ ", lastUpdate=" + lastUpdate + "]";
+	}
+
 	@Id
     private Integer id;
 
