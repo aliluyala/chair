@@ -96,10 +96,10 @@ public class Server {
 			socketCCID = new ConcurrentHashMap<Socket, String>();
 
 		// 定时任务1：更新“在线”并且“当前时间>最后心跳时间”的设备状态
-		quartzJob();
+		//quartzJob();
 		
 		//定时任务2：更新“正在使用”并且 “当前时间>消费结束时间”的设备状态
-		updateDeviceStatusJob();
+		//updateDeviceStatusJob();
 	}
 
 	private void quartzJob() {
@@ -339,56 +339,112 @@ public class Server {
 				for (String key : requestBodys) {
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 注册命令
-						String token = get(ip + ":" + clientPort);
-						String snk = "001";
-						if ("".equals(token) || null == token) {
+						String token = requestBodys[2];
+						if("0000000000".equals(token)){	//正在注册
 							// 生成token，并且保存到redis
 							token = "R" + new Date().getTime();
+							String snk= "001";
 							logger.info("---token为空，创建token--->>>" + token);
-							set(ip + ":" + clientPort, token); // ip-token
-						}
-						//设备日志跟踪
-						recordDeviceLog(requestBodys[3], 1, "在线");
-						//跟踪设备命令详情
-						recordCommand(requestBodys[3], 1, reciverMsg);
-						//根据设备NO查询设备详情
-						Device d = new Device();
-						d.setDeviceNo(requestBodys[3]);
-						Device device = deviceService.queryByDeviceNO(d);
-						//判断设备是否存在
-						if(device == null){
-							device = new Device();
-							device.setDeviceToken(token);
-							device.setOnlineTime(new Date());
-							device.setDeviceNo(requestBodys[3]);
+							Device d = new Device();
+							d.setDeviceNo(requestBodys[3]);
+							Device device = deviceService.queryByDeviceNO(d);
+							if(device == null){
+								device = new Device();
+								logger.debug("+++device为空----");
+								device.setDeviceToken(token);
+								device.setDeviceNo(requestBodys[3]);
+								device.setLastUpdate(new Date());
+								device.setCreateTime(new Date());
+								deviceService.save(device);
+							}else{
+								logger.debug("+++device不为空----");
+								device.setDeviceToken(token);
+								device.setDeviceNo(requestBodys[3]);
+								device.setLastUpdate(new Date());
+								deviceService.updateSelective(device);
+							}
+							
+							// 响应客户端消息
+							String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
+							logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【正在注册】响应客户端R1消息内容------" + send2ClientMsg);
+							responseByOutputStream(send2ClientMsg);
+							//跟踪设备命令详情
+							recordCommand(requestBodys[3], 2, send2ClientMsg);
+						}else{	//注册成功
+							if ("".equals(token) || null == token) {
+								logger.error("--------------第三次握手，得到的token为空--------------");
+								return;
+								//throw new ChairException("-10", "第三次握手，得到的token为空");
+							}
+							
+							//根据设备号查询设备信息
+							Device d = new Device();
+							d.setDeviceNo(requestBodys[3]);
+							Device device = deviceService.queryByDeviceNO(d);
+							
+							if(device == null){
+								logger.error("--------------第三次握手，得到的设备号【"+requestBodys[3]+"】查询不到设备。--------------");
+								return;
+								//throw new ChairException("-10", "第三次握手，得到的设备号查询不到设备");
+							}
+							
+							if(!device.getDeviceToken().equals(token)){
+								logger.error("--------------第三次握手，得到的token【"+token+"】与发送给客户端的token不一致，校验不通过。--------------");
+								return;
+							//	throw new ChairException("-10", "第三次握手，得到的token校验不通过");
+							}
 							device.setStatus(1);
-							device.setLastUpdate(new Date());
-							device.setCreateTime(new Date());
-							deviceService.save(device);
-						}else if(device != null && device.getStatus() == 3){
-							logger.info("---设备状态为“正在使用”，不处理--");
-							device.setDeviceToken(token);
 							device.setOnlineTime(new Date());
 							device.setLastUpdate(new Date());
 							deviceService.updateSelective(device);
-						}else{
-							device.setDeviceToken(token);
-							device.setOnlineTime(new Date());
-							device.setLastUpdate(new Date());
-							deviceService.updateSelective(device);
+							
+							//设备日志跟踪
+							recordDeviceLog(requestBodys[3], 1, "在线");
+							//跟踪设备命令详情
+							recordCommand(requestBodys[3], 1, reciverMsg);
+							
+
+							set(ip + ":" + clientPort, token); // ip-token
+							set(token, requestBodys[3]);
+							set(requestBodys[3], ip+":"+clientPort);
+							ccidSocket.put(requestBodys[3], s);
 						}
+							
+						/*
+							//根据设备NO查询设备详情
+							//判断设备是否存在
+							if(device == null){
+								device = new Device();
+								device.setDeviceToken(token);
+								device.setOnlineTime(new Date());
+								device.setDeviceNo(requestBodys[3]);
+								device.setStatus(1);
+								device.setLastUpdate(new Date());
+								device.setCreateTime(new Date());
+								deviceService.save(device);
+							}else if(device != null && device.getStatus() == 3){
+								logger.info("---设备状态为“正在使用”，不处理--");
+								device.setDeviceToken(token);
+								device.setOnlineTime(new Date());
+								device.setLastUpdate(new Date());
+								deviceService.updateSelective(device);
+							}else{
+								device.setDeviceToken(token);
+								device.setOnlineTime(new Date());
+								device.setLastUpdate(new Date());
+								deviceService.updateSelective(device);
+							}
+							
+//							deviceService.saveOrUpdate(device);
+							
+							
+							// 响应客户端消息
+							String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
+							logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 响应客户端R1消息内容------" + send2ClientMsg);
+							responseByOutputStream(send2ClientMsg);
+						}*/
+						//String token = get(ip + ":" + clientPort);
 						
-//						deviceService.saveOrUpdate(device);
-						set(token, requestBodys[3]);
-						set(requestBodys[3], ip+":"+clientPort);
-						ipSocket.put(ip + ":" + clientPort, s);
-						ccidSocket.put(requestBodys[3], s);
-						// 响应客户端消息
-						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
-						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 响应客户端R1消息内容------" + send2ClientMsg);
-						responseByOutputStream(send2ClientMsg);
-						//跟踪设备命令详情
-						recordCommand(requestBodys[3], 2, send2ClientMsg);
 					} else if ("H0".equalsIgnoreCase(key)) { // H0，心跳消息
 						// 【解析报文[*H0,001,R1497108915104,031,0,0#]，匹配以*开头，以#结尾，结果为】---true
 						String token = requestBodys[2];
