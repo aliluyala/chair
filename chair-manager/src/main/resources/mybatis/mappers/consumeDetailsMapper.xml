@@ -6,7 +6,7 @@
 <mapper namespace="com.chair.manager.mapper.ConsumedDetailsMapper">
 
 	<select id="queryConsumedDetailsList" resultType="ConsumedDetails">
-		SELECT * FROM consumed_details where open_id=#{openId} and status=#{status} ORDER BY last_update DESC;
+		SELECT * FROM consumed_details where open_id=#{openId} and status=#{status} ORDER BY last_update DESC
 	</select>
 	
 	<select id="queryConsumedDetailsPage" parameterType="com.chair.manager.pojo.dto.ConsumedDetailsDto" resultType="com.chair.manager.pojo.ConsumedDetails">
@@ -17,7 +17,7 @@
 		select count(id),
 		(SELECT sum(consumed_duration) FROM consumed_details) as totalDuration,
 		(SELECT sum(consumed_duration) FROM consumed_details where DATE_FORMAT(create_time, '%Y-%m-%d') = DATE_FORMAT(now(), '%Y-%m-%d')) as dayDuration
-		from consumed_details;
+		from consumed_details
 	</select>
 	
 	
