@@ -471,30 +471,27 @@ public class Server {
 						consumedDetailsService.updateSelective(consumedDetails);
 						
 
-						logger.info("-bbbbbb-----consumedDetailsService------"+consumedDetailsService);
 						Date date = DateUtils.addMinute(new Date(), Integer.parseInt(requestBodys[3]));
+						date = DateUtils.addSecond(date, 15);
 						String expTime = "";
 						try {
-							expTime = DateUtils.parseToFormatString(date,"yyyy-MM-dd HH:mm:ss");
+							expTime = DateUtils.parseToFormatString(date, "yyyy-MM-dd HH:mm:ss");
 						} catch (ParseException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						
 
-						logger.info("-CCCCCCCCCCCCC-----consumedDetailsService------"+consumedDetailsService);
 						//更改设备状态 // 将过期时间写入设备表
 						device.setStatus(3);
 						device.setExpTime(expTime);	//设置为正在使用
 						device.setLastUpdate(new Date());
 						deviceService.updateSelective(device);
 
-						logger.info("-DDDDDDDDDDDDDDDD-----consumedDetailsService------");
 						//设备日志跟踪
 						recordDeviceLog(device.getDeviceNo(), 3, "正在使用");
 						//删除map的对象
 						map.remove(device.getDeviceNo());
-						logger.info("-eeeeeeeeeeeeeee-----consumedDetailsService------");
 						
 					}else if("T2".equalsIgnoreCase(key)){//设备启动失败
 						Device d = new Device();

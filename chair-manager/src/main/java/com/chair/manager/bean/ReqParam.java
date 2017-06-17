@@ -185,10 +185,11 @@ public class ReqParam implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ReqParam [userID=" + userID + ", type=" + type + ", businessNO=" + businessNO + ", phoneNumber="
-				+ phoneNumber + ", packageID=" + packageID + ", identCode=" + identCode + ", deviceID=" + deviceID
-				+ ", deviceNO=" + deviceNO + ", consumedPackageID=" + consumedPackageID + ", batchNO=" + batchNO
-				+ ", openID=" + openID + ", transactionID=" + transactionID + "]";
+		return "ReqParam [consumerID=" + consumerID + ", userID=" + userID + ", type=" + type + ", businessNO="
+				+ businessNO + ", phoneNumber=" + phoneNumber + ", packageID=" + packageID + ", identCode=" + identCode
+				+ ", deviceID=" + deviceID + ", deviceNO=" + deviceNO + ", consumedPackageID=" + consumedPackageID
+				+ ", batchNO=" + batchNO + ", openID=" + openID + ", transactionID=" + transactionID + ", params="
+				+ params + "]";
 	}
 
 }
