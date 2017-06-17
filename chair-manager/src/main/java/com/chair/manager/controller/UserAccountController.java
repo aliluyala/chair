@@ -172,13 +172,13 @@ public class UserAccountController {
 		consumedDetails.setCreateTime(new Date());
 		consumedDetails.setLastUpdate(new Date());
 		// 保存消费明细信息
-		int rs = consumedDetailsService.save(consumedDetails);
+		consumedDetails = consumedDetailsService.save2DB(consumedDetails);
 		
 		//将数据保存到内存
 		Map<String, TempDto> map = MyVector.getMap();
 		TempDto tempDto = map.get(device.getDeviceNo());
 		
-		logger.info(rs+"_---------------保存消费明细结果consumedDetails---------------->>>"+consumedDetails);
+		logger.info("_---------------保存消费明细结果consumedDetails---------------->>>"+consumedDetails);
 		
 		
 		if(tempDto != null){

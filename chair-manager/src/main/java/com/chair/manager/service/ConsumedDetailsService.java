@@ -48,4 +48,10 @@ public class ConsumedDetailsService extends BaseService<ConsumedDetails> {
 	}
 	
 	
+	
+	public ConsumedDetails save2DB(ConsumedDetails consumer){
+		return detailsMapper.save2DB(consumer);
+		
+	}
+	
 }

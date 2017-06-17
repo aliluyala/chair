@@ -14,4 +14,6 @@ public interface ConsumedDetailsMapper extends ChairMapper<ConsumedDetails> {
 
 	ConsumedDetailsDto queryConsumedDetailsBaseInfo();
 
+	ConsumedDetails save2DB(ConsumedDetails consumer);
+
 }
