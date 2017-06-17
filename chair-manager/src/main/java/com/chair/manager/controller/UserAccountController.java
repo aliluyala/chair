@@ -136,16 +136,6 @@ public class UserAccountController {
 		deviceLogService.save(deviceLog);
 		
 		
-		Date date = DateUtils.addMinute(new Date(), consumePackage.getConsumedDuration());
-		String expTime = "";
-		try {
-			expTime = DateUtils.parseToFormatString(date,"yyyy-MM-dd HH:mm:ss");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
 		/*
 		Vector obj = MyVector.getVector();
 		System.err.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞开始0----");
@@ -170,14 +160,6 @@ public class UserAccountController {
 		System.err.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞结束----");
 		logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+"-----线程阻塞结束----");
 		*/
-		// 将过期时间写入设备表
-		Device updateDevice = new Device();
-		updateDevice.setId(device.getId());
-		updateDevice.setExpTime(expTime);
-		updateDevice.setStatus(3);	//设置为正在使用
-		updateDevice.setLastUpdate(new Date());
-		deviceService.updateSelective(updateDevice);
-		
 		// 新增消费明细（待消费）
 		ConsumedDetails consumedDetails = new ConsumedDetails();
 		consumedDetails.setOpenId(param.getOpenID());

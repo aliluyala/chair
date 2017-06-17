@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -455,6 +456,26 @@ public class Server {
 						consumedDetails.setStatus(2);	//消费成功
 						consumedDetails.setLastUpdate(new Date());
 						consumedDetailsService.updateSelective(consumedDetails);
+						
+						
+						Date date = DateUtils.addMinute(new Date(), Integer.parseInt(requestBodys[2]));
+						String expTime = "";
+						try {
+							expTime = DateUtils.parseToFormatString(date,"yyyy-MM-dd HH:mm:ss");
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						
+						// 将过期时间写入设备表
+						Device updateDevice = new Device();
+						updateDevice.setId(device.getId());
+						updateDevice.setExpTime(expTime);
+						updateDevice.setStatus(3);	//设置为正在使用
+						updateDevice.setLastUpdate(new Date());
+						deviceService.updateSelective(updateDevice);
+						
 
 						//删除map的对象
 						map.remove(device.getDeviceNo());
