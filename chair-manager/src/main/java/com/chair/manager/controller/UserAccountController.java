@@ -178,6 +178,9 @@ public class UserAccountController {
 		Map<String, TempDto> map = MyVector.getMap();
 		TempDto tempDto = map.get(device.getDeviceNo());
 		
+		logger.info("_---------------保存消费明细结果consumedDetails---------------->>>"+consumedDetails);
+		
+		
 		if(tempDto != null){
 			if(new Date().getTime() > ( tempDto.getDelayTime() + 60 * 1000)){
 				map.remove(device.getDeviceNo());
