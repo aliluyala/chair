@@ -338,12 +338,14 @@ public class Server {
 				//设备上报/下发
 				for (String key : requestBodys) {
 					System.err.print(key + ",");
-					if ("R1".equalsIgnoreCase(key)) { // 注册命令
+					if ("R1".equalsIgnoreCase(key)) { // 正在注册
 						String token = requestBodys[2];
-						// 生成token，并且保存到redis
-						token = "R" + new Date().getTime();
+						if (null == token || "".equals(token.trim())) {
+							// 生成token，并且保存到redis
+							token = "R" + new Date().getTime();
+							logger.info("---token为空，创建token--->>>" + token);
+						}
 						String snk= "001";
-						logger.info("---token为空，创建token--->>>" + token);
 						Device d = new Device();
 						d.setDeviceNo(requestBodys[3]);
 						Device device = deviceService.queryByDeviceNO(d);
@@ -360,7 +362,7 @@ public class Server {
 							device.setLastUpdate(new Date());
 							deviceService.updateSelective(device);
 						}
-						
+
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【正在注册】响应客户端R1消息内容------" + send2ClientMsg);
