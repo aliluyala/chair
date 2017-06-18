@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +117,9 @@ public class Server {
             public void run() {  
                 // task to run goes here  
 				logger.info("--------定时任务执行时间-Hello !!!------->>>>"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+				
 				printSokcet();	//打印socket列表
+				
 				//查询所有设备列表
 				Device device = new Device();
 				device.setStatus(1);	//在线
@@ -225,6 +228,8 @@ public class Server {
 		actionMapping.put(cls, action);
 	}
 
+	List<Socket> socketList = new ArrayList<Socket>();
+	
 	public class ConnWatchDog implements Runnable {
 
 		public void run() {
@@ -232,6 +237,8 @@ public class Server {
 				ServerSocket ss = new ServerSocket(port);
 				while (running) {
 					Socket s = ss.accept();
+					socketList.add(s);
+					printSocketList();
 					new Thread(new SocketAction(s)).start();
 				}
 			} catch (IOException e) {
@@ -642,6 +649,15 @@ public class Server {
 		for (Map.Entry<String,Socket> entry : ccidSocket.entrySet()){
 			logger.info("---【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
+	}
+	
+	
+	private void printSocketList(){
+		logger.info("--------socket.socketList一共有几条数据?----------"+socketList.size());
+		for (Socket socket : socketList) {
+			logger.info("---【socket】---"+socket);
+		}
+		
 	}
 	
 
