@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -196,12 +197,20 @@ public class ManagerController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "queryProxyList", method = RequestMethod.POST)
-	private List<Manager> queryProxyList(HttpSession session) {
-		Manager manager = (Manager) session.getAttribute("user");
-		Manager proxyManager = new Manager();
-		proxyManager.setFactoryId(manager.getId());
-		proxyManager.setType(2); // 代理
-		List<Manager> proxys = managerService.queryList(proxyManager);
+	private List<Manager> queryProxyList(HttpSession session, @RequestParam("factoryID") Integer factoryID) {
+		List<Manager> proxys = null;
+		if(factoryID == 0){
+			Manager manager = (Manager) session.getAttribute("user");
+			Manager proxyManager = new Manager();
+			proxyManager.setFactoryId(manager.getId());
+			proxyManager.setType(2); // 代理
+			proxys = managerService.queryList(proxyManager);
+		}else{
+			Manager proxyManager = new Manager();
+			proxyManager.setFactoryId(factoryID);
+			proxyManager.setType(2); // 代理
+			proxys = managerService.queryList(proxyManager);
+		}
 		return proxys;
 	}	
 	

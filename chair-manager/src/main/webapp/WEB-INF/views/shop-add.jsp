@@ -7,7 +7,7 @@
     	<input type="hidden" name="type" value="3"></input> <!-- 添加代理的默认类型 -->
 	        <tr>
 		        <td>代理名称:</td>
-		        <td><input class="easyui-combobox" name="proxyId" data-options="valueField:'id',textField:'proxyName',url:'/<%=chair%>/manager/queryProxyList',prompt:'请选择'" style="width: 280px;"></input></td>
+		        <td><input class="easyui-combobox" name="proxyId" data-options="valueField:'id',textField:'proxyName',url:'/<%=chair%>/manager/queryProxyList?factoryID=0',prompt:'请选择'" style="width: 280px;"></input></td>
 		    </tr>
 	        <tr>
 	            <td>商家名称:</td>
