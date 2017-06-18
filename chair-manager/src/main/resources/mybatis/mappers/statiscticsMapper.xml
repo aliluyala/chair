@@ -13,18 +13,25 @@
 		count(*) as totalDevice, sum(temp.income) as income, sum(temp.totalDuration) as totalDuration from 
 		(select m.*, DATE_FORMAT(c.last_update,'%Y-%m-%d') as lastup, c.device_id, sum(c.consumed_duration) as totalDuration, ( sum(c.consumed_duration) * ( m.proxy_percent/100 ) ) as income  
 		from manager m left JOIN consumed_details c ON m.id=c.shop_id where m.proxy_id=#{proxyId} and m.type=#{type} 
-		and DATE_FORMAT(c.last_update,'%Y-%m-%d') BETWEEN #{from} and #{to} GROUP BY c.device_id) as temp
-		left JOIN device d ON temp.device_id = d.id
+		and DATE_FORMAT(c.last_update,'%Y-%m-%d') BETWEEN #{from} and #{to} GROUP BY c.device_id and c.status=2) as temp
+		left JOIN device d ON temp.device_id = d.id 
 	</select>
 	
 	<!-- 统计-代理，查询代理自身收益统计 -->
 	<select id="queryBaseStatisctics" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
-		select ( sum(consumed_duration) * ((select proxy_percent from manager where id=#{proxyId} ) / 100) ) as totalIncome,
-		(select count(*) from device where proxy_id=#{proxyId}) as totalDevice ,
-		(select count(*) from manager where proxy_id=#{proxyId} and type=#{type}) as totalShop,
-		(select sum(consumed_duration) * ((select proxy_percent from manager where id=#{proxyId}) / 100) from consumed_details where DATE_FORMAT(now(), '%Y-%m-%d') = DATE_FORMAT(last_update, '%Y-%m-%d')) as dayIncome
-		from consumed_details where proxy_id=#{proxyId};
+		select 
+		(sum(consumed_duration) * (select proxy_percent/100 from manager where id=#{proxyId})) as totalIncome,
+		(select count(*) from device d where d.proxy_id=c.proxy_id) as totalDevice,
+		(select count(*) from manager where proxy_id=c.proxy_id and type=3) as totalShop
+		from consumed_details c where  status=2 and proxy_id=#{proxyId};
 	</select>
+	
+	<!-- 统计-代理，查询代理当日收益 -->
+	<select id="queryDayIncomeForProxy" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
+		select (sum(consumed_duration) * (select proxy_percent/100 from manager where id=c.proxy_id)) as dayIncome 
+		from consumed_details c where DATE_FORMAT(now(), '%Y-%m-%d') = DATE_FORMAT(last_update, '%Y-%m-%d') and status=2 and proxy_id=#{proxyId};
+	</select>
+	
 	
 	<!-- 统计-商家，查询商家自身收益统计 -->
 	<select id="queryShopStatisctics" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
@@ -32,14 +39,14 @@
 		( sum(consumed_duration) * (select shop_percent from manager where id=#{shopId}) /100 ) as totalIncome
 		from consumed_details c 
 		LEFT JOIN device d on d.id=c.device_id
-		where c.shop_id=#{shopId} and DATE_FORMAT(c.last_update,'%Y-%m-%d') BETWEEN #{from} and #{to} group by c.device_id
+		where c.status=2 and c.shop_id=#{shopId} and DATE_FORMAT(c.last_update,'%Y-%m-%d') BETWEEN #{from} and #{to} group by c.device_id
 	</select>
 	
 	<!-- 统计-商家，查询商家自身基本统计 -->
 	<select id="queryShopBaseStatisctics" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
 		select ( sum(consumed_duration) * (select shop_percent from manager where id=#{shopId}) /100 ) as totalIncome,
 		(select ( sum(consumed_duration) * (select shop_percent from manager where id=3) /100 ) from  consumed_details where shop_id=3 and DATE_FORMAT(last_update,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')) as dayIncome
-		from consumed_details where shop_id=#{shopId};
+		from consumed_details where status=2 and shop_id=#{shopId};
 	</select>
 	
 </mapper>

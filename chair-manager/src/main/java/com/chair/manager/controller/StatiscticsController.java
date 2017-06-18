@@ -155,6 +155,32 @@ public class StatiscticsController {
 		return new ResponseResult(proxyStatisctics);
 	}
 	
+	/**
+	 * 代理页面的统计，顶部今日收益
+	 * 
+	 * @param manager
+	 * @param session
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "queryDayIncomeForProxy", method = RequestMethod.POST)
+	private ResponseResult queryDayIncomeForProxy(HttpSession session) {
+		Manager manager = (Manager) session.getAttribute("user");
+		System.err.println("-----AAAAAAmanager------"+manager);
+		if(manager.getType() != 2){
+			logger.error("---queryProxyBaseInfo()---manager type is not match---");
+			return null;
+		}
+		Manager proxyManager = new Manager();
+		proxyManager.setProxyId(manager.getId());
+		proxyManager.setType(3);
+		Statisctics proxyStatisctics = managerService.queryDayIncomeForProxy(proxyManager);
+		System.out.println("-----AAAAAAProxyStatisctics------"+proxyStatisctics);
+		
+		return new ResponseResult(proxyStatisctics);
+	}
+	
+	
 	
 	/*-----------------------------------------------------------------------------------------------------*/
 	/**

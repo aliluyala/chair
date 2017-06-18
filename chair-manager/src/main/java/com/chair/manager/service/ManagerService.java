@@ -116,6 +116,16 @@ public class ManagerService extends BaseService<Manager> {
 	public Statisctics queryShopBaseStatisctics(Manager m) {
 		return statiscticsMapper.queryShopBaseStatisctics(m);
 	}
+
+	
+	/**
+	 * 
+	 * @param m
+	 * @return
+	 */
+	public Statisctics queryDayIncomeForProxy(Manager m) {
+		return statiscticsMapper.queryDayIncomeForProxy(m);
+	}
 	
 
 }

@@ -43,7 +43,7 @@
 
 (function(){
 
-	//测试接口
+	//基础统计
 	$.ajax({
 		type:'post',
 		url:'/<%=chair%>/statisctics/queryProxyBaseInfo/',
@@ -54,9 +54,20 @@
 			$("#totalIncome").textbox("setValue", o.totalIncome);
 			$("#totalShop").textbox("setValue", o.totalShop);
 			$("#totalDevice").textbox("setValue", o.totalDevice);
+		}
+	});
+	
+	//今日收益
+	$.ajax({
+		type:'post',
+		url:'/<%=chair%>/statisctics/queryDayIncomeForProxy/',
+		success:function(data){
+			//alert(JSON.stringify(data));
+			var o = data.data;
+			//alert(JSON.stringify(o))
 			$("#dayIncome").textbox("setValue", o.dayIncome);
 		}
-	}) 
+	});
 })();
 
 
