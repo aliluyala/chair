@@ -385,12 +385,6 @@ public class Server {
 						//跟踪设备命令详情
 						recordCommand(requestBodys[3], 2, send2ClientMsg);
 						
-						try {
-							Thread.sleep(5 * 1000);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 						responseByOutputStream(send2ClientMsg);
 					} else if("R2".equalsIgnoreCase(key)){	//注册成功
 						String token = requestBodys[2];
