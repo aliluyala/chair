@@ -471,9 +471,10 @@ public class Server {
 						userAccount.setLastUpdate(new Date());
 						userAccountService.updateSelective(userAccount);
 						
-						logger.info(dto.getConsumerID()+"--------更新消费明细后得到的消费明细对象为：：：："+consumedDetails);
-
-						Date date = DateUtils.addMinute(new Date(), Integer.parseInt(requestBodys[3]));
+						//获取消费时间
+						int duration = consumedDetailsService.findById(dto.getConsumerID()).getConsumedDuration();
+						
+						Date date = DateUtils.addMinute(new Date(), duration);
 						date = DateUtils.addSecond(date, 15);
 						String expTime = "";
 						try {
