@@ -346,9 +346,9 @@ public class Server {
 				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1).split(",");
 				//设备上报/下发
 				for (String key : requestBodys) {
-					logger.info("当前线程ID为："+Thread.currentThread().getId());
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 正在注册
+						logger.info("当前线程ID为："+Thread.currentThread().getId());
 						String token = requestBodys[2];
 						if ("00000000000000".equals(token) || null == token || "".equals(token.trim())) {
 							// 生成token，并且保存到redis
