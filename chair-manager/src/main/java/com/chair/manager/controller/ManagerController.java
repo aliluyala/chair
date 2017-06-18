@@ -80,9 +80,9 @@ public class ManagerController {
 	@ResponseBody
 	@RequestMapping(value = "listProxyForPage", method = RequestMethod.POST)
 	private EasyUIResult queryProxyListForPage(@RequestParam("page") Integer page, @RequestParam("rows") Integer rows) {
-		Manager manager = new Manager();
-		manager.setType(2); // 代理
-		return managerService.queryListForPage(manager, page, rows);
+		Manager proxyManager = new Manager();
+		proxyManager.setType(2); // 代理
+		return managerService.queryListForPage(proxyManager, page, rows);
 	}
 	
 	

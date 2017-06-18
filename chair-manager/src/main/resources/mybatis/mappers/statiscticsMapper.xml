@@ -6,9 +6,15 @@
 <mapper namespace="com.chair.manager.mapper.StatiscticsMapper">
 	
 	
-	<!-- 统计-代理，查询代理下所有商家的统计 -->
-	<select id="queryProxyStatisctics" parameterType="com.chair.manager.pojo.ManagerDto"
-		resultType="com.chair.manager.pojo.Statisctics">
+	<!-- 统计-代理，查询代理下所有商家信息 -->
+	<select id="queryProxyStatisctics" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
+		select m.id, m.shop_name as shopName, m.shop_location as shopLocation, m.shop_contact as shopContact, m.shop_contact_phone as shopContactPhone, count(d.id) as totalDevice 
+		from manager m left join device d on m.id=d.shop_id 
+		where m.proxy_id = #{shopId} group by m.id;
+	</select>
+	
+	<!-- 统计-代理，查询代理下所有商家的数据统计,按时间查询 -->
+	<select id="queryProxyDataStatisctics" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
 		select temp.id as id, temp.shop_name as shopName, temp.shop_location as shopLocation, temp.shop_contact as shopContact, temp.shop_contact_phone as shopContactPhone, 
 		count(*) as totalDevice, sum(temp.income) as income, sum(temp.totalDuration) as totalDuration from 
 		(select m.*, DATE_FORMAT(c.last_update,'%Y-%m-%d') as lastup, c.device_id, sum(c.consumed_duration) as totalDuration, ( sum(c.consumed_duration) * ( m.proxy_percent/100 ) ) as income  
@@ -16,6 +22,11 @@
 		and DATE_FORMAT(c.last_update,'%Y-%m-%d') BETWEEN #{from} and #{to} GROUP BY c.device_id and c.status=2) as temp
 		left JOIN device d ON temp.device_id = d.id 
 	</select>
+	
+	
+	
+	
+	
 	
 	<!-- 统计-代理，查询代理自身收益统计 -->
 	<select id="queryBaseStatisctics" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
