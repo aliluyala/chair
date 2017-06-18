@@ -473,13 +473,6 @@ public class Server {
 						consumedDetails.setStatus(2);	//消费成功
 						consumedDetails.setLastUpdate(new Date());
 						consumedDetailsService.updateSelective(consumedDetails);
-
-						// 更新账户信息
-						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
-						userAccount.setUsedDuration(userAccount.getUsedDuration() + Integer.parseInt(requestBodys[3]));
-						userAccount.setRestDuration(userAccount.getRestDuration() - Integer.parseInt(requestBodys[3]));
-						userAccount.setLastUpdate(new Date());
-						userAccountService.updateSelective(userAccount);
 						
 						//获取消费时间
 						int duration = consumedDetailsService.findById(dto.getConsumerID()).getConsumedDuration();
@@ -493,7 +486,13 @@ public class Server {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
+
+						// 更新账户信息
+						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
+						userAccount.setUsedDuration(userAccount.getUsedDuration() + duration);
+						userAccount.setRestDuration(userAccount.getRestDuration() - duration);
+						userAccount.setLastUpdate(new Date());
+						userAccountService.updateSelective(userAccount);
 
 						//更改设备状态 // 将过期时间写入设备表
 						device.setStatus(3);
@@ -504,24 +503,7 @@ public class Server {
 						//删除map的对象
 						map.remove(device.getDeviceNo());
 						
-					}/*else if("T2".equalsIgnoreCase(key)){//设备启动失败
-						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
-
-						//跟踪设备命令详情
-						recordCommand(device.getDeviceNo(), 1, reciverMsg);
-						
-						Map<String, TempDto> map = MyVector.getMap();
-						TempDto dto = map.get(device.getDeviceNo());
-						//更新消费明细状态
-						dto.getConsumerID();
-						ConsumedDetails consumedDetails = new ConsumedDetails();
-						consumedDetails.setId(dto.getConsumerID());
-						consumedDetails.setStatus(3);	//消费失败
-						consumedDetails.setLastUpdate(new Date());
-						consumedDetailsService.updateSelective(consumedDetails);
-						//删除map的对象
-						map.remove(device.getDeviceNo());
-					}*/
+					}
 				}
 					
 			}
