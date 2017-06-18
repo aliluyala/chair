@@ -140,7 +140,7 @@ public class ManagerController {
 			}
 			manager.setProxyName(proxyManager.getProxyName());
 		}
-		manager.setPassword(managerService.getMd5(manager.getPassword()));
+		manager.setPassword(manager.getPassword());
 		manager.setLastUpdate(new Date());
 		int saveRs = managerService.updateSelective(manager);
 		if(saveRs <= 0) throw new ChairException("-2", getClass()+",SQL操作失败。");
