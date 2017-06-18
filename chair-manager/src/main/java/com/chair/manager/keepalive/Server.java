@@ -442,9 +442,7 @@ public class Server {
 						
 						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 					}else if("T1".equalsIgnoreCase(key) || "T2".equalsIgnoreCase(key)){	//设备启动成功
-						
 						//*T1,001,R1497534027669,000003#
-						
 						//[*T1,001,R1497708612657,000001#]
 						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
 						Map<String, TempDto> map = MyVector.getMap();
@@ -452,19 +450,11 @@ public class Server {
 						if(userAccountService == null){
 							userAccountService = new UserAccountService();
 						}
-
+						
 						//设备日志跟踪
 						recordDeviceLog(device.getDeviceNo(), 3, "正在使用");
 						//跟踪设备命令详情
 						recordCommand(device.getDeviceNo(), 1, reciverMsg); 
-
-						
-						// 更新账户信息
-						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
-						userAccount.setUsedDuration(userAccount.getUsedDuration() + Integer.parseInt(requestBodys[3]));
-						userAccount.setRestDuration(userAccount.getRestDuration() - Integer.parseInt(requestBodys[3]));
-						userAccount.setLastUpdate(new Date());
-						userAccountService.updateSelective(userAccount);
 
 						//更新消费明细状态
 						dto.getConsumerID();
@@ -473,7 +463,15 @@ public class Server {
 						consumedDetails.setStatus(2);	//消费成功
 						consumedDetails.setLastUpdate(new Date());
 						consumedDetailsService.updateSelective(consumedDetails);
+
+						// 更新账户信息
+						UserAccount userAccount = userAccountService.findById(dto.getAccountID());
+						userAccount.setUsedDuration(userAccount.getUsedDuration() + Integer.parseInt(requestBodys[3]));
+						userAccount.setRestDuration(userAccount.getRestDuration() - Integer.parseInt(requestBodys[3]));
+						userAccount.setLastUpdate(new Date());
+						userAccountService.updateSelective(userAccount);
 						
+						logger.info(dto.getConsumerID()+"--------更新消费明细后得到的消费明细对象为：：：："+consumedDetails);
 
 						Date date = DateUtils.addMinute(new Date(), Integer.parseInt(requestBodys[3]));
 						date = DateUtils.addSecond(date, 15);
