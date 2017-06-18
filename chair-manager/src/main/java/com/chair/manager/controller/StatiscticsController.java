@@ -106,7 +106,7 @@ public class StatiscticsController {
 	@RequestMapping(value = "listProxyIncomeForPage", method = RequestMethod.POST)
 	private EasyUIResult queryProxyListForPage(HttpSession session, @RequestParam("page") Integer page, @RequestParam("rows") Integer rows, @RequestParam("from") String from, @RequestParam("to") String to ) {
 		Manager manager = (Manager) session.getAttribute("user");
-		System.err.println("-----manager------"+manager);
+		System.err.println("-----代理页面的统计，分页（管理台前端）manager------"+manager);
 		if(manager.getType() != 2){
 			logger.error("---listProxyIncomeForPage()---manager type is not match---");
 			return null;
@@ -117,8 +117,11 @@ public class StatiscticsController {
 		shopManager.setProxyId(manager.getId());
 		shopManager.setType(3);	//商家类型
 		//设置查询条件，开始日期
-		shopManager.setFrom(getStrDate(from));
-		shopManager.setTo(getStrDate(to));
+//		shopManager.setFrom(getStrDate(from));
+//		shopManager.setTo(getStrDate(to));
+		
+		System.err.println("---shopManager----"+shopManager);
+		
 		
 		// 设置分页参数
         PageHelper.startPage(page, rows);

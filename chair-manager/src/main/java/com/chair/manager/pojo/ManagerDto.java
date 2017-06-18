@@ -1,6 +1,10 @@
 package com.chair.manager.pojo;
 
 public class ManagerDto extends Manager {
+	
+	public ManagerDto(){
+		super();
+	}
 
 	private String from;
 	
@@ -22,11 +26,5 @@ public class ManagerDto extends Manager {
 		this.to = to;
 	}
 
-	@Override
-	public String toString() {
-		return "BasePojo [from=" + from + ", to=" + to + "]";
-	}
-	
-	
 	
 }
