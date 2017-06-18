@@ -18,6 +18,9 @@
 	            <th data-options="field:'proxyName',width:200">所属代理名称</th>
 	            <th data-options="field:'shopName',width:200">商家名称</th>
 	            <th data-options="field:'shopLocation',width:200">商家地址</th>
+	            <th data-options="field:'shopContact',width:200">商家联系人</th>
+	            <th data-options="field:'shopContactPhone',width:200">联系人手机号</th>
+	            <th data-options="field:'shopPercent',width:200,formatter:formatPercent">提成百分比</th>
 	            <th data-options="field:'user',width:200">管理员账号</th>
 	            <th data-options="field:'password',width:200">管理员密码</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
@@ -36,6 +39,12 @@
 </div>
         
 <script type="text/javascript">
+
+function formatPercent(val, row){
+	return (val == "null" || val == null || typeof val == "undefined")  ? "" : val +"%";
+}
+
+
 function formatDate(val,row){
 	var now = new Date(val);
 	return now.format("yyyy-MM-dd hh:mm:ss");

@@ -17,6 +17,8 @@
 	        	<th data-options="field:'id',width:60">ID</th>
 	            <th data-options="field:'factoryName',width:200">所属厂家名称</th>
 	            <th data-options="field:'proxyName',width:200">代理名称</th>
+	            <th data-options="field:'proxyPhone',width:200">手机号</th>
+	            <th data-options="field:'proxyPercent',width:200,formatter:formatPercent">提成百分比</th>
 	            <th data-options="field:'user',width:200">管理员账号</th>
 	            <th data-options="field:'password',width:200">管理员密码</th>
 	            <th data-options="field:'createTime',width:130,align:'center',formatter:formatDate">创建日期</th>
@@ -35,6 +37,12 @@
 </div>
         
 <script type="text/javascript">
+
+function formatPercent(val, row){
+	return (val == "null" || val == null || typeof val == "undefined")  ? "" : val +"%";
+}
+
+
 function formatDate(val,row){
 	var now = new Date(val);
 	return now.format("yyyy-MM-dd hh:mm:ss");
