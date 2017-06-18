@@ -105,10 +105,10 @@ public class Server {
 			socketCCID = new ConcurrentHashMap<Socket, String>();
 
 		// 定时任务1：更新“在线”并且“当前时间>最后心跳时间”的设备状态
-		quartzJob();
+		//quartzJob();
 		
 		//定时任务2：更新“正在使用”并且 “当前时间>消费结束时间”的设备状态
-		updateDeviceStatusJob();
+		//updateDeviceStatusJob();
 	}
 
 	private void quartzJob() {
@@ -348,7 +348,7 @@ public class Server {
 				for (String key : requestBodys) {
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 正在注册
-						logger.info("当前线程ID为："+Thread.currentThread().getId());
+						logger.info(requestBodys[3]+",,,当前线程ID为："+Thread.currentThread().getId());
 						String token = requestBodys[2];
 						if ("00000000000000".equals(token) || null == token || "".equals(token.trim())) {
 							// 生成token，并且保存到redis
@@ -381,9 +381,17 @@ public class Server {
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【正在注册】响应客户端R1消息内容------" + send2ClientMsg);
-						responseByOutputStream(send2ClientMsg);
+
 						//跟踪设备命令详情
 						recordCommand(requestBodys[3], 2, send2ClientMsg);
+						
+						try {
+							Thread.sleep(5 * 1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						responseByOutputStream(send2ClientMsg);
 					} else if("R2".equalsIgnoreCase(key)){	//注册成功
 						String token = requestBodys[2];
 						if ("00000000000000".equals(token) || null == token || "".equals(token.trim())) {

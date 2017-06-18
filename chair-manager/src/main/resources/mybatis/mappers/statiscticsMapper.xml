@@ -35,11 +35,10 @@
 	
 	<!-- 统计-商家，查询商家自身收益统计 -->
 	<select id="queryShopStatisctics" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
-		select d.id as id, d.device_no as deviceNo, sum(consumed_duration) as totalDuration, 
-		( sum(consumed_duration) * (select shop_percent from manager where id=#{shopId}) /100 ) as totalIncome
-		from consumed_details c 
-		LEFT JOIN device d on d.id=c.device_id
-		where c.status=2 and c.shop_id=#{shopId} and DATE_FORMAT(c.last_update,'%Y-%m-%d') BETWEEN #{from} and #{to} group by c.device_id
+		select d.id as id, d.device_no as deviceNo, 
+		sum(consumed_duration) as totalDuration, 
+		(sum(consumed_duration) * ( select shop_percent/100 from manager where id=d.shop_id) )as totalIncome 
+		from device d left join consumed_details c on d.id=c.device_id where d.shop_id=#{shopId} and c.status=2 and DATE_FORMAT(c.last_update,'%Y-%m-%d') BETWEEN #{from} and #{to} group by d.id
 	</select>
 	
 	<!-- 统计-商家，查询商家自身基本统计 -->
@@ -48,5 +47,8 @@
 		(select ( sum(consumed_duration) * (select shop_percent from manager where id=3) /100 ) from  consumed_details where shop_id=3 and DATE_FORMAT(last_update,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')) as dayIncome
 		from consumed_details where status=2 and shop_id=#{shopId};
 	</select>
+	
+	
+	
 	
 </mapper>

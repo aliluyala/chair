@@ -141,7 +141,6 @@ public class StatiscticsController {
 	@RequestMapping(value = "queryProxyBaseInfo", method = RequestMethod.POST)
 	private ResponseResult queryProxyBaseInfo(HttpSession session) {
 		Manager manager = (Manager) session.getAttribute("user");
-		System.err.println("-----manager------"+manager);
 		if(manager.getType() != 2){
 			logger.error("---queryProxyBaseInfo()---manager type is not match---");
 			return null;
@@ -150,7 +149,6 @@ public class StatiscticsController {
 		proxyManager.setProxyId(manager.getId());
 		proxyManager.setType(3);
 		Statisctics proxyStatisctics = managerService.queryBaseStatisctics(proxyManager);
-		System.err.println("-----ProxyStatisctics------"+proxyStatisctics);
 		
 		return new ResponseResult(proxyStatisctics);
 	}
@@ -166,7 +164,6 @@ public class StatiscticsController {
 	@RequestMapping(value = "queryDayIncomeForProxy", method = RequestMethod.POST)
 	private ResponseResult queryDayIncomeForProxy(HttpSession session) {
 		Manager manager = (Manager) session.getAttribute("user");
-		System.err.println("-----AAAAAAmanager------"+manager);
 		if(manager.getType() != 2){
 			logger.error("---queryProxyBaseInfo()---manager type is not match---");
 			return null;
@@ -175,7 +172,6 @@ public class StatiscticsController {
 		proxyManager.setProxyId(manager.getId());
 		proxyManager.setType(3);
 		Statisctics proxyStatisctics = managerService.queryDayIncomeForProxy(proxyManager);
-		System.out.println("-----AAAAAAProxyStatisctics------"+proxyStatisctics);
 		
 		return new ResponseResult(proxyStatisctics);
 	}
@@ -194,7 +190,6 @@ public class StatiscticsController {
 	@RequestMapping(value = "listShopIncomeForPage", method = RequestMethod.POST)
 	private EasyUIResult queryShopListForPage(HttpSession session, @RequestParam("page") Integer page, @RequestParam("rows") Integer rows, @RequestParam("from") String from, @RequestParam("to") String to ) {
 		Manager manager = (Manager) session.getAttribute("user");
-		System.err.println("-----manager------"+manager);
 		if(manager.getType() != 3){
 			logger.error("---listShopIncomeForPage()---manager type is not match---");
 			return null;
@@ -229,7 +224,6 @@ public class StatiscticsController {
 	@RequestMapping(value = "queryShopBaseInfo", method = RequestMethod.POST)
 	private ResponseResult queryShopBaseInfo(HttpSession session) {
 		Manager manager = (Manager) session.getAttribute("user");
-		System.err.println("-----manager------"+manager);
 		if(manager.getType() != 3){
 			logger.error("---queryShopBaseInfo()---manager type is not match---");
 			return null;
@@ -239,10 +233,7 @@ public class StatiscticsController {
 		shopManager.setType(3);
 		//总收益
 		//今日收益
-		
-		
 		Statisctics shopStatisctics = managerService.queryShopBaseStatisctics(shopManager);
-		System.err.println("-----ProxyStatisctics------"+shopStatisctics);
 		
 		return new ResponseResult(shopStatisctics);
 	}
