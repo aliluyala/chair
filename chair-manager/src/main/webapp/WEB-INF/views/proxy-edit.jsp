@@ -15,11 +15,19 @@
 	            <td><input class="easyui-textbox" type="text" name="proxyName" data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
 	        <tr>
-	            <td>登陆用户名:</td>
+	            <td>手机号:</td>
+	            <td><input class="easyui-textbox" type="text" name="proxyPhone" data-options="required:true" style="width: 280px;"></input></td>
+	        </tr>
+	        <tr>
+	            <td>提成百分比:</td>
+	            <td><input class="easyui-textbox" type="text" name="proxyPercent" data-options="required:true" style="width: 280px;"></input></td>
+	        </tr>
+	        <tr>
+	            <td>管理员账号:</td>
 	            <td><input class="easyui-textbox" type="text" name="user" data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
 	        <tr>
-	            <td>登陆密码:</td>
+	            <td>管理员密码:</td>
 	            <td><input class="easyui-textbox" type="text" name="password" data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
 	    </table>

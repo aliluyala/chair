@@ -196,13 +196,12 @@ public class ManagerController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "queryProxyList", method = RequestMethod.POST)
-	private List<Manager> queryProxyList(@RequestParam("factoryID") Integer factoryID) {
-		System.err.println("---factoryID---"+factoryID);
-		Manager manager = new Manager();
-		if(factoryID == null || factoryID != 0)
-			manager.setFactoryId(factoryID);
-		manager.setType(2); // 代理
-		List<Manager> proxys = managerService.queryList(manager);
+	private List<Manager> queryProxyList(HttpSession session) {
+		Manager manager = (Manager) session.getAttribute("user");
+		Manager proxyManager = new Manager();
+		proxyManager.setFactoryId(manager.getId());
+		proxyManager.setType(2); // 代理
+		List<Manager> proxys = managerService.queryList(proxyManager);
 		return proxys;
 	}	
 	

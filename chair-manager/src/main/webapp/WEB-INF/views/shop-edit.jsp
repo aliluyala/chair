@@ -8,7 +8,7 @@
 	    	<input type="hidden" name="type" value="3"></input> <!-- 添加商家的默认类型 -->
 		    <tr>
 		        <td>所属代理:</td>
-		        <td><input class="easyui-combobox" name="proxyId" data-options="valueField:'proxyId',textField:'proxyName',url:'/<%=chair%>/manager/queryFactoryList',prompt:'请选择'" style="width: 280px;"></input></td>
+		        <td><input class="easyui-combobox" name="proxyId" data-options="valueField:'id',textField:'proxyName',url:'/<%=chair%>/manager/queryProxyList',prompt:'请选择'" style="width: 280px;"></input></td>
 		    </tr>
 	        <tr>
 	            <td>商家名称:</td>
@@ -19,11 +19,23 @@
 	            <td><input class="easyui-textbox" type="text" name="shopLocation" data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
 	        <tr>
-	            <td>登陆用户名:</td>
+		        <td>商家联系:</td>
+		        <td><input class="easyui-textbox" type="text" name="shopContact" data-options="required:true" style="width: 280px;"></input></td>
+		    </tr>
+			    <tr>
+			    <td>手机号:</td>
+			    <td><input class="easyui-textbox" type="text" name="shopContactPhone" data-options="required:true" style="width: 280px;"></input></td>
+			</tr>
+			<tr>
+				<td>提成百分比:</td>
+				<td><input class="easyui-textbox" type="text" name="shopPercent" data-options="required:true" style="width: 280px;"></input></td>
+			</tr>
+	        <tr>
+	            <td>管理员账号:</td>
 	            <td><input class="easyui-textbox" type="text" name="user" data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
 	        <tr>
-	            <td>登陆密码:</td>
+	            <td>管理员密码:</td>
 	            <td><input class="easyui-textbox" type="text" name="password" data-options="required:true" style="width: 280px;"></input></td>
 	        </tr>
 	    </table>
