@@ -473,7 +473,7 @@ public class Server {
 						
 						//获取消费时间
 						int duration = consumedDetailsService.findById(dto.getConsumerID()).getConsumedDuration();
-						
+						logger.info("---根据消费明细ID："+dto.getConsumerID()+"获取消费时长为："+duration);
 						Date date = DateUtils.addMinute(new Date(), duration);
 						date = DateUtils.addSecond(date, 15);
 						String expTime = "";
