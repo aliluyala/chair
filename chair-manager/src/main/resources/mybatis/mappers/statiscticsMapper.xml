@@ -44,7 +44,7 @@
 	<!-- 统计-商家，查询商家自身基本统计 -->
 	<select id="queryShopBaseStatisctics" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
 		select ( sum(consumed_duration) * (select shop_percent from manager where id=#{shopId}) /100 ) as totalIncome,
-		(select ( sum(consumed_duration) * (select shop_percent from manager where id=3) /100 ) from  consumed_details where shop_id=3 and DATE_FORMAT(last_update,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')) as dayIncome
+		(select ( sum(consumed_duration) * (select shop_percent from manager where id=#{shopId}) /100 ) from  consumed_details where shop_id=#{shopId} and DATE_FORMAT(last_update,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')) as dayIncome
 		from consumed_details where status=2 and shop_id=#{shopId};
 	</select>
 	

@@ -123,7 +123,7 @@ public class UserAccountController {
 			sendSuccess = socketAction.send(deviceCommandLogService, device.getDeviceNo(), toMessage);
 		}
 		if(!sendSuccess && !"123".equals(device.getDeviceNo())){
-			throw new ChairException("2003", "消息发送不成功");
+			throw new ChairException("2003", "设备异常，请稍后再试");
 		}
 		
 		
