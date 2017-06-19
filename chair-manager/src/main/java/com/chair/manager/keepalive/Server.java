@@ -278,7 +278,7 @@ public class Server {
 					
 					//将thread添加到list
 					threadList.add(Thread.currentThread());
-					printThreadList();
+//					printThreadList();
 					
 					new Thread(new SocketAction(s)).start();
 				}
@@ -706,11 +706,11 @@ public class Server {
 			}
 			if(socket != null){
 				try {
-					logger.warn("---清除redis---");
+//					logger.warn("---清除redis---");
 					//清除redis
 				//flushRedis(socket);
 
-					logger.warn("---关闭socket---");
+					logger.warn("---关闭的socket为---"+socket);
 					socket.close();
 
 					logger.warn("---删除List数组对应的值---");
@@ -724,7 +724,7 @@ public class Server {
 				}
 			}
 		}
-		logger.warn("----清除与当前设备不绑定的socket----清除前数量为："+socketList.size());
+		logger.warn("----清除与当前设备不绑定的socket----清除后数量为："+socketList.size());
 	}
 
 }
