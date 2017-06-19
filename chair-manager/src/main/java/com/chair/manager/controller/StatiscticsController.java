@@ -117,8 +117,8 @@ public class StatiscticsController {
 		shopManager.setProxyId(manager.getId());
 		shopManager.setType(3);	//商家类型
 		//设置查询条件，开始日期
-//		shopManager.setFrom(getStrDate(from));
-//		shopManager.setTo(getStrDate(to));
+		shopManager.setFrom(getStrDate(from));
+		shopManager.setTo(getStrDate(to));
 		
 		System.err.println("---shopManager----"+shopManager);
 		

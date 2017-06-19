@@ -34,7 +34,7 @@
 	            <th data-options="field:'shopContact',width:100">联系人</th>
 	            <th data-options="field:'totalDevice',width:100">设备数</th>
 	            <th data-options="field:'totalDuration',width:100">消费时长(分钟)</th>
-	            <th data-options="field:'income',width:100">收益(分钟)</th>
+	            <th data-options="field:'dayIncome',width:100">收益(分钟)</th>
 	        </tr>
 	    </thead>
 	</table>
@@ -54,17 +54,6 @@
 			$("#totalIncome").textbox("setValue", o.totalIncome);
 			$("#totalShop").textbox("setValue", o.totalShop);
 			$("#totalDevice").textbox("setValue", o.totalDevice);
-		}
-	});
-	
-	//今日收益
-	$.ajax({
-		type:'post',
-		url:'/<%=chair%>/statisctics/queryDayIncomeForProxy/',
-		success:function(data){
-			//alert(JSON.stringify(data));
-			var o = data.data;
-			//alert(JSON.stringify(o))
 			$("#dayIncome").textbox("setValue", o.dayIncome);
 		}
 	});
