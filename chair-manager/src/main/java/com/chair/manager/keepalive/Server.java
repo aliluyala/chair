@@ -473,7 +473,7 @@ public class Server {
 						set(token, requestBodys[3]);
 						set(requestBodys[3], ip+":"+clientPort);
 						ccidSocket.put(requestBodys[3], s);
-
+						socketCCID.put(s, requestBodys[3]);
 						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【注册成功】------------");
 					} else if ("H0".equalsIgnoreCase(key)) { // H0，心跳消息
 						// 【解析报文[*H0,001,R1497108915104,031,0,0#]，匹配以*开头，以#结尾，结果为】---true
@@ -701,7 +701,7 @@ public class Server {
 		}
 		for (int i =0; i < socketList.size(); i++) {
 			Socket socket = socketList.get(i);
-			if(ccidSocket.values().contains(socket)){
+			if(!StringUtils.isEmpty(socketCCID.get(socket))){
 				continue;
 			}
 			if(socket != null){
