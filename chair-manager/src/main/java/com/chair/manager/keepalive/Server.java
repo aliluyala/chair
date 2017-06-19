@@ -118,7 +118,7 @@ public class Server {
                 // task to run goes here  
 				logger.info("--------定时任务执行时间-Hello !!!------->>>>"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 				
-				printSokcet();	//打印socket列表
+				printSokcetMap();	//打印socket列表
 				
 				//查询所有设备列表
 				Device device = new Device();
@@ -229,6 +229,7 @@ public class Server {
 	}
 
 	List<Socket> socketList = new ArrayList<Socket>();
+	List<Thread> threadList = new ArrayList<Thread>();
 	
 	public class ConnWatchDog implements Runnable {
 
@@ -237,8 +238,15 @@ public class Server {
 				ServerSocket ss = new ServerSocket(port);
 				while (running) {
 					Socket s = ss.accept();
+					
+					//将socket添加到list
 					socketList.add(s);
 					printSocketList();
+					
+					//将thread添加到list
+					threadList.add(Thread.currentThread());
+					printSocketList();
+					
 					new Thread(new SocketAction(s)).start();
 				}
 			} catch (IOException e) {
@@ -626,21 +634,30 @@ public class Server {
 	/**
 	 * 将socket和设备的关系打印出来
 	 */
-	private void printSokcet(){
+	private void printSokcetMap(){
 		logger.info("--------socket.map一共有几条数据?----------"+ccidSocket.size());
+		logger.warn("--------socket.map一共有几条数据?----------"+ccidSocket.size());
 		for (Map.Entry<String,Socket> entry : ccidSocket.entrySet()){
 			logger.info("---【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
+			logger.warn("---【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
 	}
 	
 	
 	private void printSocketList(){
 		logger.info("--------socket.socketList一共有几条数据?----------"+socketList.size());
+		logger.warn("--------socket.socketList一共有几条数据?----------"+socketList.size());
 		for (Socket socket : socketList) {
-			logger.info("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.info(Thread.currentThread().getName()+"isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.warn(Thread.currentThread().getName()+"isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 		}
+	}
+	
+	
+	private void printThreadList(){
 		
 	}
+	
 	
 
 }
