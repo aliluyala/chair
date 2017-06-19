@@ -648,8 +648,8 @@ public class Server {
 		logger.info("--------socket.socketList一共有几条数据?----------"+socketList.size());
 		logger.warn("--------socket.socketList一共有几条数据?----------"+socketList.size());
 		for (Socket socket : socketList) {
-			logger.info("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
-			logger.warn("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.info("通过socket查询是否有值？"+ccidSocket.values().contains(socket)+"   isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.warn("通过socket查询是否有值？"+ccidSocket.values().contains(socket)+"   isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 		}
 	}
 	
@@ -661,6 +661,12 @@ public class Server {
 		}
 	}
 	
-	
+	private void cleanSocketThread(){
+		for (Socket socket : socketList) {
+			ccidSocket.values().contains(socket);
+			logger.info("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.warn("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+		}
+	}
 
 }
