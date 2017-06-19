@@ -270,7 +270,7 @@ public class Server {
 					Socket s = ss.accept();
 					
 					//清除与当前设备不绑定的socket
-					clearSocketThread();
+					//clearSocketThread();
 					
 					//将socket添加到list
 					socketList.add(s);
