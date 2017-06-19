@@ -27,7 +27,7 @@
 		(select SUM(consumed_duration) from consumed_details c where c.proxy_id=m.id) as totalIncome,
 		(select count(1) from manager m1 where m1.proxy_id = m.id) as totalShop,
 		(select count(1) from device d where d.proxy_id = m.id) as totalDevice,
-		(select SUM(consumed_duration) * m.proxy_percent /100 from consumed_details c where c.proxy_id=m.id and DATE_FORMAT(now(), '%Y-%m-%d') = DATE_FORMAT(last_update, '%Y-%m-%d')) as dayIncome
+		(select SUM(consumed_duration) * m.shop_percent /100 from consumed_details c where c.proxy_id=m.id and DATE_FORMAT(now(), '%Y-%m-%d') = DATE_FORMAT(last_update, '%Y-%m-%d')) as dayIncome
 		from manager m where m.id=#{id}
 	</select>
 	
