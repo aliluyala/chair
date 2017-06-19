@@ -288,11 +288,15 @@ public class Server {
 					socketList.add(s);
 					printSocketList();
 					
-					//将thread添加到list
-					threadList.add(Thread.currentThread());
-//					printThreadList();
 					
-					new Thread(new SocketAction(s)).start();
+					Thread  t = new Thread(new SocketAction(s));
+					
+					//将thread添加到list
+					threadList.add(t);
+					printThreadList();
+					
+					t.start();
+
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
