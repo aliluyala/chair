@@ -239,6 +239,9 @@ public class Server {
 				while (running) {
 					Socket s = ss.accept();
 					
+					//清除与当前设备不绑定的socket
+					cleanSocketThread();
+					
 					//将socket添加到list
 					socketList.add(s);
 					printSocketList();
@@ -663,7 +666,21 @@ public class Server {
 	
 	private void cleanSocketThread(){
 		for (Socket socket : socketList) {
-			ccidSocket.values().contains(socket);
+			if(ccidSocket.values().contains(socket)){
+				continue;
+			}
+			if(socket != null){
+				try {
+					socket.close();
+					//清除redis
+					String deviceNO = flushRedis(socket);
+					//TODO 关闭线程
+					
+					
+				} catch (IOException e) {
+					logger.error("---cleanSocketThread---失败--->>>"+e.getMessage());
+				}
+			}
 			logger.info("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 			logger.warn("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 		}
