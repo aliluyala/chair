@@ -27,9 +27,12 @@
 		(select SUM(consumed_duration) from consumed_details c where c.proxy_id=m.id) as totalIncome,
 		(select count(1) from manager m1 where m1.proxy_id = m.id) as totalShop,
 		(select count(1) from device d where d.proxy_id = m.id) as totalDevice,
-		(select SUM(consumed_duration) * m.shop_percent /100 from consumed_details c where c.proxy_id=m.id and DATE_FORMAT(now(), '%Y-%m-%d') = DATE_FORMAT(last_update, '%Y-%m-%d')) as dayIncome
+		<!-- (select SUM(consumed_duration) * m1.shop_percent /100 from consumed_details c where c.shop_id=m1.shop_id and DATE_FORMAT(now(), '%Y-%m-%d') = DATE_FORMAT(last_update, '%Y-%m-%d')) as dayIncome -->
+		(SELECT ( SUM(c.consumed_duration) * m.shop_percent / 100 ) AS dayIncome FROM manager m LEFT JOIN consumed_details c ON m.id = c.shop_id  WHERE m.proxy_id =8 AND c. STATUS = 2 AND DATE_FORMAT(c.last_update, '%Y-%m-%d')  = DATE_FORMAT(now(), '%Y-%m-%d')) as dayIncome
 		from manager m where m.id=#{id}
 	</select>
+	
+	
 	
 	
 	<!-- 统计-商家，查询商家自身收益统计 -->
