@@ -699,7 +699,7 @@ public class Server {
 		if(socketList.size() <= 0 ){
 			return;
 		}
-		for (int i =0; i<socketList.size(); i++) {
+		for (int i =0; i < socketList.size(); i++) {
 			Socket socket = socketList.get(i);
 			if(ccidSocket.values().contains(socket)){
 				continue;
@@ -708,7 +708,7 @@ public class Server {
 				try {
 					logger.warn("---清除redis---");
 					//清除redis
-					flushRedis(socket);
+				//flushRedis(socket);
 
 					logger.warn("---关闭socket---");
 					socket.close();
