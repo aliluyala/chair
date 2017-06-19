@@ -113,7 +113,7 @@ public class Server {
 		updateDeviceStatusJob();
 		
 		//定时任务3：清除与当前设备不绑定的socket
-//		clearSocketJob();
+		clearSocketJob();
 	}
 	
 	private void clearSocketJob(){
@@ -124,7 +124,7 @@ public class Server {
         };  
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();  
         // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
-        service.scheduleAtFixedRate(runnable, 30, 30, TimeUnit.SECONDS); 
+        service.scheduleAtFixedRate(runnable, 30, 60, TimeUnit.SECONDS); 
 	}
 	
 
@@ -283,6 +283,7 @@ public class Server {
 				ServerSocket ss = new ServerSocket(port);
 				while (running) {
 					Socket s = ss.accept();
+					
 					//将socket添加到list
 					socketList.add(s);
 					printSocketList();
@@ -485,9 +486,6 @@ public class Server {
 						set(requestBodys[3], ip+":"+clientPort);
 						ccidSocket.put(requestBodys[3], s);
 						socketCCID.put(s, requestBodys[3]);
-						
-						//清除多余的socket
-						clearSocketThread();
 						
 						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【注册成功】------------");
 					} else if ("H0".equalsIgnoreCase(key)) { // H0，心跳消息
