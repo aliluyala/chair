@@ -245,7 +245,7 @@ public class Server {
 					
 					//将thread添加到list
 					threadList.add(Thread.currentThread());
-					printSocketList();
+					printThreadList();
 					
 					new Thread(new SocketAction(s)).start();
 				}
@@ -648,14 +648,17 @@ public class Server {
 		logger.info("--------socket.socketList一共有几条数据?----------"+socketList.size());
 		logger.warn("--------socket.socketList一共有几条数据?----------"+socketList.size());
 		for (Socket socket : socketList) {
-			logger.info(Thread.currentThread().getName()+"isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
-			logger.warn(Thread.currentThread().getName()+"isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.info("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.warn("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 		}
 	}
 	
 	
 	private void printThreadList(){
-		
+		logger.warn("--------socket.threadList一共有几条数据?----------"+threadList.size());
+		for (Thread thread : threadList) {
+			logger.warn("----thread-----"+thread+"    thread.id() :"+thread.getId()+" - name:"+thread.getName() +" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted()+ " - Priority:"+thread.getPriority());
+		}
 	}
 	
 	
