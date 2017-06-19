@@ -3,18 +3,6 @@ package com.chair.manager.pojo;
 import java.util.Date;
 
 public class Statisctics {
-	/*
-	 * <th data-options="field:'ck',checkbox:true"></th> <th
-	 * data-options="field:'id',width:60">ID</th> <th
-	 * data-options="field:'shopName',width:100">商铺</th> <th
-	 * data-options="field:'shopLocation',width:150">地址</th> <th
-	 * data-options="field:'shopPhone',width:100">电话</th> <th
-	 * data-options="field:'shopContacts',width:100">联系人</th> <th
-	 * data-options="field:'totalDevice',width:100">设备数</th> <th
-	 * data-options="field:'totalDuration',width:100">消费时长</th> <th
-	 * data-options="field:'income',width:100">收益</th>
-	 */
-
 	private Integer id;
 
 	private String deviceNo;

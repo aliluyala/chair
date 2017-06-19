@@ -149,7 +149,7 @@ public class StatiscticsController {
 			return null;
 		}
 		Manager proxyManager = new Manager();
-		proxyManager.setProxyId(manager.getId());
+		proxyManager.setId(manager.getId());
 		proxyManager.setType(3);
 		Statisctics proxyStatisctics = managerService.queryBaseStatisctics(proxyManager);
 		
@@ -175,7 +175,6 @@ public class StatiscticsController {
 		proxyManager.setProxyId(manager.getId());
 		proxyManager.setType(3);
 		Statisctics proxyStatisctics = managerService.queryDayIncomeForProxy(proxyManager);
-		
 		return new ResponseResult(proxyStatisctics);
 	}
 	

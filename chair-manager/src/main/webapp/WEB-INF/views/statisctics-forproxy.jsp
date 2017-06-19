@@ -14,7 +14,7 @@
 	        总收益：    <input id="totalIncome" class="easyui-textbox" style="width: 80px;" data-options="readonly:true"></input>
 		商铺数：    <input id="totalShop" class="easyui-textbox" style="width: 80px;" data-options="readonly:true"></input>
 		设备数：    <input id="totalDevice" class="easyui-textbox" style="width: 80px;" data-options="readonly:true"></input>  
-		今日收益： <input id="dayIncome" class="easyui-textbox" style="width: 80px;" data-options="readonly:true"></input>  
+		今日收益： <input id="todayIncome" class="easyui-textbox" style="width: 80px;" data-options="readonly:true"></input>  
      	<div>
 			 开始时间: <input id="fromDate" class="easyui-datebox" style="width:150px">
 			 结束时间: <input id="toDate" class="easyui-datebox" style="width:150px">
@@ -54,9 +54,21 @@
 			$("#totalIncome").textbox("setValue", o.totalIncome);
 			$("#totalShop").textbox("setValue", o.totalShop);
 			$("#totalDevice").textbox("setValue", o.totalDevice);
-			$("#dayIncome").textbox("setValue", o.dayIncome);
+			$("#todayIncome").textbox("setValue", o.dayIncome);
 		}
 	});
+	
+	//今日收益
+<%-- 	$.ajax({
+		type:'post',
+		url:'/<%=chair%>/statisctics/queryDayIncomeForProxy/',
+		success:function(data){
+			alert(JSON.stringify(data));
+			var o = data.data;
+			alert(JSON.stringify(o))
+		}
+	}); --%>
+	
 })();
 
 
@@ -67,6 +79,7 @@ function doSearch(){
 	var queryParameter = $('#statiscticsProxyIncomeList').datagrid("options").queryParams;
 	queryParameter.from = from;
 	queryParameter.to = to;
+	$("#todayIncome").textbox("setValue", o.dayIncome);
 	$("#statiscticsProxyIncomeList").datagrid("reload");
 	
 }
