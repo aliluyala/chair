@@ -113,7 +113,7 @@ public class Server {
 		updateDeviceStatusJob();
 		
 		//定时任务3：清除与当前设备不绑定的socket
-		clearSocketJob();
+		//clearSocketJob();
 	}
 	
 	private void clearSocketJob(){
@@ -723,8 +723,6 @@ public class Server {
 
 					logger.warn("---关闭的socket为---"+socket);
 					socket.close();
-
-					logger.warn("---删除List数组对应的值---");
 					//删除List数组对应的值
 					socketList.remove(socketList.get(i));
 					//TODO 关闭线程
