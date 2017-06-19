@@ -111,7 +111,22 @@ public class Server {
 		
 		//定时任务2：更新“正在使用”并且 “当前时间>消费结束时间”的设备状态
 		updateDeviceStatusJob();
+		
+		//定时任务3：清除与当前设备不绑定的socket
+		clearSocketJob();
 	}
+	
+	private void clearSocketJob(){
+		Runnable runnable = new Runnable() {  
+            public void run() {  
+				clearSocketThread();
+            }  
+        };  
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();  
+        // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
+        service.scheduleAtFixedRate(runnable, 30, 30, TimeUnit.SECONDS); 
+	}
+	
 
 	private void quartzJob() {
 		Runnable runnable = new Runnable() {  
@@ -268,10 +283,6 @@ public class Server {
 				ServerSocket ss = new ServerSocket(port);
 				while (running) {
 					Socket s = ss.accept();
-					
-					//清除与当前设备不绑定的socket
-					clearSocketThread();
-					
 					//将socket添加到list
 					socketList.add(s);
 					printSocketList();
