@@ -270,7 +270,7 @@ public class Server {
 					Socket s = ss.accept();
 					
 					//清除与当前设备不绑定的socket
-					//clearSocketThread();
+					clearSocketThread();
 					
 					//将socket添加到list
 					socketList.add(s);
@@ -696,6 +696,9 @@ public class Server {
 	
 	private void clearSocketThread(){
 		logger.warn("----清除与当前设备不绑定的socket----清除前数量为："+socketList.size());
+		if(socketList.size() <= 0 ){
+			return;
+		}
 		for (int i =0; i<socketList.size(); i++) {
 			Socket socket = socketList.get(i);
 			if(ccidSocket.values().contains(socket)){
@@ -703,10 +706,14 @@ public class Server {
 			}
 			if(socket != null){
 				try {
-					socket.close();
+					logger.warn("---清除redis---");
 					//清除redis
 					flushRedis(socket);
-					
+
+					logger.warn("---关闭socket---");
+					socket.close();
+
+					logger.warn("---删除List数组对应的值---");
 					//删除List数组对应的值
 					socketList.remove(socketList.get(i));
 					//TODO 关闭线程
