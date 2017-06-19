@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -205,10 +206,39 @@ public class Server {
 		boolean b = m.find();
 		// System.out.println("---b---"+b);
 		// System.out.println("*R1,001,0000000000,898602b6111700445060,864811034682927,1.0,1.0,0.1#\0");*/
-		for(int i=0; i<10; i++){
+		/*for(int i=0; i<10; i++){
 			MyVector myVector  = MyVector.getInstance();
 			Vector v = myVector.getVector();
 			System.out.println("myVector："+myVector.hashCode() + "\t Vector："+v.hashCode());
+		}*/
+/*		List<String> l = new LinkedList<String>();
+		l.add("A");
+		l.add("B");
+		l.add("C");
+		l.add("D");
+		System.out.println("--linded长度--"+l.size());
+		for (String string : l) {
+			if("B".equals(string)){
+				l.remove(string);
+			}
+			System.out.println(string);
+		}
+		System.out.println("--linded长度--"+l.size());*/
+		
+
+		List<String> list = new ArrayList<String>();
+		list.add("A");
+		list.add("B");
+		list.add("C");
+		list.add("D");
+		list.add("E");
+		list.add("F");
+		for(int i = 0; i<list.size() ; i++){
+			System.out.println("---list---"+list.size());
+			if("B".equals(list.get(i))){
+				list.remove(list.get(i));
+			}
+			System.out.println(list.get(i));
 		}
 		
 		
@@ -240,7 +270,7 @@ public class Server {
 					Socket s = ss.accept();
 					
 					//清除与当前设备不绑定的socket
-					cleanSocketThread();
+					clearSocketThread();
 					
 					//将socket添加到list
 					socketList.add(s);
@@ -664,8 +694,10 @@ public class Server {
 		}
 	}
 	
-	private void cleanSocketThread(){
-		for (Socket socket : socketList) {
+	private void clearSocketThread(){
+		logger.warn("----清除与当前设备不绑定的socket----清除前数量为："+socketList.size());
+		for (int i =0; i<socketList.size(); i++) {
+			Socket socket = socketList.get(i);
 			if(ccidSocket.values().contains(socket)){
 				continue;
 			}
@@ -673,7 +705,10 @@ public class Server {
 				try {
 					socket.close();
 					//清除redis
-					String deviceNO = flushRedis(socket);
+					flushRedis(socket);
+					
+					//删除List数组对应的值
+					socketList.remove(socketList.get(i));
 					//TODO 关闭线程
 					
 					
@@ -681,9 +716,8 @@ public class Server {
 					logger.error("---cleanSocketThread---失败--->>>"+e.getMessage());
 				}
 			}
-			logger.info("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
-			logger.warn("isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 		}
+		logger.warn("----清除与当前设备不绑定的socket----清除前数量为："+socketList.size());
 	}
 
 }
