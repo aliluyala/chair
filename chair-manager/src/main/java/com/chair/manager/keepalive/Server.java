@@ -693,30 +693,30 @@ public class Server {
 	 * 将socket和设备的关系打印出来
 	 */
 	private void printSokcetMap(){
-		logger.info("--------Socket.map一共有几条数据?----------"+ccidSocket.size());
+		logger.warn("--------Socket.map一共有几条数据?----------"+ccidSocket.size());
 		for (Map.Entry<String,Socket> entry : ccidSocket.entrySet()){
-			logger.info("---socket----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
+			logger.warn("---socket----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
 
-		logger.info("--------Thread.map一共有几条数据?----------"+ccidSocket.size());
+		logger.warn("--------Thread.map一共有几条数据?----------"+ccidSocket.size());
 		for (Entry<Thread, Socket> entry : socketThread.entrySet()){
-			logger.info("---thread----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
+			logger.warn("---thread----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
 	}
 	
 	
 	private void printSocketList(){
-		logger.warn("--------socket.socketList一共有几条数据?----------"+socketList.size());
+		logger.warn("S--------socketList一共有几条数据?----------"+socketList.size());
 		for (Socket socket : socketList) {
-			logger.warn("通过socket查询是否有值？"+ccidSocket.values().contains(socket)+"   isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.warn("通过socket查询是否有值？"+socketCCID.get(socket)+"   isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 		}
 	}
 	
 	
 	private void printThreadList(){
-		logger.warn("--A------socket.threadList一共有几条数据?----------"+threadList.size());
+		logger.warn("T--------threadList一共有几条数据?----------"+threadList.size());
 		for (Thread thread : threadList) {
-			logger.warn("----thread-----"+thread+" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted()+ " - Priority:"+thread.getPriority());
+			logger.warn("通过thread查询是否有值？"+socketThread.get(thread)+"----thread-----"+thread+" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted()+ " - Priority:"+thread.getPriority());
 		}
 	}
 	
@@ -765,5 +765,19 @@ public class Server {
 		logger.warn("----清除与当前设备不绑定的thread----清除后thread数量为："+threadList.size());
 	}
 	
-
+	
+	//测试socket是否通路
+	private boolean isConnection(Socket s){
+		String connectionMsg = "a";
+		OutputStream os;
+		try {
+			os = s.getOutputStream();
+			byte[] b = connectionMsg.getBytes();
+			os.write(b);
+			os.flush();
+		} catch (IOException e) {
+			return false;
+		}
+		return true;
+	}
 }
