@@ -151,7 +151,7 @@ public class Server {
 						String str1 = DateUtils.formatString(new Date(), "yyyy-MM-dd HH:mm:ss");
 						Date tempDate = DateUtils.addSecond(d.getOnlineTime(), 65);	
 						String str2 = DateUtils.formatString(tempDate, "yyyy-MM-dd HH:mm:ss");
-						logger.info("---设备信息---"+d+"\n 当前时刻="+str1+"\n 最后心跳时间="+str2);
+						logger.info("---设备信息---"+d.getDeviceNo()+"\t 当前时刻="+str1+"\t 最后心跳时间="+str2);
 						if(DateUtils.compareDate(str1, str2)){
 							//设备下线
 							offlineDevice(d.getDeviceNo());
@@ -409,7 +409,7 @@ public class Server {
 			Pattern p = Pattern.compile(regEx);
 			Matcher m = p.matcher(reciverMsg);
 			boolean b = m.find();
-			logger.info("---【解析报文[" + reciverMsg + "]，匹配以*开头，以#结尾，结果为】---" + b + "\n ip:port = " + ip + ":" + clientPort);
+			logger.info("---【解析报文[" + reciverMsg + "]，匹配以*开头，以#结尾，结果为】---" + b + "\t ip:port = " + ip + ":" + clientPort);
 			if (b) {
 				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1).split(",");
 				//设备上报/下发
