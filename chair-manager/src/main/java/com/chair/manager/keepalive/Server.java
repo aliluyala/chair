@@ -442,6 +442,8 @@ public class Server {
 							device.setLastUpdate(new Date());
 							device.setCreateTime(new Date());
 							deviceService.save(device);
+							//设备日志跟踪
+							recordDeviceLog(requestBodys[3], 2, "下线");
 						}else{
 							device.setDeviceToken(token);
 							device.setDeviceNo(requestBodys[3]);
