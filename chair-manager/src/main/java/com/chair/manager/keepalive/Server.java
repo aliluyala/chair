@@ -716,13 +716,14 @@ public class Server {
 	
 	
 	private void printThreadList(){
-		logger.warn("--------socket.threadList一共有几条数据?----------"+threadList.size());
+		logger.warn("--A------socket.threadList一共有几条数据?----------"+threadList.size());
 		for (Thread thread : threadList) {
 			logger.warn("----thread-----"+thread+" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted()+ " - Priority:"+thread.getPriority());
 			if(!thread.isAlive()){
-				thread.interrupt();
+				thread.stop();
 			}
 		}
+		logger.warn("--B------socket.threadList一共有几条数据?----------"+threadList.size());
 	}
 	
 	private void clearSocketThread(){
