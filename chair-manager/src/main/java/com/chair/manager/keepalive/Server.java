@@ -437,6 +437,7 @@ public class Server {
 							device = new Device();
 							device.setDeviceToken(token);
 							device.setDeviceNo(requestBodys[3]);
+							device.setStatus(2);
 							device.setLastUpdate(new Date());
 							device.setCreateTime(new Date());
 							deviceService.save(device);
@@ -710,7 +711,7 @@ public class Server {
 	private void printSocketList(){
 		logger.warn("S--------socketList一共有几条数据?----------"+socketList.size());
 		for (Socket socket : socketList) {
-			logger.warn("通过socket查询是否有值？"+socketCCID.get(socket)+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.warn("通过socket查询是否有值？"+socketCCID.get(socket)+"---【socket】---"+socket+"  isConnection()--?"+isConnection(socket)+"  isClosed()--?"+socket.isClosed());
 		}
 	}
 	
@@ -771,6 +772,7 @@ public class Server {
 	//判断是否断开连接，断开返回false,没有返回true
 	private boolean isConnection(Socket s){
 		try {
+			if(s == null) return false;
 			s.sendUrgentData(0xFF);
 			return true;
 		} catch (IOException e) {
