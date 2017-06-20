@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -60,6 +61,7 @@ public class Server {
 	private static ConcurrentHashMap<String, Socket> ipSocket;
 	private static ConcurrentHashMap<String, Socket> ccidSocket;
 	private static ConcurrentHashMap<Socket, String> socketCCID;
+	private static ConcurrentHashMap<Socket, Thread> socketThread;
 	private ConcurrentHashMap<String, String> ipToken = new ConcurrentHashMap<String, String>();
 	private Thread connWatchDog;
 	@Autowired
@@ -105,6 +107,8 @@ public class Server {
 			ccidSocket = new ConcurrentHashMap<String, Socket>();
 		if (socketCCID == null)
 			socketCCID = new ConcurrentHashMap<Socket, String>();
+		if (socketThread == null)
+			socketThread = new ConcurrentHashMap<Socket, Thread>();
 
 		// 定时任务1：更新“在线”并且“当前时间>最后心跳时间”的设备状态
 		quartzJob();
@@ -113,7 +117,7 @@ public class Server {
 		updateDeviceStatusJob();
 		
 		//定时任务3：清除与当前设备不绑定的socket
-//		clearSocketJob();
+		clearSocketJob();
 	}
 	
 	private void clearSocketJob(){
@@ -485,6 +489,7 @@ public class Server {
 						set(requestBodys[3], ip+":"+clientPort);
 						ccidSocket.put(requestBodys[3], s);
 						socketCCID.put(s, requestBodys[3]);
+						socketThread.put(s, Thread.currentThread());
 						
 						//清除多余的socket
 						clearSocketThread();
@@ -683,12 +688,18 @@ public class Server {
 	 * 将socket和设备的关系打印出来
 	 */
 	private void printSokcetMap(){
-		logger.info("--------socket.map一共有几条数据?----------"+ccidSocket.size());
-		logger.warn("--------socket.map一共有几条数据?----------"+ccidSocket.size());
+		logger.info("--------Socket.map一共有几条数据?----------"+ccidSocket.size());
 		for (Map.Entry<String,Socket> entry : ccidSocket.entrySet()){
-			logger.info("---【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
-			logger.warn("---【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
+			logger.info("---socket----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
+
+		logger.info("--------Thread.map一共有几条数据?----------"+ccidSocket.size());
+		for (Entry<Socket, Thread> entry : socketThread.entrySet()){
+			logger.info("---thread----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
+		}
+		
+		
+		
 	}
 	
 	
@@ -721,16 +732,11 @@ public class Server {
 			}
 			if(socket != null){
 				try {
-//					logger.warn("---清除redis---");
-					//清除redis
-				//flushRedis(socket);
-
 					logger.warn("---关闭的socket为---"+socket);
 					socket.close();
 					//删除List数组对应的值
 					socketList.remove(socketList.get(i));
 					//TODO 关闭线程
-					
 					
 				} catch (IOException e) {
 					logger.error("---cleanSocketThread---失败--->>>"+e.getMessage());
