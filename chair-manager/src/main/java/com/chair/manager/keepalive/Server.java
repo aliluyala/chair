@@ -763,9 +763,9 @@ public class Server {
 			if(thread != null){
 				//TODO 关闭线程
 				logger.warn("---关闭的thread为---"+thread);
-				threadList.get(i).interrupt();
+				thread.interrupt();
 				//删除List数组对应的值
-				threadList.remove(threadList.get(i));
+				threadList.remove(thread);
 			}
 		}
 		logger.warn("----清除与当前设备不绑定的thread----清除后thread数量为："+threadList.size());
