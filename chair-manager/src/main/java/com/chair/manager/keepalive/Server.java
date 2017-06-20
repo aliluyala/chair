@@ -61,7 +61,7 @@ public class Server {
 	private static ConcurrentHashMap<String, Socket> ipSocket;
 	private static ConcurrentHashMap<String, Socket> ccidSocket;
 	private static ConcurrentHashMap<Socket, String> socketCCID;
-	private static ConcurrentHashMap<Socket, Thread> socketThread;
+	private static ConcurrentHashMap<Thread, Socket> socketThread;
 	private ConcurrentHashMap<String, String> ipToken = new ConcurrentHashMap<String, String>();
 	private Thread connWatchDog;
 	@Autowired
@@ -108,7 +108,7 @@ public class Server {
 		if (socketCCID == null)
 			socketCCID = new ConcurrentHashMap<Socket, String>();
 		if (socketThread == null)
-			socketThread = new ConcurrentHashMap<Socket, Thread>();
+			socketThread = new ConcurrentHashMap<Thread, Socket>();
 
 		// 定时任务1：更新“在线”并且“当前时间>最后心跳时间”的设备状态
 		quartzJob();
@@ -117,13 +117,14 @@ public class Server {
 		updateDeviceStatusJob();
 		
 		//定时任务3：清除与当前设备不绑定的socket
-		clearSocketJob();
+		clearSocketThreadJob();
 	}
 	
-	private void clearSocketJob(){
+	private void clearSocketThreadJob(){
 		Runnable runnable = new Runnable() {  
             public void run() {  
-				clearSocketThread();
+            	clearSocket();
+            	clearThread();
             }  
         };  
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();  
@@ -493,10 +494,10 @@ public class Server {
 						set(requestBodys[3], ip+":"+clientPort);
 						ccidSocket.put(requestBodys[3], s);
 						socketCCID.put(s, requestBodys[3]);
-						socketThread.put(s, Thread.currentThread());
+						socketThread.put(Thread.currentThread(), s);
 						
 						//清除多余的socket
-						clearSocketThread();
+						//clearSocket();
 						
 						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【注册成功】------------");
 					} else if ("H0".equalsIgnoreCase(key)) { // H0，心跳消息
@@ -698,17 +699,15 @@ public class Server {
 		}
 
 		logger.info("--------Thread.map一共有几条数据?----------"+ccidSocket.size());
-		for (Entry<Socket, Thread> entry : socketThread.entrySet()){
+		for (Entry<Thread, Socket> entry : socketThread.entrySet()){
 			logger.info("---thread----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
 	}
 	
 	
 	private void printSocketList(){
-		logger.info("--------socket.socketList一共有几条数据?----------"+socketList.size());
 		logger.warn("--------socket.socketList一共有几条数据?----------"+socketList.size());
 		for (Socket socket : socketList) {
-			logger.info("通过socket查询是否有值？"+ccidSocket.values().contains(socket)+"   isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 			logger.warn("通过socket查询是否有值？"+ccidSocket.values().contains(socket)+"   isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 		}
 	}
@@ -718,15 +717,11 @@ public class Server {
 		logger.warn("--A------socket.threadList一共有几条数据?----------"+threadList.size());
 		for (Thread thread : threadList) {
 			logger.warn("----thread-----"+thread+" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted()+ " - Priority:"+thread.getPriority());
-			if(!thread.isAlive()){
-				thread.stop();
-			}
 		}
-		logger.warn("--B------socket.threadList一共有几条数据?----------"+threadList.size());
 	}
 	
-	private void clearSocketThread(){
-		logger.warn("----清除与当前设备不绑定的socket和thread----清除前socket数量为："+socketList.size()+"\t thread数量为："+threadList.size());
+	private void clearSocket(){
+		logger.warn("----清除与当前设备不绑定的socket----清除前socket数量为："+socketList.size());
 		if(socketList.size() <= 0 ){
 			return;
 		}
@@ -737,10 +732,6 @@ public class Server {
 			}
 			if(socket != null){
 				try {
-					//TODO 关闭线程
-					logger.warn("---关闭的thread为---"+socketThread.get(socketList.get(i)));
-					socketThread.get(socketList.get(i)).interrupt();
-					
 					logger.warn("---关闭的socket为---"+socket);
 					socket.close();
 					//删除List数组对应的值
@@ -750,7 +741,29 @@ public class Server {
 				}
 			}
 		}
-		logger.warn("----清除与当前设备不绑定的socket和thread----清除后socket数量为："+socketList.size()+"\t thread数量为："+threadList.size());
+		logger.warn("----清除与当前设备不绑定的socket----清除后socket数量为："+socketList.size());
 	}
+	
+	private void clearThread(){
+		logger.warn("----清除与当前设备不绑定的thread----清除前thread数量为："+threadList.size());
+		if(threadList.size() <= 0 ){
+			return;
+		}
+		for (int i =0; i < threadList.size(); i++) {
+			Thread thread = threadList.get(i);
+			if(socketThread.get(thread) != null){
+				continue;
+			}
+			if(thread != null){
+				//TODO 关闭线程
+				logger.warn("---关闭的thread为---"+thread);
+				threadList.get(i).interrupt();
+				//删除List数组对应的值
+				threadList.remove(threadList.get(i));
+			}
+		}
+		logger.warn("----清除与当前设备不绑定的thread----清除后thread数量为："+threadList.size());
+	}
+	
 
 }
