@@ -718,7 +718,7 @@ public class Server {
 	private void printThreadList(){
 		logger.warn("--------socket.threadList一共有几条数据?----------"+threadList.size());
 		for (Thread thread : threadList) {
-			logger.warn("----thread-----"+thread+"    thread.id() :"+thread.getId()+" - name:"+thread.getName() +" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted()+ " - Priority:"+thread.getPriority());
+			logger.warn("----thread-----"+thread+" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted()+ " - Priority:"+thread.getPriority());
 			if(!thread.isAlive()){
 				thread.interrupt();
 			}
