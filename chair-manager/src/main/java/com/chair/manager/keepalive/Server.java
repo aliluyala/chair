@@ -723,7 +723,7 @@ public class Server {
 	}
 	
 	private void clearSocketThread(){
-		logger.warn("----清除与当前设备不绑定的socket----清除前数量为："+socketList.size());
+		logger.warn("----清除与当前设备不绑定的socket和thread----清除前socket数量为："+socketList.size()+"\t thread数量为："+threadList.size());
 		if(socketList.size() <= 0 ){
 			return;
 		}
@@ -739,13 +739,14 @@ public class Server {
 					//删除List数组对应的值
 					socketList.remove(socketList.get(i));
 					//TODO 关闭线程
-					
+					logger.warn("---关闭的thread为---"+socketThread.get(socketList.get(i)));
+					socketThread.get(socketList.get(i)).interrupt();
 				} catch (IOException e) {
 					logger.error("---cleanSocketThread---失败--->>>"+e.getMessage());
 				}
 			}
 		}
-		logger.warn("----清除与当前设备不绑定的socket----清除后数量为："+socketList.size());
+		logger.warn("----清除与当前设备不绑定的socket和thread----清除后socket数量为："+socketList.size()+"\t thread数量为："+threadList.size());
 	}
 
 }
