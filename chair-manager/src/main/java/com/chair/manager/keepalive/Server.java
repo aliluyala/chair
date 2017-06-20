@@ -719,6 +719,9 @@ public class Server {
 		logger.warn("--------socket.threadList一共有几条数据?----------"+threadList.size());
 		for (Thread thread : threadList) {
 			logger.warn("----thread-----"+thread+"    thread.id() :"+thread.getId()+" - name:"+thread.getName() +" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted()+ " - Priority:"+thread.getPriority());
+			if(!thread.isAlive()){
+				thread.interrupt();
+			}
 		}
 	}
 	
@@ -734,13 +737,14 @@ public class Server {
 			}
 			if(socket != null){
 				try {
+					//TODO 关闭线程
+					logger.warn("---关闭的thread为---"+socketThread.get(socketList.get(i)));
+					socketThread.get(socketList.get(i)).interrupt();
+					
 					logger.warn("---关闭的socket为---"+socket);
 					socket.close();
 					//删除List数组对应的值
 					socketList.remove(socketList.get(i));
-					//TODO 关闭线程
-					logger.warn("---关闭的thread为---"+socketThread.get(socketList.get(i)));
-					socketThread.get(socketList.get(i)).interrupt();
 				} catch (IOException e) {
 					logger.error("---cleanSocketThread---失败--->>>"+e.getMessage());
 				}
