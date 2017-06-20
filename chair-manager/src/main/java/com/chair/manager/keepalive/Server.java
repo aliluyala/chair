@@ -123,6 +123,11 @@ public class Server {
 	private void clearSocketThreadJob(){
 		Runnable runnable = new Runnable() {  
             public void run() {  
+            	//打印socket,thread列表
+				printSokcetMap();
+            	logger.warn("###");
+            	logger.warn("###");
+            	logger.warn("###");
             	clearSocket();
             	logger.warn("---------------------------黄金分割线-----------------------");
             	clearThread();
@@ -139,8 +144,6 @@ public class Server {
             public void run() {  
                 // task to run goes here  
 				logger.info("--------定时任务执行时间-Hello !!!------->>>>"+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-				
-				printSokcetMap();	//打印socket列表
 				
 				//查询所有设备列表
 				Device device = new Device();
