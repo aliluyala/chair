@@ -124,6 +124,7 @@ public class Server {
 		Runnable runnable = new Runnable() {  
             public void run() {  
             	clearSocket();
+            	logger.warn("---------------------------黄金分割线-----------------------");
             	clearThread();
             }  
         };  
@@ -445,13 +446,17 @@ public class Server {
 							device.setLastUpdate(new Date());
 							deviceService.updateSelective(device);
 						}
-
+						
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【正在注册】响应客户端R1消息内容------" + send2ClientMsg);
 
 						//跟踪设备命令详情
 						recordCommand(requestBodys[3], 2, send2ClientMsg);
+
+						ccidSocket.put(requestBodys[3], s);
+						socketCCID.put(s, requestBodys[3]);
+						socketThread.put(Thread.currentThread(), s);
 						
 						responseByOutputStream(send2ClientMsg);
 					} else if("R2".equalsIgnoreCase(key)){	//注册成功
@@ -492,9 +497,6 @@ public class Server {
 						set(ip + ":" + clientPort, token); // ip-token
 						set(token, requestBodys[3]);
 						set(requestBodys[3], ip+":"+clientPort);
-						ccidSocket.put(requestBodys[3], s);
-						socketCCID.put(s, requestBodys[3]);
-						socketThread.put(Thread.currentThread(), s);
 						
 						//清除多余的socket
 						//clearSocket();
@@ -708,7 +710,7 @@ public class Server {
 	private void printSocketList(){
 		logger.warn("S--------socketList一共有几条数据?----------"+socketList.size());
 		for (Socket socket : socketList) {
-			logger.warn("通过socket查询是否有值？"+socketCCID.get(socket)+"   isOutputShutdown--? "+socket.isOutputShutdown()+"    isInputShutdown--?"+socket.isInputShutdown()+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
+			logger.warn("通过socket查询是否有值？"+socketCCID.get(socket)+"---【socket】---"+socket+"   isBound()--?"+socket.isBound()+"  isConnected()--?"+socket.isConnected()+"  isClosed()--?"+socket.isClosed());
 		}
 	}
 	
@@ -716,7 +718,7 @@ public class Server {
 	private void printThreadList(){
 		logger.warn("T--------threadList一共有几条数据?----------"+threadList.size());
 		for (Thread thread : threadList) {
-			logger.warn("通过thread查询是否有值？"+socketThread.get(thread)+"----thread-----"+thread+" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted()+ " - Priority:"+thread.getPriority());
+			logger.warn("通过thread查询是否有值？"+socketThread.get(thread)+"----thread-----"+thread+" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted());
 		}
 	}
 	
@@ -766,18 +768,13 @@ public class Server {
 	}
 	
 	
-	//测试socket是否通路
+	//判断是否断开连接，断开返回false,没有返回true
 	private boolean isConnection(Socket s){
-		String connectionMsg = "a";
-		OutputStream os;
 		try {
-			os = s.getOutputStream();
-			byte[] b = connectionMsg.getBytes();
-			os.write(b);
-			os.flush();
+			s.sendUrgentData(0xFF);
+			return true;
 		} catch (IOException e) {
 			return false;
 		}
-		return true;
 	}
 }
