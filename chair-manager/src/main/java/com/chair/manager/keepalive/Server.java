@@ -129,7 +129,7 @@ public class Server {
         };  
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();  
         // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
-        service.scheduleAtFixedRate(runnable, 30, 60, TimeUnit.SECONDS); 
+        service.scheduleAtFixedRate(runnable, 5, 5, TimeUnit.MINUTES); 
 	}
 	
 
@@ -296,10 +296,10 @@ public class Server {
 					
 					Thread  t = new Thread(new SocketAction(s));
 					t.start();
-					
+
 					//将thread添加到list
-					printThreadList();
 					threadList.add(t);
+					printThreadList();
 
 				}
 			} catch (IOException e) {
@@ -416,12 +416,12 @@ public class Server {
 				for (String key : requestBodys) {
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 正在注册
-						logger.info(requestBodys[3]+",,,当前线程ID为："+Thread.currentThread().getId());
+						logger.info(requestBodys[3]+",,,当前线程ID为："+Thread.currentThread());
 						String token = requestBodys[2];
 						if ("00000000000000".equals(token) || null == token || "".equals(token.trim())) {
 							// 生成token，并且保存到redis
 							token = "R" + new Date().getTime();
-							logger.info("---token为空，创建token--->>>" + token);
+							//logger.info("---token为空，创建token--->>>" + token);
 						}
 						
 						//跟踪设备命令详情
@@ -647,7 +647,7 @@ public class Server {
 	
 	
 	private void recordDeviceLog(String deviceNO, int status, String statusDesc){
-		logger.info("-------设备日志跟踪------deviceNO："+deviceNO+"\nstatus："+status+"\nstatusDesc："+statusDesc);
+		logger.info("-------设备日志跟踪------deviceNO："+deviceNO+"\tstatus："+status+"\tstatusDesc："+statusDesc);
 		DeviceLog deviceLog = new DeviceLog();
 		deviceLog.setDeviceNo(deviceNO);
 		deviceLog.setDeviceStatus(status);	//1、2、3
@@ -659,7 +659,7 @@ public class Server {
 	
 	
 	private void recordCommand(String deviceNO, int type, String commad){
-		logger.info("-------------["+deviceCommandLogService+"]-------设备命令跟踪------deviceNO："+deviceNO+"\ntype："+type+"\ncommad："+commad);
+		logger.info("-------设备命令跟踪------deviceNO："+deviceNO+"\ttype："+type+"\tcommad："+commad);
 		DeviceCommandLog deviceCommandLog = new DeviceCommandLog();
 		deviceCommandLog.setDeviceNo(deviceNO);
 		deviceCommandLog.setCommandType(type);	//1.设备上报命令 2.设备下发命令
