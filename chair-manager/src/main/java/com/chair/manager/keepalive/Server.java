@@ -128,7 +128,7 @@ public class Server {
         };  
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();  
         // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  
-        service.scheduleAtFixedRate(runnable, 30, 30, TimeUnit.SECONDS); 
+        service.scheduleAtFixedRate(runnable, 30, 60, TimeUnit.SECONDS); 
 	}
 	
 
@@ -287,15 +287,20 @@ public class Server {
 				ServerSocket ss = new ServerSocket(port);
 				while (running) {
 					Socket s = ss.accept();
+					
 					//将socket添加到list
 					socketList.add(s);
 					printSocketList();
 					
-					//将thread添加到list
-					threadList.add(Thread.currentThread());
-//					printThreadList();
 					
-					new Thread(new SocketAction(s)).start();
+					Thread  t = new Thread(new SocketAction(s));
+					
+					//将thread添加到list
+					threadList.add(t);
+					printThreadList();
+					
+					t.start();
+
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -697,9 +702,6 @@ public class Server {
 		for (Entry<Socket, Thread> entry : socketThread.entrySet()){
 			logger.info("---thread----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
-		
-		
-		
 	}
 	
 	
