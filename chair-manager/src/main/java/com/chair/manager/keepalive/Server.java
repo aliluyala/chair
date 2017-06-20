@@ -294,12 +294,11 @@ public class Server {
 					
 					
 					Thread  t = new Thread(new SocketAction(s));
+					t.start();
 					
 					//将thread添加到list
-					threadList.add(t);
 					printThreadList();
-					
-					t.start();
+					threadList.add(t);
 
 				}
 			} catch (IOException e) {
