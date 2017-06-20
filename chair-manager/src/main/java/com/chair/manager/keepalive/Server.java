@@ -437,7 +437,7 @@ public class Server {
 							device = new Device();
 							device.setDeviceToken(token);
 							device.setDeviceNo(requestBodys[3]);
-							device.setStatus(2);
+//							device.setStatus(2);
 							device.setLastUpdate(new Date());
 							device.setCreateTime(new Date());
 							deviceService.save(device);
