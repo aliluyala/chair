@@ -123,7 +123,7 @@ public class ManagerService extends BaseService<Manager> {
 	 * @param m
 	 * @return
 	 */
-	public Statisctics queryDayIncomeForProxy(Manager m) {
+	public List<Statisctics> queryDayIncomeForProxy(Manager m) {
 		return statiscticsMapper.queryDayIncomeForProxy(m);
 	}
 	

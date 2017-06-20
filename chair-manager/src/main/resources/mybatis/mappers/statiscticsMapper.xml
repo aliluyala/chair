@@ -26,10 +26,19 @@
 		select 
 		(select SUM(consumed_duration) from consumed_details c where c.proxy_id=m.id) as totalIncome,
 		(select count(1) from manager m1 where m1.proxy_id = m.id) as totalShop,
-		(select count(1) from device d where d.proxy_id = m.id) as totalDevice,
-		(select SUM(consumed_duration) * m.proxy_percent /100 from consumed_details c where c.proxy_id=m.id and DATE_FORMAT(now(), '%Y-%m-%d') = DATE_FORMAT(last_update, '%Y-%m-%d')) as dayIncome
+		(select count(1) from device d where d.proxy_id = m.id) as totalDevice
+		<!-- (select SUM(consumed_duration) * m.proxy_percent /100 from consumed_details c where c.proxy_id=m.id and DATE_FORMAT(now(), '%Y-%m-%d') = DATE_FORMAT(last_update, '%Y-%m-%d')) as dayIncome -->
+		<!-- (select sum(c.consumed_duration) * m1.shop_percent/100  from manager m1 left JOIN consumed_details c on c.shop_id=m1.id where m1.proxy_id=8 group by m1.id) as dayIncome -->
 		from manager m where m.id=#{id}
 	</select>
+	
+	<!-- 统计-代理，查询代理下所有商家的今日收益之和 -->
+	<select id="queryDayIncomeForProxy" parameterType="com.chair.manager.pojo.ManagerDto" resultType="com.chair.manager.pojo.Statisctics">
+		select (sum(c.consumed_duration) * m1.shop_percent/100 ) as dayIncome
+		from manager m1 left JOIN consumed_details c on c.shop_id=m1.id where m1.proxy_id=#{proxyId} group by m1.id
+	</select>
+	
+	
 	
 	
 	<!-- 统计-商家，查询商家自身收益统计 -->

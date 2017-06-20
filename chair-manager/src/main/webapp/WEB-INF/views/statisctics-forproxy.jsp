@@ -54,20 +54,20 @@
 			$("#totalIncome").textbox("setValue", o.totalIncome);
 			$("#totalShop").textbox("setValue", o.totalShop);
 			$("#totalDevice").textbox("setValue", o.totalDevice);
-			$("#todayIncome").textbox("setValue", o.dayIncome);
 		}
 	});
 	
 	//今日收益
-<%-- 	$.ajax({
+	$.ajax({
 		type:'post',
 		url:'/<%=chair%>/statisctics/queryDayIncomeForProxy/',
 		success:function(data){
 			alert(JSON.stringify(data));
 			var o = data.data;
-			alert(JSON.stringify(o))
+			//alert(JSON.stringify(o))
+			$("#todayIncome").textbox("setValue", o.dayIncome);
 		}
-	}); --%>
+	}); 
 	
 })();
 

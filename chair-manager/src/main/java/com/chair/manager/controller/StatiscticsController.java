@@ -174,7 +174,15 @@ public class StatiscticsController {
 		Manager proxyManager = new Manager();
 		proxyManager.setProxyId(manager.getId());
 		proxyManager.setType(3);
-		Statisctics proxyStatisctics = managerService.queryDayIncomeForProxy(proxyManager);
+		List<Statisctics> proxyStatiscticsList = managerService.queryDayIncomeForProxy(proxyManager);
+		Float dayIncome = 0.0f;
+		for (int i = 0; i < proxyStatiscticsList.size(); i++) {
+			dayIncome += proxyStatiscticsList.get(i).getDayIncome();
+		}
+		
+		System.out.println("----查询代理下所有商家的今日收益之和 :dayIncome---"+dayIncome);
+		Statisctics proxyStatisctics  = new Statisctics();
+		proxyStatisctics.setDayIncome(dayIncome);
 		return new ResponseResult(proxyStatisctics);
 	}
 	

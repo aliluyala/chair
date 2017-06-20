@@ -18,7 +18,7 @@ public interface StatiscticsMapper extends ChairMapper<Statisctics> {
 
 	Statisctics queryShopBaseStatisctics(Manager m);
 
-	Statisctics queryDayIncomeForProxy(Manager m);
+	List<Statisctics> queryDayIncomeForProxy(Manager m);
 	
 	
 }
