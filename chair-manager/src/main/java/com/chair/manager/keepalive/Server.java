@@ -704,7 +704,7 @@ public class Server {
 			logger.warn("---socket----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
 
-		logger.warn("--------Thread.map一共有几条数据?----------"+ccidSocket.size());
+		logger.warn("--------Thread.map一共有几条数据?----------"+socketThread.size());
 		for (Entry<Thread, Socket> entry : socketThread.entrySet()){
 			logger.warn("---thread----【"+entry.getKey()+"】---【"+entry.getValue()+"】---");
 		}
@@ -722,7 +722,7 @@ public class Server {
 	private void printThreadList(){
 		logger.warn("T--------threadList一共有几条数据?----------"+threadList.size());
 		for (Thread thread : threadList) {
-			logger.warn("通过thread查询是否有值？"+socketThread.get(thread)+"----thread-----"+thread+" - isAlive ? "+thread.isAlive()+" - isDaemon ? "+thread.isDaemon()+" - isInterrupted ? "+ thread.isInterrupted());
+			logger.warn("通过thread查询是否有值？"+socketThread.get(thread)+"----thread-----"+thread+" - isAlive ? "+thread.isAlive()+" - isInterrupted ? "+ thread.isInterrupted());
 		}
 	}
 	
@@ -733,7 +733,7 @@ public class Server {
 		}
 		for (int i =0; i < socketList.size(); i++) {
 			Socket socket = socketList.get(i);
-			if(!StringUtils.isEmpty(socketCCID.get(socket))){
+			if(!StringUtils.isEmpty(socketCCID.get(socket)) && socket.isConnected()){
 				continue;
 			}
 			if(socket != null){
@@ -757,7 +757,7 @@ public class Server {
 		}
 		for (int i =0; i < threadList.size(); i++) {
 			Thread thread = threadList.get(i);
-			if(socketThread.get(thread) != null){
+			if(socketThread.get(thread) != null && thread.isAlive()){
 				continue;
 			}
 			if(thread != null){
