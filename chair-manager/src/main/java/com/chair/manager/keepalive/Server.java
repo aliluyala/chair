@@ -115,7 +115,7 @@ public class Server {
 		updateDeviceStatusJob();
 		
 		//定时任务3：清除与当前设备不绑定的socket
-		clearSocketThreadJob();
+//		clearSocketThreadJob();
 	}
 	
 	private void clearSocketThreadJob(){
