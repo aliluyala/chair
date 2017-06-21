@@ -457,11 +457,6 @@ public class Server {
 
 						//跟踪设备命令详情
 						recordCommand(requestBodys[3], 2, send2ClientMsg);
-
-						ccidSocket.put(requestBodys[3], s);
-						socketCCID.put(s, requestBodys[3]);
-						socketThread.put(Thread.currentThread(), s);
-						
 						responseByOutputStream(send2ClientMsg);
 					} else if("R2".equalsIgnoreCase(key)){	//注册成功
 						String token = requestBodys[2];
@@ -501,6 +496,10 @@ public class Server {
 						set(ip + ":" + clientPort, token); // ip-token
 						set(token, requestBodys[3]);
 						set(requestBodys[3], ip+":"+clientPort);
+
+						ccidSocket.put(requestBodys[3], s);
+						socketCCID.put(s, requestBodys[3]);
+						socketThread.put(Thread.currentThread(), s);
 						
 						//清除多余的socket
 						//clearSocket();
