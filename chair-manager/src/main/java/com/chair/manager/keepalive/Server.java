@@ -292,16 +292,16 @@ public class Server {
 					Socket s = ss.accept();
 					
 					//将socket添加到list
-					socketList.add(s);
-					printSocketList();
+//					socketList.add(s);
+//					printSocketList();
 					
 					
 					Thread  t = new Thread(new SocketAction(s));
 					t.start();
 
 					//将thread添加到list
-					threadList.add(t);
-					printThreadList();
+//					threadList.add(t);
+//					printThreadList();
 
 				}
 			} catch (IOException e) {
@@ -452,7 +452,8 @@ public class Server {
 						
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
-						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【正在注册】响应客户端R1消息内容------" + send2ClientMsg);
+//						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【正在注册】响应客户端R1消息内容------" + send2ClientMsg);
+						logger.info("【正在注册】响应客户端R1消息内容"+send2ClientMsg);
 
 						//跟踪设备命令详情
 						recordCommand(requestBodys[3], 2, send2ClientMsg);
@@ -503,7 +504,7 @@ public class Server {
 						//清除多余的socket
 						//clearSocket();
 						
-						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【注册成功】------------");
+						logger.info("【注册成功】");
 					} else if ("H0".equalsIgnoreCase(key)) { // H0，心跳消息
 						// 【解析报文[*H0,001,R1497108915104,031,0,0#]，匹配以*开头，以#结尾，结果为】---true
 						String token = requestBodys[2];
@@ -520,10 +521,8 @@ public class Server {
 						}
 						deviceService.updateSelective(device);
 						
-						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间为："+new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+						logger.info("---H0命令更新设备token：【"+token+"】---CCID：【"+device.getDeviceNo()+"】的最后心跳时间<<<---");
 					}else if("T1".equalsIgnoreCase(key) || "T2".equalsIgnoreCase(key)){	//设备启动成功
-						//*T1,001,R1497534027669,000003#
-						//[*T1,001,R1497708612657,000001#]
 						Device device = deviceService.queryDeviceByToken(requestBodys[2]);
 						Map<String, TempDto> map = MyVector.getMap();
 						TempDto dto = map.get(device.getDeviceNo());
@@ -651,7 +650,7 @@ public class Server {
 	
 	
 	private void recordDeviceLog(String deviceNO, int status, String statusDesc){
-		logger.info("-------设备日志跟踪------deviceNO："+deviceNO+"\tstatus："+status+"\tstatusDesc："+statusDesc);
+		logger.info("设备日志跟踪------deviceNO："+deviceNO+"\tstatus："+status+"\tstatusDesc："+statusDesc);
 		DeviceLog deviceLog = new DeviceLog();
 		deviceLog.setDeviceNo(deviceNO);
 		deviceLog.setDeviceStatus(status);	//1、2、3
@@ -663,7 +662,7 @@ public class Server {
 	
 	
 	private void recordCommand(String deviceNO, int type, String commad){
-		logger.info("-------设备命令跟踪------deviceNO："+deviceNO+"\ttype："+type+"\tcommad："+commad);
+		logger.info("设备命令跟踪------deviceNO："+deviceNO+"\ttype："+type+"\tcommad："+commad);
 		DeviceCommandLog deviceCommandLog = new DeviceCommandLog();
 		deviceCommandLog.setDeviceNo(deviceNO);
 		deviceCommandLog.setCommandType(type);	//1.设备上报命令 2.设备下发命令
