@@ -758,7 +758,7 @@ public class Server {
 			if(thread != null){
 				//TODO 关闭线程
 				logger.warn("---关闭的thread为---"+thread);
-				thread.interrupt();
+				thread.stop();
 				//删除List数组对应的值
 				threadList.remove(thread);
 			}
