@@ -68,7 +68,9 @@ public class UsersController {
 	@RequestMapping(value = "queryCurConsumeStatus", method = RequestMethod.POST)
 	private ResponseResult queryCurConsumeStatus(@RequestBody ReqParam param) {
 		logger.info("------【查询当前消费明细状态】---参数>>>" + param);
-		return new ResponseResult(consumedDetailsService.findById(param.getConsumerID()));
+		ConsumedDetails consumedDetails =consumedDetailsService.findById(param.getConsumerID());
+		logger.info("------【查询当前消费明细返回值】---Status--->>>" + consumedDetails.getStatus());
+		return new ResponseResult(consumedDetails);
 	}
 	
 	

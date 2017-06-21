@@ -115,7 +115,7 @@ public class Server {
 		updateDeviceStatusJob();
 		
 		//定时任务3：清除与当前设备不绑定的socket
-//		clearSocketThreadJob();
+		clearSocketThreadJob();
 	}
 	
 	private void clearSocketThreadJob(){
@@ -292,16 +292,16 @@ public class Server {
 					Socket s = ss.accept();
 					
 					//将socket添加到list
-//					socketList.add(s);
-//					printSocketList();
+					socketList.add(s);
+					printSocketList();
 					
 					
 					Thread  t = new Thread(new SocketAction(s));
 					t.start();
 
 					//将thread添加到list
-//					threadList.add(t);
-//					printThreadList();
+					threadList.add(t);
+					printThreadList();
 
 				}
 			} catch (IOException e) {
@@ -397,7 +397,6 @@ public class Server {
                 int r = is.read(b);
                 if(r>-1){
                     String reciverMsg = new String(b);
-                    System.out.println("---------------接收来自客户端消息：>>>----------"+reciverMsg);
                     resolveMessage(clientIP, clientPort, reciverMsg.trim());
                 }
             }
@@ -411,7 +410,7 @@ public class Server {
 			Pattern p = Pattern.compile(regEx);
 			Matcher m = p.matcher(reciverMsg);
 			boolean b = m.find();
-			logger.info("\t当前socket："+s+"\t当前线程为："+Thread.currentThread()+"---【解析报文[" + reciverMsg + "]，匹配以*开头，以#结尾，结果为】---" + b );
+			logger.info("当前："+s+"  -  对应线程为："+Thread.currentThread()+"-【解析报文[" + reciverMsg + "]，匹配以*开头，以#结尾，结果为】-" + b );
 			if (b) {
 				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1).split(",");
 				//设备上报/下发
@@ -422,7 +421,6 @@ public class Server {
 						if ("00000000000000".equals(token) || null == token || "".equals(token.trim())) {
 							// 生成token，并且保存到redis
 							token = "R" + new Date().getTime();
-							//logger.info("---token为空，创建token--->>>" + token);
 						}
 						
 						//跟踪设备命令详情
@@ -453,7 +451,7 @@ public class Server {
 						// 响应客户端消息
 						String send2ClientMsg = "*" + key + "," + snk + "," + token + "#";
 //						logger.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())+ "------ 【正在注册】响应客户端R1消息内容------" + send2ClientMsg);
-						logger.info("【正在注册】响应客户端R1消息内容"+send2ClientMsg);
+						logger.info("【正在注册】响应客户端R1消息内容--->>>"+send2ClientMsg);
 
 						//跟踪设备命令详情
 						recordCommand(requestBodys[3], 2, send2ClientMsg);
