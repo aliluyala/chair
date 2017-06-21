@@ -411,14 +411,13 @@ public class Server {
 			Pattern p = Pattern.compile(regEx);
 			Matcher m = p.matcher(reciverMsg);
 			boolean b = m.find();
-			logger.info("---【解析报文[" + reciverMsg + "]，匹配以*开头，以#结尾，结果为】---" + b + "\t ip:port = " + ip + ":" + clientPort);
+			logger.info("\t当前socket："+s+"\t当前线程为："+Thread.currentThread()+"---【解析报文[" + reciverMsg + "]，匹配以*开头，以#结尾，结果为】---" + b );
 			if (b) {
 				String[] requestBodys = reciverMsg.substring(reciverMsg.indexOf("*") + 1, reciverMsg.length() - 1).split(",");
 				//设备上报/下发
 				for (String key : requestBodys) {
 					System.err.print(key + ",");
 					if ("R1".equalsIgnoreCase(key)) { // 正在注册
-						logger.info(requestBodys[3]+",,,当前线程ID为："+Thread.currentThread());
 						String token = requestBodys[2];
 						if ("00000000000000".equals(token) || null == token || "".equals(token.trim())) {
 							// 生成token，并且保存到redis
